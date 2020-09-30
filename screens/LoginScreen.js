@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -15,129 +15,190 @@ import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Dismisskeyboard from "../utils/DismissKeyboard";
+import Feather from "react-native-vector-icons/Feather";
 
-export default class LoginScreen extends Component {
-  constructor() {
-    super();
+const LoginScreen = ({ navigation }) => {
+  const [data, setData] = React.useState({
+    email: "",
+    password: "",
+    errorMessage: "",
+    check_textInputChange: false,
+    secureTextEntry: true,
+    isValidUser: true,
+    isValidPassword: true,
+  });
 
-    this.state = {
-      email: "",
-      password: "",
-      isLoading: false,
-      errorMessage: "",
-    };
-  }
-
-  updateInputVal = (val, prop) => {
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
-  };
-
-  userLogin = () => {
-    if (this.state.email === "" && this.state.password === "") {
-      Alert.alert("Enter details to signin!");
-    } else {
-      this.setState({
-        isLoading: true,
+  const TextInputChange = (val) => {
+    if (val.trim().length >= 4) {
+      setData({
+        ...data,
+        email: val,
+        check_textInputChange: true,
+        isValidUser: true,
       });
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.state.email, this.state.password)
-        .then((res) => {
-          console.log(res);
-          console.log("User logged-in successfully!");
-          this.setState({
-            isLoading: false,
-            email: "",
-            password: "",
-          });
-          // this.props.navigation.navigate("Home");
-        })
-        .catch((error) => this.setState({ errorMessage: error.message }));
+    } else {
+      setData({
+        ...data,
+        email: val,
+        check_textInputChange: false,
+        isValidUser: false,
+      });
     }
   };
 
-  render() {
-    return (
-      <Dismisskeyboard>
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior="padding"
-          enabled
-        >
-          <View style={styles.container}>
-            <StatusBar backgroundColor="#009387" barStyle="light-content" />
-            <View style={styles.header}>
-              <Text style={styles.text_header}>Welcome</Text>
-            </View>
-            <Animatable.View style={styles.footer} animation="fadeInUpBig">
-              {/* ------------------------ EMAIL SECTION & INPUT ----------------------------- */}
-              <Text style={styles.text_footer}>Email</Text>
-              <View style={styles.action}>
-                <FontAwesome name="at" color="#05375a" size={20} />
-                <TextInput
-                  placeholder="Your Email Address"
-                  style={styles.textInput}
-                  autoCapitalize="none"
-                  onChangeText={(email) => this.setState({ email })}
-                  value={this.state.email}
-                />
-              </View>
-              {/* ------------------------ PASSWORD SECTION & INPUT --------------------------- */}
-              <Text style={[styles.text_footer, { marginTop: 35 }]}>
-                Password
-              </Text>
-              <View style={styles.action}>
-                <FontAwesome name="lock" color="#05375a" size={20} />
-                <TextInput
-                  placeholder="Your Password"
-                  secureTextEntry={true}
-                  style={styles.textInput}
-                  autoCapitalize="none"
-                  onChangeText={(password) => this.setState({ password })}
-                  value={this.state.password}
-                />
-              </View>
-              {/* ------------------------ SIGN-IN & SIGN-UP SECTION &  ------------------------ */}
-              <View style={styles.button}>
-                <LinearGradient
-                  colors={["#08d4c4", "#01ab9d"]}
-                  style={styles.signIn}
-                >
-                  <TouchableOpacity onPress={this.userLogin}>
-                    <Text style={styles.textSign}>Login</Text>
-                  </TouchableOpacity>
-                </LinearGradient>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate("RegisterScreen")
-                  }
-                  style={styles.signIn}
-                >
-                  <Text style={[styles.textSign, { color: "#009387" }]}>
-                    Register
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </Animatable.View>
+  const handlePasswordChange = (val) => {
+    if (val.trim().length >= 6) {
+      setData({
+        ...data,
+        password: val,
+        isValidPassword: true,
+      });
+    } else {
+      setData({
+        ...data,
+        password: val,
+        isValidPassword: false,
+      });
+    }
+  };
+
+  const updateSecureTextEntry = (val) => {
+    setData({
+      ...data,
+      secureTextEntry: !data.secureTextEntry,
+    });
+  };
+
+  const handleValidUser = (val) => {
+    if (val.trim().length >= 4) {
+      setData({
+        ...data,
+        isValidUser: true,
+      });
+    } else {
+      setData({
+        ...data,
+        isValidUser: false,
+      });
+    }
+  };
+
+  const userLogin = async (email, password) => {
+    if (data.email === "" && data.password === "") {
+      Alert.alert("אנא הכנס פרטים");
+    } else {
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => setData({ errorMessage: error.message }));
+    }
+  };
+
+  return (
+    <Dismisskeyboard>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <View style={styles.container}>
+          <StatusBar backgroundColor="#33A8FF" barStyle="light-content" />
+          <View style={styles.header}>
+            <Text style={styles.text_header}>ברוכים הבאים!</Text>
+            <Text style={styles.text_underHeader}>התחברו כעת</Text>
           </View>
-        </KeyboardAvoidingView>
-      </Dismisskeyboard>
-    );
-  }
-}
+
+          <Animatable.View style={styles.footer} animation="fadeInUpBig">
+            {/* ------------------------ EMAIL SECTION & INPUT ----------------------------- */}
+            <Text style={styles.text_footer}>Email</Text>
+            <View style={styles.action}>
+              <FontAwesome name="at" color="#05375a" size={20} />
+              <TextInput
+                placeholder="Your Email Address"
+                style={styles.textInput}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                onChangeText={(email) => TextInputChange(email)}
+                onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
+              />
+              {data.check_textInputChange ? (
+                <Animatable.View animation="bounceIn">
+                  <Feather name="check-circle" color="green" size={20} />
+                </Animatable.View>
+              ) : null}
+            </View>
+            {data.isValidUser ? null : (
+              <Animatable.View animation="fadeInLeft" duration={500}>
+                <Text style={styles.errorMsg}>Email Error.</Text>
+              </Animatable.View>
+            )}
+            {/* ------------------------ PASSWORD SECTION & INPUT --------------------------- */}
+            <Text style={[styles.text_footer, { marginTop: 35 }]}>
+              Password
+            </Text>
+            <View style={styles.action}>
+              <Feather name="lock" color="#05375a" size={20} />
+              <TextInput
+                placeholder="Your Password"
+                secureTextEntry={data.secureTextEntry ? true : false}
+                style={styles.textInput}
+                autoCapitalize="none"
+                onChangeText={(password) => handlePasswordChange(password)}
+              />
+              <TouchableOpacity onPress={updateSecureTextEntry}>
+                {data.secureTextEntry ? (
+                  <Feather name="eye-off" color="gray" size={20} />
+                ) : (
+                  <Feather name="eye" color="gray" size={20} />
+                )}
+              </TouchableOpacity>
+            </View>
+            {data.isValidPassword ? null : (
+              <Animatable.View animation="fadeInLeft" duration={500}>
+                <Text style={styles.errorMsg}>
+                  Password must be 6 characters long.
+                </Text>
+              </Animatable.View>
+            )}
+
+            {/* ------------------------ SIGN-IN & SIGN-UP SECTION &  ------------------------ */}
+            <View style={styles.button}>
+              <LinearGradient
+                colors={["#33A8FF", "#33A8FF"]}
+                style={styles.signIn}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    userLogin(data.email, data.password);
+                  }}
+                >
+                  <Text style={styles.textSign}>התחבר</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("RegisterScreen")}
+                style={styles.signIn}
+              >
+                <Text style={[styles.textSign, { color: "#33A8FF" }]}>
+                  הירשם
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Animatable.View>
+        </View>
+      </KeyboardAvoidingView>
+    </Dismisskeyboard>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#009387",
+    backgroundColor: "#33A8FF",
   },
   header: {
-    flex: 1,
-    justifyContent: "flex-end",
-    paddingHorizontal: 20,
-    paddingBottom: 50,
+    flex: 2,
+    justifyContent: "center",
+    alignItems: "center",
   },
   footer: {
     flex: 3,
@@ -151,6 +212,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 30,
+  },
+  text_underHeader: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 15,
   },
   text_footer: {
     color: "#05375a",
@@ -192,7 +258,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    borderColor: "#009387",
+    borderColor: "#33A8FF",
     borderWidth: 1,
     marginTop: 15,
   },
@@ -202,3 +268,5 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 });
+
+export default LoginScreen;

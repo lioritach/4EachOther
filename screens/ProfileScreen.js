@@ -1,15 +1,13 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 
-export default class ProfileScreen extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text> Message Screen </Text>
-      </View>
-    );
-  }
-}
+const ProfileScreen = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Text> Message Screen </Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -18,3 +16,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+export default ProfileScreen;

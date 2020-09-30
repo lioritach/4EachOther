@@ -1,18 +1,13 @@
 import React from "react";
 import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
-import * as firebase from "firebase";
-
-const auth12 = () => {
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-};
-
+import firebase from "../database/firebase";
 export default class LoadingScreen extends React.Component {
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      this.navigation.navigate(user ? "MainTabScreens" : "RootStackScreen");
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>

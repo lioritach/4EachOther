@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,244 +7,196 @@ import {
   StyleSheet,
   StatusBar,
   Alert,
-  ActivityIndicator,
   KeyboardAvoidingView,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import * as firebase from "firebase";
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { Button } from "react-native-paper";
-import firebase from "../database/firebase";
 import Dismisskeyboard from "../utils/DismissKeyboard";
+import Feather from "react-native-vector-icons/Feather";
 
-export default class RegisterScreen extends Component {
-  constructor() {
-    super();
+const RegisterScreen = ({ navigation }) => {
+  const [data, setData] = React.useState({
+    email: "",
+    password: "",
+    confirm_password: "",
+    check_textInputChange: false,
+    secureTextEntry: true,
+    confirm_secureTextEntry: true,
+  });
 
-    this.state = {
-      displayName: "",
-      email: "",
-      password: "",
-      isLoading: false,
-    };
-  }
-
-  updateInputVal = (val, prop) => {
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
+  const TextInputChange = (val) => {
+    if (val.length != 0) {
+      setData({
+        ...data,
+        email: val,
+        check_textInputChange: true,
+      });
+    } else {
+      setData({
+        ...data,
+        email: val,
+        check_textInputChange: false,
+      });
+    }
   };
 
-  registerUser = () => {
-    if (this.state.email === "" && this.state.password === "") {
-      Alert.alert("Enter details to signup!");
+  const handlePasswordChange = (val) => {
+    setData({
+      ...data,
+      password: val,
+    });
+  };
+
+  const handleConfirmPasswordChange = (val) => {
+    setData({
+      ...data,
+      confirm_password: val,
+    });
+  };
+
+  const updateSecureTextEntry = (val) => {
+    setData({
+      ...data,
+      secureTextEntry: !data.secureTextEntry,
+    });
+  };
+
+  const updateConfirmSecureTextEntry = (val) => {
+    setData({
+      ...data,
+      confirm_secureTextEntry: !data.confirm_secureTextEntry,
+    });
+  };
+
+  const userRegister = (email, password) => {
+    if (data.email === "" && data.password === "") {
+      Alert.alert("אנא הכנס פרטים");
     } else {
-      this.setState({
-        isLoading: true,
-      });
       firebase
         .auth()
-        .createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .createUserWithEmailAndPassword(email, password)
         .then((res) => {
-          res.user.updateProfile({
-            displayName: this.state.displayName,
-          });
-          console.log("User registered successfully!");
-          this.setState({
-            isLoading: false,
-            displayName: "",
-            email: "",
-            password: "",
-          });
-          this.props.navigation.navigate("LoginScreen");
+          console.log(res);
         })
-        .catch((error) => this.setState({ errorMessage: error.message }));
+        .catch((error) => setData({ errorMessage: error.message }));
     }
+    navigation.navigate("LoginScreen");
   };
 
-  render() {
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E" />
-        </View>
-      );
-    }
-    return (
-      <Dismisskeyboard>
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior="padding"
-          enabled
-        >
-          <View style={styles.container}>
-            <StatusBar backgroundColor="#009387" barStyle="light-content" />
-            <View style={styles.header}>
-              <Text style={styles.text_header}>
-                {"Hello!\nSign Up to get started."}
-              </Text>
-            </View>
-            <Animatable.View style={styles.footer} animation="fadeInUpBig">
-              {/* ------------------------ NAME SECTION & INPUT ----------------------------- */}
-              <Text style={styles.text_footer}>Name</Text>
-              <View style={styles.action}>
-                <FontAwesome name="user-o" color="#05375a" size={20} />
-                <TextInput
-                  placeholder="Your Name"
-                  style={styles.textInput}
-                  autoCapitalize="none"
-                  onChangeText={(val) =>
-                    this.updateInputVal(val, "displayName")
-                  }
-                  value={this.state.displayName}
-                />
-              </View>
-              {/* ------------------------ EMAIL SECTION & INPUT ----------------------------- */}
-              <Text style={[styles.text_footer, { marginTop: 35 }]}>Email</Text>
-              <View style={styles.action}>
-                <FontAwesome name="at" color="#05375a" size={20} />
-                <TextInput
-                  placeholder="Your Email Address"
-                  style={styles.textInput}
-                  autoCapitalize="none"
-                  onChangeText={(val) => this.updateInputVal(val, "email")}
-                  value={this.state.email}
-                />
-              </View>
-              {/* ------------------------ PASSWORD SECTION & INPUT --------------------------- */}
-              <Text style={[styles.text_footer, { marginTop: 35 }]}>
-                Password
-              </Text>
-              <View style={styles.action}>
-                <FontAwesome name="lock" color="#05375a" size={20} />
-                <TextInput
-                  placeholder="Your Password"
-                  secureTextEntry={true}
-                  style={styles.textInput}
-                  autoCapitalize="none"
-                  maxLength={15}
-                  onChangeText={(val) => this.updateInputVal(val, "password")}
-                  value={this.state.password}
-                />
-              </View>
-              {/* ------------------------ SIGN-IN & SIGN-UP SECTION &  ------------------------ */}
-              <View style={styles.button}>
-                <LinearGradient
-                  colors={["#08d4c4", "#01ab9d"]}
-                  style={styles.signIn}
-                >
-                  <Button onPress={() => this.registerUser()}>
-                    <Text style={styles.textSign}>Register</Text>
-                  </Button>
-                </LinearGradient>
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate("LoginScreen")}
-                  style={styles.signIn}
-                >
-                  <Text style={[styles.textSign, { color: "#009387" }]}>
-                    Login
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </Animatable.View>
+  return (
+    <Dismisskeyboard>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <View style={styles.container}>
+          <StatusBar backgroundColor="#33A8FF" barStyle="light-content" />
+          <View style={styles.header}>
+            <Text style={styles.text_header}>ברוכים הבאים!</Text>
+            <Text style={styles.text_underHeader}>הירשמו כעת</Text>
           </View>
-        </KeyboardAvoidingView>
-      </Dismisskeyboard>
-    );
 
-    // return (
-    //   <View style={styles.container}>
-    //     <StatusBar barStyle="light-content"></StatusBar>
-    //     <Image
-    //       source={require("../assets/bg.jpg")}
-    //       style={{ marginTop: -140, marginLeft: -50 }}
-    //     ></Image>
-
-    //     <Image
-    //       source={require("../assets/bg.jpg")}
-    //       style={{ position: "absolute", bottom: -325, right: -225 }}
-    //     ></Image>
-
-    //     <View
-    //       style={{
-    //         position: "absolute",
-    //         top: 60,
-    //         alignItems: "center",
-    //         width: "100%",
-    //       }}
-    //     >
-    //       <Image
-    //         source={require("../assets/login.png")}
-    //         style={{ marginTop: 30, alignSelf: "center" }}
-    //       ></Image>
-    //       <Text style={styles.greeting}>{"Hello again.\nWelcome back."}</Text>
-    //     </View>
-
-    //     <View style={styles.errorMessage}>
-    //       <Text>
-    //         {this.state.errorMessage && (
-    //           <Text style={styles.error}>{this.state.errorMessage}</Text>
-    //         )}
-    //       </Text>
-    //     </View>
-
-    //     <View style={styles.form}>
-    //       <View>
-    //         <Text style={styles.inputTitle}>Email Address</Text>
-    //         <TextInput
-    //           style={styles.input}
-    //           autoCapitalize="none"
-    //           onChangeText={(email) => this.setState({ email })}
-    //           value={this.state.email}
-    //         ></TextInput>
-    //       </View>
-
-    //       <View style={{ marginTop: 32 }}>
-    //         <Text style={styles.inputTitle}>Password</Text>
-    //         <TextInput
-    //           style={styles.input}
-    //           secureTextEntry
-    //           autoCapitalize="none"
-    //           onChangeText={(password) => this.setState({ password })}
-    //           value={this.state.password}
-    //         ></TextInput>
-    //       </View>
-    //     </View>
-
-    //     <TouchableOpacity style={styles.button} onPress={this.handleLogin}>
-    //       <Text style={{ color: "#FFF", fontWeight: "500" }}>Sign In</Text>
-    //     </TouchableOpacity>
-
-    //     <TouchableOpacity
-    //       style={{ alignSelf: "center", marginTop: 30, top: -133 }}
-    //       onPress={() => this.props.navigation.navigate("Login")}
-    //     >
-    //       <Text style={{ color: "#414959", fontSize: 13 }}>
-    //         New Here?{" "}
-    //         <Text style={{ color: "#E9446A", fontWeight: "500" }}>
-    //           Register
-    //         </Text>
-    //       </Text>
-    //     </TouchableOpacity>
-    //   </View>
-    // );
-  }
-}
+          <Animatable.View style={styles.footer} animation="fadeInUpBig">
+            {/* ------------------------ EMAIL SECTION & INPUT ----------------------------- */}
+            <Text style={styles.text_footer}>Email</Text>
+            <View style={styles.action}>
+              <FontAwesome name="at" color="#05375a" size={20} />
+              <TextInput
+                placeholder="Your Email Address"
+                style={styles.textInput}
+                autoCapitalize="none"
+                onChangeText={(email) => TextInputChange(email)}
+              />
+              {data.check_textInputChange ? (
+                <Feather name="check-circle" color="green" size={20} />
+              ) : null}
+            </View>
+            {/* ------------------------ PASSWORD SECTION & INPUT --------------------------- */}
+            <Text style={[styles.text_footer, { marginTop: 35 }]}>
+              Password
+            </Text>
+            <View style={styles.action}>
+              <Feather name="lock" color="#05375a" size={20} />
+              <TextInput
+                placeholder="Your Password"
+                secureTextEntry={data.secureTextEntry ? true : false}
+                style={styles.textInput}
+                autoCapitalize="none"
+                onChangeText={(password) => handlePasswordChange(password)}
+              />
+              <TouchableOpacity onPress={updateSecureTextEntry}>
+                {data.secureTextEntry ? (
+                  <Feather name="eye-off" color="gray" size={20} />
+                ) : (
+                  <Feather name="eye" color="gray" size={20} />
+                )}
+              </TouchableOpacity>
+            </View>
+            {/* ------------------------ CONFIRM PASSWORD SECTION & INPUT --------------------------- */}
+            <Text style={[styles.text_footer, { marginTop: 35 }]}>
+              Confirm Password
+            </Text>
+            <View style={styles.action}>
+              <Feather name="lock" color="#05375a" size={20} />
+              <TextInput
+                placeholder="Confirm Your Password"
+                secureTextEntry={data.secureTextEntry ? true : false}
+                style={styles.textInput}
+                autoCapitalize="none"
+                onChangeText={(password) =>
+                  handleConfirmPasswordChange(password)
+                }
+              />
+              <TouchableOpacity onPress={updateConfirmSecureTextEntry}>
+                {data.secureTextEntry ? (
+                  <Feather name="eye-off" color="gray" size={20} />
+                ) : (
+                  <Feather name="eye" color="gray" size={20} />
+                )}
+              </TouchableOpacity>
+            </View>
+            {/* ------------------------ SIGN-IN & SIGN-UP SECTION &  ------------------------ */}
+            <View style={styles.button}>
+              <LinearGradient
+                colors={["#33A8FF", "#33A8FF"]}
+                style={styles.signIn}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    userRegister(data.email, data.password);
+                  }}
+                >
+                  <Text style={styles.textSign}>הירשם</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("LoginScreen")}
+                style={styles.signIn}
+              >
+                <Text style={[styles.textSign, { color: "#33A8FF" }]}>
+                  התחבר
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Animatable.View>
+        </View>
+      </KeyboardAvoidingView>
+    </Dismisskeyboard>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#009387",
+    backgroundColor: "#33A8FF",
   },
   header: {
-    flex: 1,
-    justifyContent: "flex-end",
-    paddingHorizontal: 20,
-    paddingBottom: 50,
+    flex: 1.5,
+    justifyContent: "center",
+    alignItems: "center",
   },
   footer: {
-    flex: 3,
+    flex: Platform.OS === "ios" ? 3 : 5,
     backgroundColor: "#fff",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -255,6 +207,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 30,
+  },
+  text_underHeader: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 15,
   },
   text_footer: {
     color: "#05375a",
@@ -281,8 +238,10 @@ const styles = StyleSheet.create({
     color: "#05375a",
   },
   errorMsg: {
-    color: "#FF0000",
-    fontSize: 14,
+    color: "#E9446A",
+    fontSize: 13,
+    fontWeight: "600",
+    textAlign: "center",
   },
   button: {
     alignItems: "center",
@@ -294,7 +253,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    borderColor: "#009387",
+    borderColor: "#33A8FF",
     borderWidth: 1,
     marginTop: 15,
   },
@@ -304,3 +263,5 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 });
+
+export default RegisterScreen;

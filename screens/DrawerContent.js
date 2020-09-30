@@ -15,6 +15,10 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import firebase from "../database/firebase";
 
 export function DrawerContent(props) {
+  const signOut1 = () => {
+    firebase.auth().signOut();
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -22,7 +26,7 @@ export function DrawerContent(props) {
           <View style={styles.userInfoSection}>
             <View>
               <Title style={styles.title}>
-                <Text>Hello </Text>
+                <Text>Hello {firebase.auth().currentUser.email}</Text>
               </Title>
             </View>
           </View>
@@ -34,8 +38,10 @@ export function DrawerContent(props) {
             icon={({ color, size }) => (
               <Icon name="home-outline" color={color} size={size} />
             )}
-            label="Home"
-            onPress={() => {}}
+            label="עמוד הבית"
+            onPress={() => {
+              props.navigation.navigate("Home");
+            }}
           />
         </Drawer.Section>
 
@@ -45,7 +51,7 @@ export function DrawerContent(props) {
             icon={({ color, size }) => (
               <Icon name="settings" color={color} size={size} />
             )}
-            label="Settings"
+            label="הגדרות"
             onPress={() => {}}
           />
         </Drawer.Section>
@@ -56,7 +62,7 @@ export function DrawerContent(props) {
             icon={({ color, size }) => (
               <Icon name="help-circle" color={color} size={size} />
             )}
-            label="Help"
+            label="עזרה"
             onPress={() => {}}
           />
         </Drawer.Section>
@@ -67,7 +73,7 @@ export function DrawerContent(props) {
             icon={({ color, size }) => (
               <Icon name="share" color={color} size={size} />
             )}
-            label="Share us"
+            label="שתפו את האפליקציה"
             onPress={() => {}}
           />
         </Drawer.Section>
@@ -78,17 +84,10 @@ export function DrawerContent(props) {
           icon={({ color, size }) => (
             <Icon name="exit-to-app" color={color} size={size} />
           )}
-          label="Sign out"
-          onPress={
-            (signout = () => {
-              firebase
-                .auth()
-                .signOut()
-                .then(() => {
-                  this.props.navigation.navigate("Root");
-                });
-            })
-          }
+          label="התנתקות"
+          onPress={() => {
+            signOut1();
+          }}
         />
       </Drawer.Section>
     </View>

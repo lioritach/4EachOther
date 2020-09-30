@@ -1,26 +1,45 @@
-import React, { useEffect } from "react";
-import { View, ActivityIndicator } from "react-native";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { DrawerContent } from "./screens/DrawerContent";
 import RootStackScreen from "./screens/RootStackScreen";
-import { createSwitchNavigator } from "react-navigation";
 import MainTabScreens from "./screens/MainTabScreens";
+import LoadingScreen from "./screens/LoadingScreen";
+import firebase from "./database/firebase";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const App = () => {
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
   return (
     <NavigationContainer>
-      {/* <RootStackScreen /> */}
-      <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
-        <Stack.Screen name="Root" component={RootStackScreen} />
-        <Stack.Screen name="Home" component={MainTabScreens} />
-      </Drawer.Navigator>
+      {!user ? (
+        <RootStackScreen />
+      ) : (
+        <Drawer.Navigator
+          drawerContent={(props) => <DrawerContent {...props} />}
+        >
+          <Drawer.Screen name="HomeDrawer" component={MainTabScreens} />
+        </Drawer.Navigator>
+      )}
     </NavigationContainer>
   );
 };

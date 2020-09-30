@@ -1,9 +1,12 @@
 import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
+
 import * as firebase from "firebase";
 
 import HomeScreen from "./HomeScreen";
@@ -14,35 +17,37 @@ import RegisterScreen from "./RegisterScreen";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
-const LoginStack = createStackNavigator();
-const Auth = createStackNavigator();
+const MessageStack = createStackNavigator();
+
 const Tab = createBottomTabNavigator();
 
 const MainTabScreens = () => (
-  <Tab.Navigator
-    activeColor="#fff"
-    tabBarOptions={{
-      activeTintColor: "#009387",
-    }}
-  >
+  <Tab.Navigator initialRouteName="Home" activeColor="#fff">
     <Tab.Screen
       name="Home"
       component={HomeStackScreen}
       options={{
-        tabBarLabel: "Home",
-        tabBarColor: "#009387",
+        tabBarLabel: ({ focused }) => (
+          <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
+            עמוד הבית
+          </Text>
+        ),
         tabBarIcon: ({ color }) => (
-          <Ionicons name="ios-arrow-round-back" color={color} size={26} />
+          <Ionicons name="ios-home" color={color} size={26} />
         ),
       }}
     />
     <Tab.Screen
       name="MessageScreen"
-      component={MessageScreen}
+      component={MessageStackScreen}
       options={{
-        tabBarLabel: "Updates",
+        tabBarLabel: ({ focused }) => (
+          <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
+            הודעות
+          </Text>
+        ),
         tabBarIcon: ({ color }) => (
-          <Ionicons name="ios-home" color={color} size={26} />
+          <Ionicons name="ios-notifications" color={color} size={26} />
         ),
       }}
     />
@@ -50,7 +55,11 @@ const MainTabScreens = () => (
       name="ProfileScreen"
       component={ProfileStackScreen}
       options={{
-        tabBarLabel: "Profile",
+        tabBarLabel: ({ focused }) => (
+          <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
+            פרופיל אישי
+          </Text>
+        ),
         tabBarIcon: ({ color }) => (
           <Ionicons name="ios-person" color={color} size={26} />
         ),
@@ -61,27 +70,11 @@ const MainTabScreens = () => (
 
 export default MainTabScreens;
 
-const LoginStackScreen = ({ navigation }) => (
-  <LoginStack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: "#009387",
-      },
-      headerTintColor: "#fff",
-      headerTitleStyle: {
-        fontWeight: "bold",
-      },
-    }}
-  >
-    <LoginStack.Screen name="Login" component={LoginScreen} />
-  </LoginStack.Navigator>
-);
-
 const HomeStackScreen = ({ navigation }) => (
   <HomeStack.Navigator
     screenOptions={{
       headerStyle: {
-        backgroundColor: "#009387",
+        backgroundColor: "#33A8FF",
       },
       headerTintColor: "#fff",
       headerTitleStyle: {
@@ -90,14 +83,14 @@ const HomeStackScreen = ({ navigation }) => (
     }}
   >
     <HomeStack.Screen
-      name="Home"
+      name="דף הבית"
       component={HomeScreen}
       options={{
         headerLeft: () => (
           <Icon.Button
             name="bars"
             size={25}
-            backgroundColor="#009387"
+            backgroundColor="#33A8FF"
             onPress={() => {
               navigation.openDrawer();
             }}
@@ -108,15 +101,11 @@ const HomeStackScreen = ({ navigation }) => (
   </HomeStack.Navigator>
 );
 
-const AuthStackScreen = ({ navigation }) => (
-  <Auth.Screen name="Login" component={LoginScreen} />
-);
-
 const ProfileStackScreen = ({ navigation }) => (
   <ProfileStack.Navigator
     screenOptions={{
       headerStyle: {
-        backgroundColor: "#009387",
+        backgroundColor: "#33A8FF",
       },
       headerTintColor: "#fff",
       headerTitleStyle: {
@@ -125,14 +114,14 @@ const ProfileStackScreen = ({ navigation }) => (
     }}
   >
     <ProfileStack.Screen
-      name="Profile"
+      name="פרופיל אישי"
       component={ProfileScreen}
       options={{
         headerLeft: () => (
           <Icon.Button
             name="bars"
             size={25}
-            backgroundColor="#009387"
+            backgroundColor="#33A8FF"
             onPress={() => {
               navigation.openDrawer();
             }}
@@ -141,4 +130,35 @@ const ProfileStackScreen = ({ navigation }) => (
       }}
     />
   </ProfileStack.Navigator>
+);
+
+const MessageStackScreen = ({ navigation }) => (
+  <MessageStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#33A8FF",
+      },
+      headerTintColor: "#fff",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <MessageStack.Screen
+      name="הודעות & עדכונים"
+      component={MessageScreen}
+      options={{
+        headerLeft: () => (
+          <Icon.Button
+            name="bars"
+            size={25}
+            backgroundColor="#33A8FF"
+            onPress={() => {
+              navigation.openDrawer();
+            }}
+          ></Icon.Button>
+        ),
+      }}
+    />
+  </MessageStack.Navigator>
 );
