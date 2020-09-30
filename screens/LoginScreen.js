@@ -160,7 +160,7 @@ const LoginScreen = ({ navigation }) => {
               </Animatable.View>
             )}
 
-            {/* ------------------------ SIGN-IN & SIGN-UP SECTION &  ------------------------ */}
+            {/* ------------------------ SIGN-IN & SIGN-UP SECTION! &  ------------------------ */}
             <View style={styles.button}>
               <LinearGradient
                 colors={["#33A8FF", "#33A8FF"]}
