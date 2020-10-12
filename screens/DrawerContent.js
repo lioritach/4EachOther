@@ -1,18 +1,10 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import {
-  Avatar,
-  Title,
-  Caption,
-  Paragraph,
-  Drawer,
-  Text,
-  TouchableRipple,
-  Switch,
-} from "react-native-paper";
+import { Title, Drawer, Text } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import firebase from "../database/firebase";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import * as firebase from "firebase";
 
 export function DrawerContent(props) {
   const signOut1 = () => {
@@ -71,9 +63,9 @@ export function DrawerContent(props) {
         <Drawer.Section style={styles.drawerSection}>
           <DrawerItem
             icon={({ color, size }) => (
-              <Icon name="share" color={color} size={size} />
+              <FontAwesome5 name="hands-helping" color={color} size={size} />
             )}
-            label="שתפו את האפליקציה"
+            label="תהליך ההתנדבות"
             onPress={() => {}}
           />
         </Drawer.Section>

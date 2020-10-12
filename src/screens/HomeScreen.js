@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
-import * as firebase from "firebase";
 import Swiper from "react-native-swiper";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import Fontisto from "react-native-vector-icons/Fontisto";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const HomeScreen = ({ navigation }) => {
   return (
@@ -19,76 +14,66 @@ const HomeScreen = ({ navigation }) => {
         >
           <View style={styles.slide}>
             <Image
-              source={require("../assets/img1.jpg")}
+              source={require("../../assets/img1.jpg")}
               resizeMode="cover"
               style={styles.sliderImage}
             />
           </View>
           <View style={styles.slide}>
             <Image
-              source={require("../assets/img2.jpg")}
+              source={require("../../assets/img2.jpg")}
               resizeMode="cover"
               style={styles.sliderImage}
             />
           </View>
           <View style={styles.slide}>
             <Image
-              source={require("../assets/img3.jpg")}
+              source={require("../../assets/img3.jpg")}
               resizeMode="cover"
               style={styles.sliderImage}
             />
           </View>
         </Swiper>
       </View>
+
+      <View style={styles.categoryContainer}>
+        <Text style={styles.textTitle}>
+          שלום, אנא בחרו את העיר בה תרצו להתנדב
+        </Text>
+      </View>
+
+      <View style={styles.categoryContainer}></View>
+
       <View style={styles.categoryContainer}>
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("volunteer", { title: "התנדבויות בשעת חירום" });
+          
+            navigation.navigate("Ofakim_HomeStack");
           }}
         >
           <View style={styles.categoryIcon}>
             {/* <Fontisto name="clock" size={35} color="#33A8FF" /> */}
             <Image
-              source={require("../assets/emergency.png")}
-              style={styles.sliderImage}
+              source={require("../../assets/ofakim.jpg")}
+              style={styles.slider}
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>התנדבות בשעת חירום</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            // navigation.navigate("volunteer", {
-            //   title: "התנדבות עם אוכלוסיית גיל הזהב",
-            // });
+            navigation.navigate("BeerSheva_HomeStack");
           }}
         >
           <View style={styles.categoryIcon}>
             {/* <Fontisto name="clock" size={35} color="#33A8FF" /> */}
             <Image
-              source={require("../assets/old.png")}
-              style={styles.sliderImage}
+              source={require("../../assets/beersheva.jpg")}
+              style={styles.slider}
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>אוכלוסיית גיל הזהב</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() => {
-            // navigation.navigate("volunteer", { title: "התנדבויות בני נוער" });
-          }}
-        >
-          <View style={styles.categoryIcon}>
-            {/* <MaterialIcons name="family-restroom" size={35} color="#33A8FF" /> */}
-            <Image
-              source={require("../assets/teens.png")}
-              style={styles.sliderImage}
-            />
-          </View>
-          <Text style={styles.categoryBtnTxt}>התנדבות בני נוער</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -99,6 +84,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#EFECF4",
+  },
+  textTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 10,
   },
   sliderContainer: {
     height: 200,
@@ -118,6 +108,12 @@ const styles = StyleSheet.create({
   sliderImage: {
     height: "100%",
     width: "100%",
+    alignSelf: "center",
+    borderRadius: 8,
+  },
+  slider: {
+    height: "200%",
+    width: "200%",
     alignSelf: "center",
     borderRadius: 8,
   },
@@ -149,7 +145,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "#de4f35",
     fontSize: 12,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 });
 

@@ -18,7 +18,7 @@ import Dismisskeyboard from "../utils/DismissKeyboard";
 import Feather from "react-native-vector-icons/Feather";
 
 const LoginScreen = ({ navigation }) => {
-  const [data, setData] = React.useState({
+  const [data, setData] = useState({
     email: "",
     password: "",
     errorMessage: "",
@@ -160,7 +160,7 @@ const LoginScreen = ({ navigation }) => {
               </Animatable.View>
             )}
 
-            {/* ------------------------ SIGN-IN & SIGN-UP SECTION! &  ------------------------ */}
+            {/* ------------------------ SIGN-IN & SIGN-UP SECTION &  ------------------------ */}
             <View style={styles.button}>
               <LinearGradient
                 colors={["#33A8FF", "#33A8FF"]}

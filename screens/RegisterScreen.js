@@ -18,7 +18,7 @@ import Dismisskeyboard from "../utils/DismissKeyboard";
 import Feather from "react-native-vector-icons/Feather";
 
 const RegisterScreen = ({ navigation }) => {
-  const [data, setData] = React.useState({
+  const [data, setData] = useState({
     email: "",
     password: "",
     confirm_password: "",
@@ -82,8 +82,8 @@ const RegisterScreen = ({ navigation }) => {
           console.log(res);
         })
         .catch((error) => setData({ errorMessage: error.message }));
+      navigation.navigate("LoginScreen");
     }
-    navigation.navigate("LoginScreen");
   };
 
   return (

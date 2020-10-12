@@ -1,12 +1,14 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import LottieView from "lottie-react-native";
-import Text from "../components/Text";
+
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
 
+import Text from "../components/Text";
+
 export default LoadingScreen = () => {
-  const [_, setUser] = useContext(UserContext);
+  const [val, setUser] = useContext(UserContext);
   const firebase = useContext(FirebaseContext);
 
   useEffect(() => {
@@ -15,27 +17,28 @@ export default LoadingScreen = () => {
       if (user) {
         const userInfo = await firebase.getUserInfo(user.uid);
         setUser({
-          username: userInfo.name,
+          username: userInfo.username,
           email: userInfo.email,
           uid: user.uid,
-          logged: true,
+          isLoggedIn: true,
         });
       } else {
-        setUser((state) => ({ ...state, logged: false }));
+        setUser((state) => ({ ...state, isLoggedIn: false }));
       }
-    }, 2000);
+    }, 1500);
   }, []);
 
   return (
     <Container>
-      <Text title color="#ffff">
-        4EachOther App
+      <Text titleLoading heavy color="#ffffff">
+        4EachOther
       </Text>
-      <Text medium color="#ffff">
+      <Text medium color="#ffffff">
         מיד מתחילים ...
       </Text>
+
       <LottieView
-        source={require("../assets/loading.json")}
+        source={require("../../assets/loading.json")}
         autoPlay
         loop
         style={{ width: "100%" }}
@@ -50,20 +53,3 @@ const Container = styled.View`
   justify-content: center;
   background-color: #33a8ff;
 `;
-
-// export default class LoadingScreen extends React.Component {
-//   componentDidMount() {
-//     firebase.auth().onAuthStateChanged((user) => {
-//       this.navigation.navigate(user ? "MainTabScreens" : "RootStackScreen");
-//     });
-//   }
-
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <Text> Loading ... </Text>
-//         <ActivityIndicator size="large"></ActivityIndicator>
-//       </View>
-//     );
-//   }
-// }
