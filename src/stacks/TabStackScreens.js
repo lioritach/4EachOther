@@ -1,9 +1,10 @@
 import React from "react";
-import { Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
 import HomeScreen from "../screens/HomeScreen";
@@ -12,11 +13,18 @@ import NotificationsScreen from "../screens/NotificationsScreen";
 import Ofakim from ".././cities/Ofakim";
 import BeerSheva from ".././cities/BeerSheva";
 import EmergencyOfakim from "../screens/categories/OfakimCity/EmergencyOfakim";
-import routineOfakim from "../screens/categories/OfakimCity/routineOfakim";
+import EmergencyBeerSheva from "../screens/categories/BeerShevaCity/EmergencyBeerSheva";
+import RoutineOfakim from "../screens/categories/OfakimCity/RoutineOfakim";
+import CardView from "../components/CardView";
+import ReligionOfakim from "../screens/categories/OfakimCity/ReligionOfakim";
+import TeensOfakim from "../screens/categories/OfakimCity/TeensOfakim";
+import OldsOfakim from "../screens/categories/OfakimCity/OldsOfakim";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const NotificationsStack = createStackNavigator();
+const drawer = createDrawerNavigator();
+
 const Tab = createBottomTabNavigator();
 
 const MainTabScreens = () => (
@@ -123,7 +131,7 @@ const HomeStackScreen = ({ navigation }) => (
 
     <HomeStack.Screen
       name="routineOfakim"
-      component={routineOfakim}
+      component={RoutineOfakim}
       options={({ route }) => ({
         headerBackTitleVisible: false,
         headerShown: true,
@@ -133,11 +141,41 @@ const HomeStackScreen = ({ navigation }) => (
 
     <HomeStack.Screen
       name="religionOfakim"
-      component={routineOfakim}
+      component={ReligionOfakim}
       options={({ route }) => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות לפי מגדר באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="teensOfakim"
+      component={TeensOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות לבני נוער באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="oldsOfakim"
+      component={OldsOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות עם קשישים באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="viewContents"
+      component={CardView}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: route.params.title,
       })}
     />
 

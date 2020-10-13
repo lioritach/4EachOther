@@ -3,450 +3,82 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import { Card } from "react-native-material-cards";
+import CardVol from "../../../components/CardVol";
 
-export default EmergencyOfakim = () => {
+const EmergencyOfakim = ({ navigation }) => {
   const [data, setData] = useState([]);
+  const [clicked, setClicked] = useState(true);
 
   useEffect(() => {
     const uid = firebase.auth().currentUser.uid;
+    let isMounted = false;
 
-    const getData = firebase
+    const ref = firebase
       .firestore()
-      .collection("ofakim")
-      .onSnapshot((docs) => {
-        let data = [];
-        docs.forEach((doc1) => {
-          data.push(doc1.data());
-        });
-        setData(data);
-      });
+      .collection("ofakim_emergency")
+      .onSnapshot(
+        (snapshot) => {
+          setData(
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              dataVal: doc.data(),
+            }))
+          );
+        },
+        (err) => {
+          setErr(err);
+        }
+      );
 
-    // const sub = firebase
-    //   .firestore()
-    //   .collection("users")
-    //   .doc(uid)
-    //   .onSnapshot((doc) => {
-    //     setTitle(doc.data().username);
-    //   });
-    // const hosen = firebase
-    //   .database()
-    //   .ref("emergencyOfakim/hosen")
-    //   .on("value", (snapshot) => {
-    //     const title = snapshot.val().title;
-    //     const subTitle = snapshot.val().subTitle;
-    //     const description = snapshot.val().description;
-    //     setTitle(title);
-    //     setSubTitle(subTitle);
-    //     setDescription(description);
-    //   });
-
-    // const manhigut = firebase
-    //   .database()
-    //   .ref("emergencyOfakim/manhigut")
-    //   .on("value", (snapshot) => {
-    //     const title = snapshot.val().title;
-    //     const subTitle = snapshot.val().subTitle;
-    //     const description = snapshot.val().description;
-    //     setTitle_manhigut(title);
-    //     setSubTitle_manhigut(subTitle);
-    //     setDescription_manhigut(description);
-    //   });
-
-    // const idf = firebase
-    //   .database()
-    //   .ref("emergencyOfakim/idf")
-    //   .on("value", (snapshot) => {
-    //     const title = snapshot.val().title;
-    //     const subTitle = snapshot.val().subTitle;
-    //     const description = snapshot.val().description;
-    //     setTitle_idf(title);
-    //     setSubTitle_idf(subTitle);
-    //     setDescription_idf(description);
-    //   });
-
-    // const mada = firebase
-    //   .database()
-    //   .ref("emergencyOfakim/mada")
-    //   .on("value", (snapshot) => {
-    //     const title = snapshot.val().title;
-    //     const subTitle = snapshot.val().subTitle;
-    //     const description = snapshot.val().description;
-    //     setTitle_mada(title);
-    //     setSubTitle_mada(subTitle);
-    //     setDescription_mada(description);
-    //   });
-
-    // const ogen = firebase
-    //   .database()
-    //   .ref("emergencyOfakim/ogen")
-    //   .on("value", (snapshot) => {
-    //     const title = snapshot.val().title;
-    //     const subTitle = snapshot.val().subTitle;
-    //     const description = snapshot.val().description;
-    //     setTitle_ogen(title);
-    //     setSubTitle_ogen(subTitle);
-    //     setDescription_ogen(description);
-    //   });
-
-    // const kavRachel = firebase
-    //   .database()
-    //   .ref("emergencyOfakim/kavRachel")
-    //   .on("value", (snapshot) => {
-    //     const title = snapshot.val().title;
-    //     const subTitle = snapshot.val().subTitle;
-    //     const description = snapshot.val().description;
-    //     setTitle_kavRachel(title);
-    //     setSubTitle_kavRachel(subTitle);
-    //     setDescription_kavRachel(description);
-    //   });
-
-    // const aihudHazala = firebase
-    //   .database()
-    //   .ref("emergencyOfakim/aihudHazala")
-    //   .on("value", (snapshot) => {
-    //     const title = snapshot.val().title;
-    //     const subTitle = snapshot.val().subTitle;
-    //     const description = snapshot.val().description;
-    //     setTitle_aihudHazala(title);
-    //     setSubTitle_aihudHazala(subTitle);
-    //     setDescription_aihudHazala(description);
-    //   });
+    return () => ref();
   }, []);
+
+  const toggleClickedHandler = () => {
+    const doesShow = clicked;
+    setClicked(!doesShow);
+    toggleClickedHandler1();
+  };
+
+  const toggleClickedHandler1 = () => {
+    console.log("hi");
+  };
 
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <Card>
-          <Image
-            source={require("../../../../assets/hosen.jpg")}
-            style={{ height: 200, width: 200, marginLeft: 74 }}
-          />
-
-          <Text style={styles.textTitle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.textTitle}>
-                {val.hosen_title}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.subTitleStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.subTitleStyle}>
-                {val.hosen_subTitle}
-              </Text>
-            ))}
-          </Text>
-          <Text style={styles.descStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.descStyle}>
-                {val.hosen_description}
-              </Text>
-            ))}
-          </Text>
-          <View style={styles.sep}>
-            <TouchableOpacity onPress={() => console.log("presssed")}>
-              <Text style={styles.textPressHereToVol}>
-                לחצו כאן כדי להתנדב ב
-                <Text>
-                  {data.map((val, index) => (
-                    <Text key={index} style={styles.textPressHereToVol}>
-                      {val.hosen_title}
-                    </Text>
-                  ))}
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
-
-        <Card>
-          <Image
-            source={require("../../../../assets/aihudHazala.jpg")}
-            style={{ height: 200, width: 200, marginLeft: 74 }}
-          />
-
-          <Text style={styles.textTitle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.textTitle}>
-                {val.aihudHazala_title}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.subTitleStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.subTitleStyle}>
-                {val.aihudHazala_subTitle}
-              </Text>
-            ))}
-          </Text>
-          <Text style={styles.descStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.descStyle}>
-                {val.aihudHazala_description}
-              </Text>
-            ))}
-          </Text>
-          <View style={styles.sep}>
-            <TouchableOpacity onPress={() => console.log("presssed")}>
-              <Text style={styles.textPressHereToVol}>
-                לחצו כאן כדי להתנדב ב
-                <Text>
-                  {data.map((val, index) => (
-                    <Text key={index} style={styles.textPressHereToVol}>
-                      {val.aihudHazala_title}
-                    </Text>
-                  ))}
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
-
-        <Card>
-          <Image
-            source={require("../../../../assets/itc.jpg")}
-            style={{ height: 200, width: 230, marginLeft: 74 }}
-          />
-
-          <Text style={styles.textTitle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.textTitle}>
-                {val.manhigut_title}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.subTitleStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.subTitleStyle}>
-                {val.manhigut_subTitle}
-              </Text>
-            ))}
-          </Text>
-          <Text style={styles.descStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.descStyle}>
-                {val.manhigut_description}
-              </Text>
-            ))}
-          </Text>
-          <View style={styles.sep}>
-            <TouchableOpacity onPress={() => console.log("presssed")}>
-              <Text style={styles.textPressHereToVol}>
-                לחצו כאן כדי להתנדב ב
-                <Text>
-                  {data.map((val, index) => (
-                    <Text key={index} style={styles.textPressHereToVol}>
-                      {val.manhigut_title}
-                    </Text>
-                  ))}
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
-
-        <Card>
-          <Image
-            source={require("../../../../assets/idf.jpg")}
-            style={{ height: 200, width: 200, marginLeft: 74 }}
-          />
-
-          <Text style={styles.textTitle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.textTitle}>
-                {val.idf_title}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.subTitleStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.subTitleStyle}>
-                {val.idf_subTitle}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.descStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.descStyle}>
-                {val.idf_description}
-              </Text>
-            ))}
-          </Text>
-
-          <View style={styles.sep}>
-            <TouchableOpacity onPress={() => console.log("presssed")}>
-              <Text style={styles.textPressHereToVol}>
-                לחצו כאן כדי להתנדב ב
-                <Text>
-                  {data.map((val, index) => (
-                    <Text key={index} style={styles.textPressHereToVol}>
-                      {val.idf_title}
-                    </Text>
-                  ))}
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
-
-        <Card>
-          <Image
-            source={require("../../../../assets/mda.png")}
-            style={{ height: 200, width: 200, marginLeft: 74 }}
-          />
-
-          <Text style={styles.textTitle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.textTitle}>
-                {val.mda_title}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.subTitleStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.subTitleStyle}>
-                {val.mda_subTitle}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.descStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.descStyle}>
-                {val.mda_description}
-              </Text>
-            ))}
-          </Text>
-
-          <View style={styles.sep}>
-            <TouchableOpacity onPress={() => console.log("presssed")}>
-              <Text style={styles.textPressHereToVol}>
-                לחצו כאן כדי להתנדב ב
-                <Text>
-                  {data.map((val, index) => (
-                    <Text key={index} style={styles.textPressHereToVol}>
-                      {val.mda_title}
-                    </Text>
-                  ))}
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
-
-        <Card>
-          <Image
-            source={require("../../../../assets/ofakim.jpg")}
-            style={{ height: 200, width: 200, marginLeft: 74 }}
-          />
-
-          <Text style={styles.textTitle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.textTitle}>
-                {val.ogen_title}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.subTitleStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.subTitleStyle}>
-                {val.ogen_subTitle}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.descStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.descStyle}>
-                {val.ogen_description}
-              </Text>
-            ))}
-          </Text>
-
-          {/* ----------------------- BUTTON SECTION ---------------------------------- */}
-          <View style={styles.sep}>
-            <TouchableOpacity onPress={() => console.log("presssed")}>
-              <Text style={styles.textPressHereToVol}>
-                לחצו כאן כדי להתנדב ב
-                <Text>
-                  {data.map((val, index) => (
-                    <Text key={index} style={styles.textPressHereToVol}>
-                      {val.ogen_title}
-                    </Text>
-                  ))}
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
-
-        {/* ----------------------- ANOTHER CARD SECTION ---------------------------------- */}
-
-        <Card>
-          <Image
-            source={require("../../../../assets/kavRachel.png")}
-            style={{ height: 200, width: 200, marginLeft: 74 }}
-          />
-
-          {/* ----------------------- TITLE SECTION ---------------------------------- */}
-          <Text style={styles.textTitle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.textTitle}>
-                {val.kavRachel_title}
-              </Text>
-            ))}
-          </Text>
-
-          {/* ----------------------- SUBTITLE SECTION ---------------------------------- */}
-          <Text style={styles.subTitleStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.subTitleStyle}>
-                {val.kavRachel_subTitle}
-              </Text>
-            ))}
-          </Text>
-
-          {/* ----------------------- DESCRIPTION SECTION ---------------------------------- */}
-          <Text style={styles.descStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.descStyle}>
-                {val.kavRachel_description}
-              </Text>
-            ))}
-          </Text>
-
-          {/* ----------------------- BUTTON SECTION ---------------------------------- */}
-          <View style={styles.sep}>
-            <TouchableOpacity onPress={() => console.log("presssed")}>
-              <Text style={styles.textPressHereToVol}>
-                לחצו כאן כדי להתנדב ב
-                <Text>
-                  {data.map((val, index) => (
-                    <Text key={index} style={styles.textPressHereToVol}>
-                      {val.kavRachel_title}
-                    </Text>
-                  ))}
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
+      <View>
+        {data.map(({ id, dataVal }) => (
+          <TouchableOpacity
+            key={id}
+            onPress={() => {
+              navigation.navigate("viewContents", {
+                title: dataVal.title,
+                subtitle: dataVal.subtitle,
+                description: dataVal.description,
+                image: dataVal.image,
+              });
+            }}
+          >
+            <CardVol
+              title={dataVal.title}
+              description={dataVal.description}
+              image={dataVal.image}
+            />
+          </TouchableOpacity>
+        ))}
       </View>
     </ScrollView>
   );
 };
+export default EmergencyOfakim;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#EFECF4",
+    marginTop: 10,
+  },
+  cardDes: {
+    margin: 10,
   },
   textTitle: {
     flex: 1,
@@ -477,7 +109,18 @@ const styles = StyleSheet.create({
     paddingBottom: 14,
     fontSize: 20,
     fontWeight: "bold",
-    color: "#33a8ff",
+    color: "#ffffff",
+    backgroundColor: "#33a8ff",
+  },
+  textAfterPressHereToVol: {
+    alignContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    paddingBottom: 14,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#ffffff",
+    backgroundColor: "green",
   },
   descStyle: {
     alignItems: "flex-start",
@@ -490,12 +133,23 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   sep: {
-    borderTopColor: "#E9E9E9",
+    borderTopColor: "black",
     borderTopWidth: 1,
     flexDirection: "column",
     alignItems: "stretch",
     justifyContent: "flex-start",
     alignSelf: "stretch",
     paddingTop: 19,
+    backgroundColor: "#33a8ff",
+  },
+  sepAfterClicked: {
+    borderTopColor: "black",
+    borderTopWidth: 1,
+    flexDirection: "column",
+    alignItems: "stretch",
+    justifyContent: "flex-start",
+    alignSelf: "stretch",
+    paddingTop: 19,
+    backgroundColor: "green",
   },
 });

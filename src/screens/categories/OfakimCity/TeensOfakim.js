@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import CardVol from "../../../components/CardVol";
 
-const ReligionOfakim = ({ navigation }) => {
+const TeensOfakim = ({ navigation }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const uid = firebase.auth().currentUser.uid;
     let isMounted = false;
 
     const ref = firebase
       .firestore()
-      .collection("ofakim_religion")
+      .collection("ofakim_teens")
       .onSnapshot(
         (snapshot) => {
           setData(
@@ -27,6 +26,7 @@ const ReligionOfakim = ({ navigation }) => {
           setErr(err);
         }
       );
+
     return () => ref();
   }, []);
 
@@ -57,7 +57,7 @@ const ReligionOfakim = ({ navigation }) => {
   );
 };
 
-export default ReligionOfakim;
+export default TeensOfakim;
 
 const styles = StyleSheet.create({
   container: {
@@ -76,6 +76,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     textAlign: "center",
+  },
+  textPressHereToVol: {
+    alignContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    paddingBottom: 14,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#ffffff",
+    backgroundColor: "#33a8ff",
   },
   subTitleStyle: {
     fontSize: 15,

@@ -64,7 +64,7 @@ export default Ofakim = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("teensOfakim");
           }}
         >
           <View style={styles.categoryIcon}>
@@ -117,7 +117,7 @@ export default Ofakim = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("oldsOfakim");
           }}
         >
           <View style={styles.categoryIcon}>

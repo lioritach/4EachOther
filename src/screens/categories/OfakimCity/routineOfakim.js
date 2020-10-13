@@ -2,170 +2,62 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
-import { Card } from "react-native-material-cards";
-import { Button } from "react-native-paper";
+import CardVol from "../../../components/CardVol";
 
-export default routineOfakim = () => {
+const RoutineOfakim = ({ navigation }) => {
   const [data, setData] = useState([]);
-  const uid = firebase.auth().currentUser.uid; //todo remove this
 
   useEffect(() => {
-    // const uid = firebase.auth().currentUser.uid; //todo remove this
+    let isMounted = false;
 
-    const getData = firebase
+    const ref = firebase
       .firestore()
-      .collection("ofakim")
-      .onSnapshot((docs) => {
-        let data = [];
-        docs.forEach((doc1) => {
-          data.push(doc1.data());
-        });
-        setData(data);
-      });
+      .collection("ofakim_routine")
+      .onSnapshot(
+        (snapshot) => {
+          setData(
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              dataVal: doc.data(),
+            }))
+          );
+        },
+        (err) => {
+          setErr(err);
+        }
+      );
+
+    return () => ref();
   }, []);
 
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <Card>
-          <Image
-            source={require("../../../../assets/ahuzatNegev.jpeg")}
-            style={{ height: 200, width: 310, marginLeft: 30 }}
-          />
-          <Text style={styles.textTitle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.textTitle}>
-                {val.ahuzatNegev_title}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.subTitleStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.subTitleStyle}>
-                {val.ahuzatNegev_subTitle}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.descStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.descStyle}>
-                {val.ahuzatNegev_description}
-              </Text>
-            ))}
-          </Text>
-
-          <View style={styles.sep}>
-            <TouchableOpacity
-              onPress={() => {
-                firebase
-                  .firestore()
-                  .collection("requests")
-                  .doc(uid)
-                  .set(
-                    {
-                      title: [{ title: "2אחוזת נגב" }],
-                      email: firebase.auth().currentUser.email,
-                      uid: uid,
-                      confirm: "לא מאושר",
-                    },
-                    { merge: true }
-                  )
-                  .then(() =>
-                    Alert.alert(
-                      `תודה רבה ` +
-                        firebase.auth().currentUser.email +
-                        `\n במידה ותאושר תקבל הודעה`
-                    )
-                  );
-              }}
-            >
-              <Text style={styles.textPressHereToVol}>
-                לחצו כאן כדי להתנדב ב
-                <Text>
-                  {data.map((val, index) => (
-                    <Text key={index} style={styles.textPressHereToVol}>
-                      {val.ahuzatNegev_title}
-                    </Text>
-                  ))}
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
-
-        <Card>
-          <Image
-            source={require("../../../../assets/ahuzatNegev.jpeg")}
-            style={{ height: 200, width: 310, marginLeft: 30 }}
-          />
-          <Text style={styles.textTitle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.textTitle}>
-                {val.ahuzatNegev_title}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.subTitleStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.subTitleStyle}>
-                {val.ahuzatNegev_subTitle}
-              </Text>
-            ))}
-          </Text>
-
-          <Text style={styles.descStyle}>
-            {data.map((val, index) => (
-              <Text key={index} style={styles.descStyle}>
-                {val.ahuzatNegev_description}
-              </Text>
-            ))}
-          </Text>
-
-          <View style={styles.sep}>
-            <TouchableOpacity
-              onPress={() => {
-                firebase
-                  .firestore()
-                  .collection("requests")
-                  .doc(uid)
-                  .set(
-                    {
-                      title: { title: "2אחוזת נגב" },
-                      email: firebase.auth().currentUser.email,
-                      uid: uid,
-                      confirm: "לא מאושר",
-                    },
-                    { merge: false }
-                  )
-                  .then(() =>
-                    Alert.alert(
-                      `תודה רבה ` +
-                        firebase.auth().currentUser.email +
-                        `\n במידה ותאושר תקבל הודעה`
-                    )
-                  );
-              }}
-            >
-              <Text style={styles.textPressHereToVol}>
-                לחצו כאן כדי להתנדב ב
-                <Text>
-                  {data.map((val, index) => (
-                    <Text key={index} style={styles.textPressHereToVol}>
-                      {val.ahuzatNegev_title}
-                    </Text>
-                  ))}
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
+      <View>
+        {data.map(({ id, dataVal }) => (
+          <TouchableOpacity
+            key={id}
+            onPress={() => {
+              navigation.navigate("viewContents", {
+                title: dataVal.title,
+                subtitle: dataVal.subtitle,
+                description: dataVal.description,
+                image: dataVal.image,
+              });
+            }}
+          >
+            <CardVol
+              title={dataVal.title}
+              description={dataVal.description}
+              image={dataVal.image}
+            />
+          </TouchableOpacity>
+        ))}
       </View>
     </ScrollView>
   );
 };
+
+export default RoutineOfakim;
 
 const styles = StyleSheet.create({
   container: {
@@ -192,7 +84,8 @@ const styles = StyleSheet.create({
     paddingBottom: 14,
     fontSize: 20,
     fontWeight: "bold",
-    color: "#33a8ff",
+    color: "#ffffff",
+    backgroundColor: "#33a8ff",
   },
   subTitleStyle: {
     fontSize: 15,
@@ -214,12 +107,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   sep: {
-    borderTopColor: "#E9E9E9",
+    borderTopColor: "black",
     borderTopWidth: 1,
     flexDirection: "column",
     alignItems: "stretch",
     justifyContent: "flex-start",
     alignSelf: "stretch",
     paddingTop: 19,
+    backgroundColor: "#33a8ff",
   },
 });

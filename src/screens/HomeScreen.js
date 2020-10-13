@@ -48,7 +48,6 @@ const HomeScreen = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-          
             navigation.navigate("Ofakim_HomeStack");
           }}
         >

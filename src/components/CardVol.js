@@ -1,21 +1,23 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { Button } from "react-native-paper";
 
-const Card = ({ itemData, onPress }) => {
+const CardVol = ({ title, description, image }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity>
       <View style={styles.card}>
         <View style={styles.cardImgWrapper}>
           <Image
-            source={itemData.image}
+            source={{ uri: image }}
             resizeMode="cover"
             style={styles.cardImg}
           />
         </View>
         <View style={styles.cardInfo}>
-          <Text style={styles.cardTitle}>{itemData.title}</Text>
+          <Text style={styles.cardTitle}>{title}</Text>
+
           <Text numberOfLines={2} style={styles.cardDetails}>
-            {itemData.description}
+            {description}
           </Text>
         </View>
       </View>
@@ -23,7 +25,7 @@ const Card = ({ itemData, onPress }) => {
   );
 };
 
-export default Card;
+export default CardVol;
 
 const styles = StyleSheet.create({
   card: {
