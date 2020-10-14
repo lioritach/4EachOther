@@ -16,12 +16,10 @@ export default SigninScreen = ({ navigation }) => {
 
   const signIn = async () => {
     setLoading(true);
-
     try {
       await firebase.signIn(email, password);
 
       const uid = firebase.getCurrentUser().uid;
-
       const userInfo = await firebase.getUserInfo(uid);
 
       setUser({
@@ -92,6 +90,15 @@ export default SigninScreen = ({ navigation }) => {
           </Text>
         </SignUp>
 
+        <ForgotPassword onPress={() => navigation.navigate("ForgotPassword")}>
+          <Text small center>
+            שכחת סיסמא?{" "}
+            <Text bold color="#33a8ff">
+              לחץ כאן כדי לאפס!
+            </Text>
+          </Text>
+        </ForgotPassword>
+
         <HeaderGraphic>
           <RightCircle />
           <LeftCircle />
@@ -147,6 +154,10 @@ const Loading = styled.ActivityIndicator.attrs((props) => ({
 
 const SignUp = styled.TouchableOpacity`
   margin-top: 29px;
+`;
+
+const ForgotPassword = styled.TouchableOpacity`
+  margin-top: 17px;
 `;
 
 const HeaderGraphic = styled.View`
