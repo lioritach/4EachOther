@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Button } from "react-native-paper";
 
 const CardVol = ({ title, description, image }) => {
   return (

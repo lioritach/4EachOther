@@ -19,6 +19,7 @@ import CardView from "../components/CardView";
 import ReligionOfakim from "../screens/categories/OfakimCity/ReligionOfakim";
 import TeensOfakim from "../screens/categories/OfakimCity/TeensOfakim";
 import OldsOfakim from "../screens/categories/OfakimCity/OldsOfakim";
+import FormTextInput from "../components/FormTextInput";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -176,6 +177,16 @@ const HomeStackScreen = ({ navigation }) => (
         headerBackTitleVisible: false,
         headerShown: true,
         title: route.params.title,
+      })}
+    />
+
+    <HomeStack.Screen
+      name="formTextInput"
+      component={FormTextInput}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "הזנת פרטים להתנדבות",
       })}
     />
 

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import {
   View,
   Text,
@@ -7,22 +7,22 @@ import {
   Dimensions,
   StatusBar,
   Platform,
-  Alert,
-  Button,
 } from "react-native";
 import HeaderImageScrollView, {
   TriggeringView,
 } from "react-native-image-header-scroll-view";
 import * as Animatable from "react-native-animatable";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Swiper from "react-native-swiper";
+import { UserContext } from "../context/UserContext";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const MIN_HEIGHT = Platform.OS === "ios" ? 90 : 55;
 const MAX_HEIGHT = 350;
 
-const CardView = ({ route }) => {
+const CardView = ({ route, navigation }) => {
   const { title, subtitle, description, image } = route.params;
   const navTitleView = useRef(null);
+  const [user] = useContext(UserContext);
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -69,13 +69,14 @@ const CardView = ({ route }) => {
           <Text style={styles.title}>מעוניין להתנדב?</Text>
         </View>
         <View style={[styles.section, styles.sectionLarge]}>
-          {/* <Text style={styles.sectionContent}> </Text> */}
-          {/* <Button
-          title="לחץ כאן כדי להרשם"
-          onPress={addData}
-          style={styles.buttonStyle}
-        /> */}
-          <Button onPress={() => {}} title="add" />
+          <TouchableOpacity
+            style={styles.commandButton}
+            onPress={() => {
+              navigation.navigate("formTextInput", { title: title });
+            }}
+          >
+            <Text style={styles.panelButtonTitle}>לחץ כאן</Text>
+          </TouchableOpacity>
         </View>
       </HeaderImageScrollView>
     </View>
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    fontWeight: "bold",
   },
   vol: {
     flexDirection: "row",
@@ -185,5 +187,17 @@ const styles = StyleSheet.create({
   },
   sectionLarge: {
     minHeight: 100,
+  },
+  panelButtonTitle: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "white",
+  },
+  commandButton: {
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: "#33A8FF",
+    alignItems: "center",
+    marginTop: 10,
   },
 });
