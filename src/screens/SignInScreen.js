@@ -42,7 +42,7 @@ export default SigninScreen = ({ navigation }) => {
       <Container>
         <Main>
           <Text title semi center>
-            Welcome back!
+            טוב לראות אתכם שוב!
           </Text>
         </Main>
 
@@ -78,16 +78,16 @@ export default SigninScreen = ({ navigation }) => {
             <Loading />
           ) : (
             <Text bold center color="#ffffff">
-              Sign In
+              התחבר
             </Text>
           )}
         </SignInContainer>
 
         <SignUp onPress={() => navigation.navigate("SignUp")}>
           <Text small center>
-            Don't have an account?{" "}
+            עדיין לא נרשמת?{" "}
             <Text bold color="#33a8ff">
-              Sign Up!
+              הירשם עכשיו!
             </Text>
           </Text>
         </SignUp>

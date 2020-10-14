@@ -9,6 +9,7 @@ export default SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
   const [loading, setLoading] = useState(false);
   const firebase = useContext(FirebaseContext);
   const [val, setUser] = useContext(UserContext);
@@ -16,7 +17,7 @@ export default SignUpScreen = ({ navigation }) => {
   const signUp = async () => {
     setLoading(true);
 
-    const user = { username, email, password };
+    const user = { username, email, password, phoneNumber };
 
     try {
       const createdUser = firebase.createUser(user);
@@ -33,8 +34,8 @@ export default SignUpScreen = ({ navigation }) => {
     <DismissKeyboard>
       <Container>
         <Main>
-          <Text title semi center>
-            Sign up to get started.
+          <Text large semi center>
+            שלום לכם! הירשמו כדי להתחיל.
           </Text>
         </Main>
 
@@ -63,6 +64,18 @@ export default SignUpScreen = ({ navigation }) => {
           </AuthContainer>
 
           <AuthContainer>
+            <AuthTitle>Phone Number</AuthTitle>
+            <AuthField
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="number-pad"
+              maxLength={10}
+              onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber.trim())}
+              value={phoneNumber}
+            />
+          </AuthContainer>
+
+          <AuthContainer>
             <AuthTitle>Password</AuthTitle>
             <AuthField
               autoCapitalize="none"
@@ -80,16 +93,16 @@ export default SignUpScreen = ({ navigation }) => {
             <Loading />
           ) : (
             <Text bold center color="#ffffff">
-              Sign Up
+              הירשם
             </Text>
           )}
         </SignUpContainer>
 
         <SignUp onPress={() => navigation.navigate("SignIn")}>
           <Text small center>
-            already have an account?{" "}
+            יש לכם משתמש?{" "}
             <Text bold color="#33a8ff">
-              Sign In!
+              התחברו עכשיו!
             </Text>
           </Text>
         </SignUp>

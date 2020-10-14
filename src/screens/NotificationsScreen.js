@@ -1,117 +1,63 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
 import * as firebase from "firebase";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import CardMessages from "../components/CardMessages";
 
-export default class NotificationsScreen extends Component {
-  state = {
-    user: {
-      name: "",
-    },
-  };
+const NotificationsScreen = ({ title, status }) => {
+  const [data, setData] = useState([]);
+  const [err, setErr] = useState();
 
-  componentDidMount() {
-    this.uid = firebase.auth().currentUser.uid;
-    // this.sub = firebase
-    //   .firestore()
-    //   .collection("users")
-    //   .onSnapshot((doc) => {
-    //     this.setState({
-    //       user: {
-    //         name: doc.data().confirm,
-    //       },
-    //     });
-    //   });
-    this.sub = firebase
+  useEffect(() => {
+    const uid = firebase.auth().currentUser.uid;
+    let isMounted = false;
+
+    const ref = firebase
       .firestore()
       .collection("requests")
-      .doc(this.uid)
-      .onSnapshot((doc) => {
-        this.setState({
-          user: {
-            name: doc.data().confirm,
-          },
-        });
-      });
-  }
+      .where("uid", "==", uid)
+      .onSnapshot(
+        (snapshot) => {
+          setData(
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              dataVal: doc.data(),
+            }))
+          );
+        },
+        (err) => {
+          setErr(err);
+        }
+      );
+  }, []);
 
-  render() {
-    return (
+  return (
+    <ScrollView>
       <View style={styles.container}>
-        <View style={styles.sliderContainer}>
-          <Image
-            source={require("../.././assets/covid.png")}
-            style={styles.sliderImage}
-          />
-        </View>
-        <Text style={{ height: "30%" }}>Name: {this.state.user.name}</Text>
-        <View
+        <Image
           style={{
-            borderBottomColor: "black",
-            borderBottomWidth: 1,
+            height: 200,
+            width: 200,
+            alignSelf: "center",
           }}
+          source={require("../../assets/notifications.png")}
         />
+        {data.map(({ id, dataVal }) => (
+          <TouchableOpacity key={id}>
+            <CardMessages title={dataVal.title} status={dataVal.status} />
+          </TouchableOpacity>
+        ))}
       </View>
-    );
-  }
-}
+    </ScrollView>
+  );
+};
+
+export default NotificationsScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  sliderContainer: {
-    height: 200,
-    width: "90%",
-    marginTop: 10,
-    justifyContent: "center",
-    alignSelf: "center",
-    borderRadius: 8,
-  },
-  wrapper: {},
-  slide: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "transparent",
-    borderRadius: 8,
-  },
-  sliderImage: {
-    height: "70%",
-    width: "50%",
-    alignSelf: "center",
-    borderRadius: 8,
-    marginLeft: -210,
-    marginTop: -70,
-  },
-  categoryContainer: {
-    flexDirection: "row",
-    width: "90%",
-    alignSelf: "center",
-    marginTop: 25,
-    marginBottom: 10,
-  },
-  categoryBtn: {
-    flex: 1,
-    width: "30%",
-    marginHorizontal: 0,
-    alignSelf: "center",
-  },
-  categoryIcon: {
-    borderWidth: 0,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    width: 70,
-    height: 70,
-    backgroundColor: "#fdeae7" /* '#FF6347' */,
-    borderRadius: 50,
-  },
-  categoryBtnTxt: {
-    alignSelf: "center",
-    marginTop: 5,
-    color: "#de4f35",
-    fontSize: 12,
-    fontWeight: "bold",
   },
 });
