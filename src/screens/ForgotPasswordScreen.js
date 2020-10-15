@@ -18,9 +18,9 @@ const ForgotPasswordScreen = ({ navigation }) => {
     setEmail("");
   };
 
-  const onSubmit = () => {
-    if (!email.trim()) {
-      alert("נא להזין אימייל!");
+  const onSubmit = (email) => {
+    if (typeof email == "undefined") {
+      alert("מייל הוא שדה חובה!");
       return;
     } else {
       forgotPassword(email);
@@ -57,7 +57,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity onPress={onSubmit}>
+        <TouchableOpacity onPress={() => onSubmit(email)}>
           <Text style={styles.sendButton}>שלח</Text>
         </TouchableOpacity>
 

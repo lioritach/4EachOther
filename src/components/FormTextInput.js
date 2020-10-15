@@ -6,7 +6,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserContext } from "../context/UserContext";
 import * as firebase from "firebase";
 
-const FormTextInput = ({ route }) => {
+const FormTextInput = ({ route, navigation }) => {
   const [phone, setPhone] = useState("");
   const [fullName, setFullName] = useState("");
   const [user] = useContext(UserContext);
@@ -19,15 +19,16 @@ const FormTextInput = ({ route }) => {
     firebase
       .firestore()
       .collection("requests")
-      .doc(uid)
-      .set({
+      .add({
         title: title,
         fullName: fullName,
         phoneNumber: phone,
         status: "ממתין לאישור.",
+        uid: uid,
       })
       .then(() => {
         console.log("Data sent.");
+        navigation.navigate("viewContents");
       });
 
     alert("איזה כיף! תודה שבחרת להתנדב ב" + title);
@@ -36,11 +37,16 @@ const FormTextInput = ({ route }) => {
     setPhone("");
   };
 
-  const onSubmit = () => {
-    if (!phone.trim() && !fullName.length) {
-      alert("אין אפשרות להשאיר שדות ריקים!");
+  const onSubmit = (fullName, phone) => {
+    if (typeof phone == "undefined") {
+      alert("שגיאה! מספר טלפון הוא שדה חובה");
+      return;
+    } else if (typeof fullName == "undefined" || fullName.length == 0) {
+      alert("שגיאה! שם מלא הוא שדה חובה");
+      return;
     } else if (phone.length < 10) {
-      alert("מספר טלפון באורך לא חוקי");
+      alert("מספר טלפון באורך לא תקין");
+      return;
     } else {
       sendData();
     }
@@ -91,7 +97,7 @@ const FormTextInput = ({ route }) => {
           />
         </View>
 
-        <TouchableOpacity onPress={onSubmit}>
+        <TouchableOpacity onPress={() => onSubmit(fullName, phone)}>
           <Text style={styles.sendButton}>שלח</Text>
         </TouchableOpacity>
       </View>

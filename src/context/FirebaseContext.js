@@ -28,6 +28,7 @@ const Firebase = {
       db.collection("users").doc(uid).set({
         username: user.username,
         email: user.email,
+        phoneNumber: user.phoneNumber,
       });
 
       delete user.password;

@@ -30,6 +30,34 @@ export default SignUpScreen = ({ navigation }) => {
     }
   };
 
+  const onSubmit = (username, password, phoneNumber, email) => {
+    if (typeof username == "undefined") {
+      alert("שגיאה! שם משתמש זהו שדה חובה");
+      return;
+    } else if (typeof password == "undefined") {
+      alert("שגיאה! סיסמא היא שדה חובה");
+      return;
+    } else if (typeof phoneNumber == "undefined") {
+      alert("שגיאה! מספר טלפון זהו שדה חובה");
+      return;
+    } else if (phoneNumber.length < 10) {
+      alert("מספר טלפון באורך לא חוקי!");
+    } else if (typeof email == "undefined") {
+      alert("שגיאה! מייל זהו שדה חובה");
+      return;
+    } else if (!validate(email)) {
+      alert("המייל אינו תקין!");
+    } else {
+      signUp();
+    }
+  };
+
+  const validate = (email) => {
+    const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+
+    return expression.test(String(email).toLowerCase());
+  };
+
   return (
     <DismissKeyboard>
       <Container>
@@ -88,7 +116,16 @@ export default SignUpScreen = ({ navigation }) => {
           </AuthContainer>
         </Auth>
 
-        <SignUpContainer onPress={signUp} disabled={loading}>
+        <SignUpContainer
+          onPress={() => {
+            console.log(username);
+            console.log(password);
+            console.log(phoneNumber);
+            console.log(email);
+            onSubmit(username, password, phoneNumber, email);
+          }}
+          disabled={loading}
+        >
           {loading ? (
             <Loading />
           ) : (
