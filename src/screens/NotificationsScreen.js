@@ -30,6 +30,7 @@ const NotificationsScreen = ({ title, status }) => {
           setErr(err);
         }
       );
+    return () => ref();
   }, []);
 
   return (
