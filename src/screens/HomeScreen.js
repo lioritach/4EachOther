@@ -67,7 +67,6 @@ const HomeScreen = ({ navigation }) => {
           }}
         >
           <View style={styles.categoryIcon}>
-            {/* <Fontisto name="clock" size={35} color="#33A8FF" /> */}
             <Image
               source={require("../../assets/beersheva.jpg")}
               style={styles.slider}
@@ -147,5 +146,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-
 export default HomeScreen;

@@ -2,8 +2,8 @@ import React, { Component, useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
 import * as firebase from "firebase";
+import CardMessage from "../components/CardMessage";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import CardMessages from "../components/CardMessages";
 
 const NotificationsScreen = ({ title, status }) => {
   const [data, setData] = useState([]);
@@ -11,7 +11,6 @@ const NotificationsScreen = ({ title, status }) => {
 
   useEffect(() => {
     const uid = firebase.auth().currentUser.uid;
-    let isMounted = false;
 
     const ref = firebase
       .firestore()
@@ -30,7 +29,6 @@ const NotificationsScreen = ({ title, status }) => {
           setErr(err);
         }
       );
-    return () => ref();
   }, []);
 
   return (
@@ -44,9 +42,15 @@ const NotificationsScreen = ({ title, status }) => {
           }}
           source={require("../../assets/notifications.png")}
         />
+        <View>
+          <Text style={{ textAlign: "center" }}>
+            {" "}
+            באיזור זה תוכלו לצפות בסטטוס הרישום להתנדבויות
+          </Text>
+        </View>
         {data.map(({ id, dataVal }) => (
           <TouchableOpacity key={id}>
-            <CardMessages title={dataVal.title} status={dataVal.status} />
+            <CardMessage title={dataVal.title} status={dataVal.status} />
           </TouchableOpacity>
         ))}
       </View>

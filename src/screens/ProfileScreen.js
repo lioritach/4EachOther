@@ -1,45 +1,41 @@
 import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components";
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
-import Text from "../components/Text";
-import { View } from "react-native";
+import { View, StyleSheet, Text, Image } from "react-native";
 import * as firebase from "firebase";
-import { Card } from "react-native-material-cards";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons";
 
-export default ProfileScreen = () => {
+export default ProfileScreen = ({ navigation }) => {
   const [user, setUser] = useContext(UserContext);
   const firebase1 = useContext(FirebaseContext);
   const [data, setData] = useState([]);
-
-  // const getData = async () => {
-  //   const document = await firebase
-  //     .firestore()
-  //     .collection("ofakim")
-  //     .doc("ofakim_routine")
-  //     .get();
-  // };
+  const [err, setErr] = useState();
 
   useEffect(() => {
-    // getData();
-    const sub = firebase
-      .firestore()
-      .collection("ofakim")
-      .onSnapshot((docs) => {
-        let data = [];
-        docs.forEach((doc1) => {
-          data.push(doc1.data());
-        });
-        setData(data);
-        console.log(data);
-      });
-    // const sub = firebase
-    //   .firestore()
-    //   .collection("ofakim")
-    //   .doc("ofakim_routine")
-    //   .onSnapshot((doc) => {
-    //     setData(doc.data().title);
-    //   });
+    const uid = firebase.auth().currentUser.uid;
+
+    const ref = () => {
+      firebase
+        .firestore()
+        .collection("users")
+        .where("uid", "==", uid)
+        .onSnapshot(
+          (snapshot) => {
+            setData(
+              snapshot.docs.map((doc) => ({
+                id: doc.id,
+                dataVal: doc.data(),
+              }))
+            );
+          },
+          (err) => {
+            setErr(err);
+          }
+        );
+    };
+
+    ref();
   }, []);
 
   const logOut = async () => {
@@ -51,37 +47,141 @@ export default ProfileScreen = () => {
   };
 
   return (
-    <Container>
-      <Logout onPress={logOut}>
-        <Text medium bold center color="#e23">
-          LOG OUT
-        </Text>
-      </Logout>
+    <View style={styles.container}>
+      <ScrollView>
+        <Image
+          style={{
+            height: 200,
+            width: 300,
+            margin: 0,
+            alignSelf: "center",
+          }}
+          source={require("../../assets/profile.png")}
+        />
+        {data.map(({ id, dataVal }) => (
+          <View style={styles.userInfoSection} key={id}>
+            <View style={styles.row}>
+              <Text style={{ color: "#777777", marginRight: 10 }}>
+                שם משתמש: {dataVal.username}
+              </Text>
+              <Ionicons name="md-person" size={20} />
+            </View>
 
-      <Text>
-        {data.map((val, index) => (
-          <View key={index}>
-            <Text>{val.routine_title}</Text>
+            <View style={styles.row}>
+              <Text style={{ color: "#777777", marginRight: 10 }}>
+                כתובת מייל: {dataVal.email}
+              </Text>
+              <Ionicons name="ios-mail" size={20} />
+            </View>
+
+            <View style={styles.row}>
+              <Text style={{ color: "#777777", marginRight: 10 }}>
+                מספר טלפון: {dataVal.phoneNumber}
+              </Text>
+              <Ionicons name="ios-call" size={20} />
+            </View>
           </View>
         ))}
-      </Text>
-      <Text>
-        {data.map((val, index) => (
-          <View key={index}>
-            <Text>{val.hosen_title}</Text>
+
+        {data.map(({ id, countVal }) => (
+          <View style={styles.infoBoxWrapper} key={id}>
+            <View
+              style={[
+                styles.infoBox,
+                {
+                  borderRightColor: "#dddddd",
+                  borderRightWidth: 1,
+                },
+              ]}
+            ></View>
           </View>
         ))}
-      </Text>
-    </Container>
+
+        <View style={styles.userInfoSection2}>
+          <View style={styles.row2}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("editProfile")}
+            >
+              <Text style={styles.menuItemText}>עריכת פרופיל</Text>
+            </TouchableOpacity>
+            <Ionicons name="md-settings" size={20} />
+          </View>
+
+          <View style={styles.row2}>
+            <TouchableOpacity>
+              <Text style={styles.menuItemText}>אודות</Text>
+            </TouchableOpacity>
+            <Ionicons name="ios-information-circle" size={20} />
+          </View>
+
+          <View style={styles.row2}>
+            <TouchableOpacity onPress={logOut}>
+              <Text style={styles.menuItemText}>התנתקות</Text>
+            </TouchableOpacity>
+            <Ionicons name="ios-log-out" size={20} />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
-const Container = styled.View`
-  align-items: center;
-  margin-top: 64px;
-  flex: 1;
-`;
-
-const Logout = styled.TouchableOpacity`
-  margin-bottom: 32px;
-`;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  logout: {
+    marginBottom: 32,
+  },
+  userInfoSection: {
+    paddingHorizontal: 30,
+    marginBottom: 25,
+    alignContent: "flex-end",
+    alignItems: "flex-end",
+    alignSelf: "flex-end",
+  },
+  userInfoSection2: {
+    paddingHorizontal: 30,
+    marginBottom: 25,
+    padding: 20,
+    alignContent: "flex-end",
+    alignItems: "flex-end",
+    alignSelf: "flex-end",
+  },
+  row: {
+    flexDirection: "row",
+    marginBottom: 13,
+  },
+  row2: {
+    flexDirection: "row",
+    marginBottom: 39,
+  },
+  menuWrapper: {
+    marginTop: 10,
+  },
+  menuItem: {
+    flexDirection: "row",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+  },
+  menuItemText: {
+    color: "#777777",
+    fontWeight: "600",
+    fontSize: 16,
+    lineHeight: 26,
+    marginRight: 10,
+  },
+  infoBoxWrapper: {
+    borderBottomColor: "#dddddd",
+    borderBottomWidth: 1,
+    borderTopColor: "#dddddd",
+    flexDirection: "row",
+    height: 20,
+  },
+  infoBox: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

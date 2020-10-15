@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
-const CardMessages = ({ title, status }) => {
+const CardMessage = ({ title, status }) => {
   return (
     <TouchableOpacity>
       <View style={styles.card}>
@@ -16,18 +17,19 @@ const CardMessages = ({ title, status }) => {
   );
 };
 
-export default CardMessages;
+export default CardMessage;
 
 const styles = StyleSheet.create({
   card: {
     height: 100,
-    marginVertical: 10,
+    marginVertical: 15,
     flexDirection: "row",
     shadowColor: "#999",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
+    margin: 10,
   },
   cardImgWrapper: {
     flex: 1,
@@ -45,9 +47,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: "#ccc",
     borderWidth: 1,
-    borderLeftWidth: 0,
+    borderLeftWidth: 1,
     borderBottomRightRadius: 8,
+    borderBottomLeftRadius: 8,
     borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
     backgroundColor: "#fff",
   },
   cardTitle: {

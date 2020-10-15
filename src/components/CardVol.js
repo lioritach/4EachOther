@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cardImg: {
-    height: "100%",
-    width: "100%",
+    height: 100,
+    width: 100,
     alignSelf: "center",
     borderRadius: 8,
     borderBottomRightRadius: 0,
@@ -60,9 +60,13 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 15,
+    color: "#33A8FF",
   },
   cardDetails: {
     fontSize: 12,
     color: "#444",
+    textAlign: "right",
   },
 });

@@ -1,53 +1,47 @@
-import React, { useState, useContext } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { TextInput } from "react-native-paper";
-import DismissKeyboard from "./DismissKeyboard";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { UserContext } from "../context/UserContext";
+import React, { useState } from "react";
+import { View, StyleSheet, Text, Image, TextInput } from "react-native";
 import * as firebase from "firebase";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import DismissKeyboard from "../components/DismissKeyboard";
 
-const FormTextInput = ({ route, navigation }) => {
+export default EditProfileScreen = ({ navigation }) => {
   const [phone, setPhone] = useState();
-  const [fullName, setFullName] = useState();
-  const [user] = useContext(UserContext);
+  const [username, setUsername] = useState();
 
-  const { title } = route.params;
+  const updateData = () => {
+    const uid = firebase.auth().currentUser.uid;
 
-  const sendData = () => {
-    const uid = user.uid;
     firebase
       .firestore()
-      .collection("requests")
-      .add({
-        title: title,
-        fullName: fullName,
+      .collection("users")
+      .doc(uid)
+      .update({
+        username: username,
         phoneNumber: phone,
-        status: "ממתין לאישור.",
-        uid: uid,
       })
       .then(() => {
-        console.log("Data sent.");
-        navigation.navigate("viewContents");
+        setPhone("");
+        setUsername("");
+        alert("הפרטים עודכנו בהצלחה!");
+        navigation.navigate("profile");
+      })
+      .catch((error) => {
+        alert("שגיאה בעדכון נתונים.");
       });
-
-    alert("איזה כיף! תודה שבחרת להתנדב ב" + title);
-
-    setFullName("");
-    setPhone("");
   };
 
-  const onSubmit = (fullName, phone) => {
-    if (typeof phone == "undefined") {
+  const onSubmit = (username, phone) => {
+    if (typeof phone == "undefined" || phone.length == 0) {
       alert("שגיאה! מספר טלפון הוא שדה חובה");
       return;
-    } else if (typeof fullName == "undefined" || fullName.length == 0) {
+    } else if (typeof username == "undefined" || username.length == 0) {
       alert("שגיאה! שם מלא הוא שדה חובה");
       return;
     } else if (phone.length < 10) {
       alert("מספר טלפון באורך לא תקין");
       return;
     } else {
-      sendData();
+      updateData();
     }
   };
 
@@ -55,15 +49,9 @@ const FormTextInput = ({ route, navigation }) => {
     <DismissKeyboard>
       <View style={styles.container}>
         <Image
-          source={require("../../assets/happy.png")}
-          style={{ width: "100%", height: "28%" }}
+          source={require("../../assets/edit.png")}
+          style={{ width: "100%", height: "35%" }}
         />
-        <View>
-          <Text style={styles.titleText}>איזה כיף שבחרת להתנדב!</Text>
-          <Text style={styles.subTitleText}>
-            כל מה שנותר זה רק להזין פרטים:
-          </Text>
-        </View>
 
         <View style={styles.textInputView}>
           <Text style={styles.textInput}>שם מלא: </Text>
@@ -73,10 +61,10 @@ const FormTextInput = ({ route, navigation }) => {
             autoCorrect={false}
             autoFocus={true}
             keyboardType="default"
-            onChangeText={(fullName) => {
-              setFullName(fullName);
+            onChangeText={(username) => {
+              setUsername(username);
             }}
-            value={fullName}
+            value={username}
           />
         </View>
 
@@ -96,15 +84,13 @@ const FormTextInput = ({ route, navigation }) => {
           />
         </View>
 
-        <TouchableOpacity onPress={() => onSubmit(fullName, phone)}>
-          <Text style={styles.sendButton}>שלח</Text>
+        <TouchableOpacity onPress={() => onSubmit(username, phone)}>
+          <Text style={styles.sendButton}>עדכן</Text>
         </TouchableOpacity>
       </View>
     </DismissKeyboard>
   );
 };
-
-export default FormTextInput;
 
 const styles = StyleSheet.create({
   container: {

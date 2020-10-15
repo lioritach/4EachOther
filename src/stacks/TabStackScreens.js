@@ -20,11 +20,11 @@ import ReligionOfakim from "../screens/categories/OfakimCity/ReligionOfakim";
 import TeensOfakim from "../screens/categories/OfakimCity/TeensOfakim";
 import OldsOfakim from "../screens/categories/OfakimCity/OldsOfakim";
 import FormTextInput from "../components/FormTextInput";
+import EditProfileScreen from "../screens/EditProfileScreen";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const NotificationsStack = createStackNavigator();
-const drawer = createDrawerNavigator();
 
 const Tab = createBottomTabNavigator();
 
@@ -223,7 +223,25 @@ const ProfileStackScreen = ({ navigation }) => (
       },
     }}
   >
-    <ProfileStack.Screen name="פרופיל אישי" component={ProfileScreen} />
+    <ProfileStack.Screen
+      name="profile"
+      component={ProfileScreen}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "פרופיל אישי",
+      })}
+    />
+
+    <ProfileStack.Screen
+      name="editProfile"
+      component={EditProfileScreen}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "עריכת פרופיל",
+      })}
+    />
   </ProfileStack.Navigator>
 );
 

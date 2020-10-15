@@ -14,6 +14,7 @@ import HeaderImageScrollView, {
 import * as Animatable from "react-native-animatable";
 import { UserContext } from "../context/UserContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { isEnabled } from "react-native/Libraries/Performance/Systrace";
 
 const MIN_HEIGHT = Platform.OS === "ios" ? 90 : 55;
 const MAX_HEIGHT = 350;

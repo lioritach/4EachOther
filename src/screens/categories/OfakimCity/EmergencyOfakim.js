@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
-import { Card } from "react-native-material-cards";
 import CardVol from "../../../components/CardVol";
 
 const EmergencyOfakim = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [clicked, setClicked] = useState(true);
+  const [err, setErr] = useState();
 
   useEffect(() => {
     const uid = firebase.auth().currentUser.uid;
@@ -37,10 +37,6 @@ const EmergencyOfakim = ({ navigation }) => {
     const doesShow = clicked;
     setClicked(!doesShow);
     toggleClickedHandler1();
-  };
-
-  const toggleClickedHandler1 = () => {
-    console.log("hi");
   };
 
   return (
