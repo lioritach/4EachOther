@@ -1,77 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
-import Swiper from "react-native-swiper";
 
-const HomeScreen = ({ navigation }) => {
+export default Ofakim = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.sliderContainer}>
-        <Swiper
-          horizontal={false}
-          autoplay
-          height={200}
-          activeDotColor="#33A8FF"
-        >
-          <View style={styles.slide}>
-            <Image
-              source={require("../../assets/img1.jpg")}
-              resizeMode="cover"
-              style={styles.sliderImage}
-            />
-          </View>
-          <View style={styles.slide}>
-            <Image
-              source={require("../../assets/img2.jpg")}
-              resizeMode="cover"
-              style={styles.sliderImage}
-            />
-          </View>
-          <View style={styles.slide}>
-            <Image
-              source={require("../../assets/img3.jpg")}
-              resizeMode="cover"
-              style={styles.sliderImage}
-            />
-          </View>
-        </Swiper>
-      </View>
-
       <View style={styles.categoryContainer}>
-        <Text style={styles.textTitle}>
-          שלום, אנא בחרו את העיר בה תרצו להתנדב
-        </Text>
+        <Text style={styles.textTitle}>שלום מנהל/ת התנדבויות!</Text>
       </View>
 
-      <View style={styles.categoryContainer}></View>
-
+      {/* ---------------------------- Categories Section ------------------------------------ */}
       <View style={styles.categoryContainer}>
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("EmergencyOfakim");
           }}
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../assets/ofakim.jpg")}
-              style={styles.slider}
+              source={require("../../../assets/sos.png")}
+              style={styles.sliderImage}
             />
           </View>
+          <Text style={styles.categoryBtnTxt}>התנדבויות בחירום</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("BeerSheva_HomeStack");
+            navigation.navigate("EmergencyOfakim");
           }}
         >
           <View style={styles.categoryIcon}>
-            {/* <Fontisto name="clock" size={35} color="#33A8FF" /> */}
             <Image
-              source={require("../../assets/beersheva.jpg")}
-              style={styles.slider}
+              source={require("../../../assets/sos.png")}
+              style={styles.sliderImage}
             />
           </View>
+          <Text style={styles.categoryBtnTxt}>התנדבויות בחירום</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => {
+            navigation.navigate("EmergencyOfakim");
+          }}
+        >
+          <View style={styles.categoryIcon}>
+            <Image
+              source={require("../../../assets/sos.png")}
+              style={styles.sliderImage}
+            />
+          </View>
+          <Text style={styles.categoryBtnTxt}>התנדבויות בחירום</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -84,9 +65,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFECF4",
   },
   textTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
-    marginLeft: 10,
+    marginLeft: 85,
+    textAlign: "center",
   },
   sliderContainer: {
     height: 200,
@@ -146,4 +128,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-export default HomeScreen;

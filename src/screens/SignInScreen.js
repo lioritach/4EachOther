@@ -6,6 +6,7 @@ import LottieView from "lottie-react-native";
 import DismissKeyboard from "../components/DismissKeyboard";
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
+import * as firebase1 from "firebase";
 
 export default SigninScreen = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -22,11 +23,35 @@ export default SigninScreen = ({ navigation }) => {
       const uid = firebase.getCurrentUser().uid;
       const userInfo = await firebase.getUserInfo(uid);
 
+      console.log("uiddddddd: ", uid);
+
+      const a = firebase1
+        .firestore()
+        .collection("admins")
+        .where("userId", "==", uid)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            // doc.data() is never undefined for query doc snapshots
+            setUser({
+              username: userInfo.username,
+              email: userInfo.email,
+              uid,
+              isLoggedIn: true,
+              isAdmin: true,
+            });
+          });
+        })
+        .catch(function (error) {
+          console.log("Error getting documents: ", error);
+        });
+
       setUser({
         username: userInfo.username,
         email: userInfo.email,
         uid,
         isLoggedIn: true,
+        isAdmin: false,
       });
     } catch (error) {
       alert(error.message);

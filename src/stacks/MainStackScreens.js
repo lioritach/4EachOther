@@ -1,93 +1,267 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
+import { StyleSheet, Text, View } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+
 import ProfileScreen from "../screens/ProfileScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
+import Ofakim from ".././cities/Ofakim";
+import BeerSheva from ".././cities/BeerSheva";
+import EmergencyOfakim from "../screens/categories/OfakimCity/EmergencyOfakim";
+import EmergencyBeerSheva from "../screens/categories/BeerShevaCity/EmergencyBeerSheva";
+import RoutineOfakim from "../screens/categories/OfakimCity/RoutineOfakim";
+import CardView from "../components/CardView";
+import ReligionOfakim from "../screens/categories/OfakimCity/ReligionOfakim";
+import TeensOfakim from "../screens/categories/OfakimCity/TeensOfakim";
+import OldsOfakim from "../screens/categories/OfakimCity/OldsOfakim";
+import FormTextInput from "../components/FormTextInput";
+import EditProfileScreen from "../screens/EditProfileScreen";
+import AdminHomeScreen from "../screens/admin/AdminHomeScreen";
+
+const HomeStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
+const NotificationsStack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
 
-function HomeScreen() {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-          if (route.name === "TabA") {
-            iconName = focused
-              ? "ios-information-circle"
-              : "ios-information-circle-outline";
-          } else if (route.name === "TabB") {
-            iconName = focused ? "ios-list-box" : "ios-list";
-          }
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: "tomato",
-        inactiveTintColor: "gray",
+const MainStacksScreens = () => (
+  <Tab.Navigator initialRouteName="Home" activeColor="#fff">
+    <Tab.Screen
+      name="Home"
+      component={HomeStackScreen}
+      options={{
+        tabBarLabel: ({ focused }) => (
+          <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
+            עמוד הבית
+          </Text>
+        ),
+        tabBarIcon: ({ color }) => (
+          <Ionicons name="ios-home" color={color} size={26} />
+        ),
       }}
-    >
-      <Tab.Screen name="TabA" component={TabAScreen} />
-      <Tab.Screen name="TabB" component={TabBScreen} />
-    </Tab.Navigator>
-  );
-}
+    />
+    <Tab.Screen
+      name="Notifications"
+      component={NotificationsStackScreen}
+      options={{
+        tabBarLabel: ({ focused }) => (
+          <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
+            הודעות
+          </Text>
+        ),
+        tabBarIcon: ({ color }) => (
+          <Ionicons name="ios-notifications" color={color} size={26} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="ProfileScreen"
+      component={ProfileStackScreen}
+      options={{
+        tabBarLabel: ({ focused }) => (
+          <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
+            פרופיל אישי
+          </Text>
+        ),
+        tabBarIcon: ({ color }) => (
+          <Ionicons name="ios-person" color={color} size={26} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
 
-function NotificationsScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>No New Notifications!</Text>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-  );
-}
-const Stack = createStackNavigator();
-function TabAScreen() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="TabA Home" component={TabADetailsScreen} />
-      <Stack.Screen name="TabA Details" component={Details} />
-    </Stack.Navigator>
-  );
-}
-function TabADetailsScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Welcome to TabA page!</Text>
-      <Button
-        onPress={() => navigation.navigate("TabA Details")}
-        title="Go to TabA Details"
-      />
-    </View>
-  );
-}
-function Details() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>TabA Details here!</Text>
-    </View>
-  );
-}
-function TabBScreen() {
-  return (
-    <View>
-      <Text style={{ textAlign: "center", marginTop: 300 }}>
-        Welcome to TabB page!
-      </Text>
-    </View>
-  );
-}
-const Drawer = createDrawerNavigator();
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Notifications" component={NotificationsScreen} />
-      </Drawer.Navigator>
-    </NavigationContainer>
-  );
-}
+export default MainStacksScreens;
+
+const HomeStackScreen = ({ navigation }) => (
+  <HomeStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#33A8FF",
+        shadowColor: "#fff",
+        elevation: 0,
+      },
+      headerTintColor: "#fff",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <HomeStack.Screen
+      name="HomePage"
+      component={AdminHomeScreen}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        title: "עמוד הבית",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="Ofakim_HomeStack"
+      component={Ofakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות בעיר אופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="BeerSheva_HomeStack"
+      component={BeerSheva}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות בעיר באר שבע",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="EmergencyOfakim"
+      component={EmergencyOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות בשעת חירום באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="routineOfakim"
+      component={RoutineOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות בשגרה באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="religionOfakim"
+      component={ReligionOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות לפי מגדר באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="teensOfakim"
+      component={TeensOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות לבני נוער באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="oldsOfakim"
+      component={OldsOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות עם קשישים באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="viewContents"
+      component={CardView}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: route.params.title,
+      })}
+    />
+
+    <HomeStack.Screen
+      name="formTextInput"
+      component={FormTextInput}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "הזנת פרטים להתנדבות",
+      })}
+    />
+
+    {/* <HomeStack.Screen
+      name={"volunteer"}
+      component={CardListScreen}
+      options={({ route }) => ({
+        title: route.params.title,
+        headerBackTitleVisible: false,
+      })}
+    />
+    <HomeStack.Screen
+      name={"cardItems"}
+      component={CardItemDetails}
+      options={({ route }) => ({
+        // title: route.params.title,
+        headerBackTitleVisible: false,
+      })}
+    /> */}
+  </HomeStack.Navigator>
+);
+
+const ProfileStackScreen = ({ navigation }) => (
+  <ProfileStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#33A8FF",
+        shadowColor: "#fff",
+        elevation: 0,
+      },
+      headerTintColor: "#fff",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <ProfileStack.Screen
+      name="profile"
+      component={ProfileScreen}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "פרופיל אישי",
+      })}
+    />
+
+    <ProfileStack.Screen
+      name="editProfile"
+      component={EditProfileScreen}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "עריכת פרופיל",
+      })}
+    />
+  </ProfileStack.Navigator>
+);
+
+const NotificationsStackScreen = ({ navigation }) => (
+  <NotificationsStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#33A8FF",
+        shadowColor: "#fff",
+        elevation: 0,
+      },
+      headerTintColor: "#fff",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <NotificationsStack.Screen
+      name="הודעות & עדכונים"
+      component={NotificationsScreen}
+    />
+  </NotificationsStack.Navigator>
+);

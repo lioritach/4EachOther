@@ -14,7 +14,6 @@ const CardVol = ({ title, description, image }) => {
         </View>
         <View style={styles.cardInfo}>
           <Text style={styles.cardTitle}>{title}</Text>
-
           <Text numberOfLines={2} style={styles.cardDetails}>
             {description}
           </Text>

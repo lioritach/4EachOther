@@ -1,7 +1,6 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Swiper from "react-native-swiper";
 
 const Tab = createMaterialTopTabNavigator();
 

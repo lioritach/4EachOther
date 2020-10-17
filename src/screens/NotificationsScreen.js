@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
 import * as firebase from "firebase";
-import CardMessage from ".././components/CardMessages";
+import CardMessage from "../components/CardMessage";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 const NotificationsScreen = ({ title, status }) => {
@@ -29,6 +29,8 @@ const NotificationsScreen = ({ title, status }) => {
           setErr(err);
         }
       );
+
+    return () => ref();
   }, []);
 
   return (
