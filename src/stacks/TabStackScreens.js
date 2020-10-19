@@ -260,8 +260,13 @@ const NotificationsStackScreen = ({ navigation }) => (
     }}
   >
     <NotificationsStack.Screen
-      name="הודעות & עדכונים"
+      name="messages"
       component={NotificationsScreen}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "הודעות & עדכונים",
+      })}
     />
   </NotificationsStack.Navigator>
 );

@@ -23,5 +23,7 @@ export default AppStackScreens = () => {
         <AppStack.Screen name="Auth" component={AuthStackScreens} />
       )}
     </AppStack.Navigator>
+
+
   );
 };

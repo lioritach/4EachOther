@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Alert } from "react-native";
 
 import * as firebase from "firebase";
 import CardMessage from "../components/CardMessages";
@@ -33,6 +33,39 @@ const NotificationsScreen = ({ title, status }) => {
     return () => ref();
   }, []);
 
+  const alertDelete = (title, uid) => {
+    Alert.alert("מחיקת התנדבות", "האם ברצונך למחוק את ההתנדבות?", [
+      {
+        text: "לא",
+        onPress: () => {
+          navigation.navigate("messages");
+        },
+      },
+      {
+        text: "כן",
+        onPress: () => {
+          deleteFields(title, uid);
+        },
+      },
+    ]);
+  };
+
+
+  const deleteFields = (title, uid) => {
+    firebase
+      .firestore()
+      .collection("requests")
+      .where("uid", "==", uid)
+      .where("title", "==", title)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          doc.ref.delete();
+          alert("ההתנדבות נמחקה בהצלחה!");
+        });
+      });
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -51,7 +84,12 @@ const NotificationsScreen = ({ title, status }) => {
           </Text>
         </View>
         {data.map(({ id, dataVal }) => (
-          <TouchableOpacity key={id}>
+          <TouchableOpacity
+            key={id}
+            onPress={() => {
+              alertDelete(dataVal.title, dataVal.uid);
+            }}
+          >
             <CardMessage title={dataVal.title} status={dataVal.status} />
           </TouchableOpacity>
         ))}

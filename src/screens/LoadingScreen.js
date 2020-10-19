@@ -20,33 +20,12 @@ export default LoadingScreen = () => {
         const userInfo = await firebase.getUserInfo(user.uid);
         const uid2 = firebase1.auth().currentUser.uid;
 
-        const a = firebase1
-          .firestore()
-          .collection("admins")
-          .where("userId", "==", uid2)
-          .get()
-          .then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
-              // doc.data() is never undefined for query doc snapshots
-              setUser({
-                username: userInfo.username,
-                email: userInfo.email,
-                uid: user.uid,
-                isLoggedIn: true,
-                isAdmin: true,
-              });
-            });
-          })
-          .catch(function (error) {
-            console.log("Error getting documents: ", error);
-          });
-
         setUser({
           username: userInfo.username,
           email: userInfo.email,
           uid: user.uid,
           isLoggedIn: true,
-          isAdmin: false,
+          // isAdmin: false,
         });
       } else {
         setUser((state) => ({ ...state, isLoggedIn: false }));

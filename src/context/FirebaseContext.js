@@ -29,6 +29,7 @@ const Firebase = {
         username: user.username,
         email: user.email,
         phoneNumber: user.phoneNumber,
+        uid: uid,
       });
 
       delete user.password;
@@ -49,6 +50,19 @@ const Firebase = {
       }
     } catch (error) {
       console.log("Error in @getUserInfo ", error);
+    }
+  },
+
+  getAdminInfo: async (uid) => {
+    try {
+      const admin = await db.collection("admins").doc(uid).get();
+      console.log("uid admin: ", uid);
+      console.log("data admin: ", admin.data());
+      if (admin.exists) {
+        return true;
+      }
+    } catch (error) {
+      console.log("Error in @getadminInfo ", error);
     }
   },
 

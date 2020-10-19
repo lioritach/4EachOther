@@ -22,41 +22,40 @@ export default SigninScreen = ({ navigation }) => {
 
       const uid = firebase.getCurrentUser().uid;
       const userInfo = await firebase.getUserInfo(uid);
+      const adminInfo = await firebase.getAdminInfo(uid);
 
-      console.log("uiddddddd: ", uid);
-
-      const a = firebase1
-        .firestore()
-        .collection("admins")
-        .where("userId", "==", uid)
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (doc) {
-            // doc.data() is never undefined for query doc snapshots
-            setUser({
-              username: userInfo.username,
-              email: userInfo.email,
-              uid,
-              isLoggedIn: true,
-              isAdmin: true,
-            });
-          });
-        })
-        .catch(function (error) {
-          console.log("Error getting documents: ", error);
+      if (adminInfo) {
+        setUser({
+          username: userInfo.username,
+          email: userInfo.email,
+          uid,
+          isLoggedIn: true,
+          isAdmin: true,
         });
-
-      setUser({
-        username: userInfo.username,
-        email: userInfo.email,
-        uid,
-        isLoggedIn: true,
-        isAdmin: false,
-      });
+      } else {
+        setUser({
+          username: userInfo.username,
+          email: userInfo.email,
+          uid,
+          isLoggedIn: true,
+          isAdmin: false,
+        });
+      }
     } catch (error) {
       alert(error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkAdmin = (uid) => {
+    const userid = firebase.getCurrentUser().uid;
+    if (uid === userid) {
+      console.log("is admin");
+      return true;
+    } else {
+      console.log("is not admin");
+      return false;
     }
   };
 
