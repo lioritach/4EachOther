@@ -19,14 +19,25 @@ export default LoadingScreen = () => {
       if (user) {
         const userInfo = await firebase.getUserInfo(user.uid);
         const uid2 = firebase1.auth().currentUser.uid;
+        const adminInfo = await firebase.getAdminInfo(user.uid);
 
-        setUser({
-          username: userInfo.username,
-          email: userInfo.email,
-          uid: user.uid,
-          isLoggedIn: true,
-          // isAdmin: false,
-        });
+        if (adminInfo) {
+          setUser({
+            username: userInfo.username,
+            email: userInfo.email,
+            uid: user.uid,
+            isLoggedIn: true,
+            isAdmin: true,
+          });
+        } else {
+          setUser({
+            username: userInfo.username,
+            email: userInfo.email,
+            uid: user.uid,
+            isLoggedIn: true,
+            isAdmin: false,
+          });
+        }
       } else {
         setUser((state) => ({ ...state, isLoggedIn: false }));
       }
