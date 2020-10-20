@@ -21,6 +21,8 @@ import OldsOfakim from "../screens/categories/OfakimCity/OldsOfakim";
 import FormTextInput from "../components/FormTextInput";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import AdminHomeScreen from "../screens/admin/AdminHomeScreen";
+import AddNewVolunteers from "../screens/admin/AddNewVolunteers";
+import ShowRequests from "../screens/admin/ShowRequests";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
