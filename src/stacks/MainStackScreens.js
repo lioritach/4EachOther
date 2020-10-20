@@ -121,14 +121,24 @@ const HomeStackScreen = ({ navigation }) => (
     />
 
     <HomeStack.Screen
-      name="EmergencyOfakim"
-      component={EmergencyOfakim}
-      options={({ route }) => ({
-        headerBackTitleVisible: false,
-        headerShown: true,
-        title: "התנדבויות בשעת חירום באופקים",
-      })}
-    />
+        name="addNewVol"
+        component={AddNewVolunteers}
+        options={({ route }) => ({
+          headerBackTitleVisible: false,
+          headerShown: true,
+          title: "הוספת התנדבות חדשה",
+        })}
+      />
+
+    <HomeStack.Screen
+        name="showRequests"
+        component={ShowRequests}
+        options={({ route }) => ({
+          headerBackTitleVisible: false,
+          headerShown: true,
+          title: "בקשות הממתינות להתנדבות",
+        })}
+      />
 
     <HomeStack.Screen
       name="routineOfakim"
