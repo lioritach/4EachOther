@@ -28,7 +28,7 @@ export default Ofakim = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("EmergencyOfakim");
+            navigation.navigate("showRequests");
           }}
         >
           <View style={styles.categoryIcon}>
@@ -37,7 +37,7 @@ export default Ofakim = ({ navigation }) => {
               style={styles.sliderImage}
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>התנדבויות בחירום</Text>
+          <Text style={styles.categoryBtnTxt}>בקשות ממתינות להתנדבות</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
