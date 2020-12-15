@@ -1,12 +1,9 @@
 import React, { useState, useContext } from "react";
-import { View } from "react-native";
 import styled from "styled-components";
 import Text from "../components/Text";
-import LottieView from "lottie-react-native";
-import DismissKeyboard from "../components/DismissKeyboard";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
-import * as firebase1 from "firebase";
 
 export default SigninScreen = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -48,17 +45,6 @@ export default SigninScreen = ({ navigation }) => {
     }
   };
 
-  const checkAdmin = (uid) => {
-    const userid = firebase.getCurrentUser().uid;
-    if (uid === userid) {
-      console.log("is admin");
-      return true;
-    } else {
-      console.log("is not admin");
-      return false;
-    }
-  };
-
   const onSubmit = (email, password) => {
     if (typeof password == "undefined") {
       alert("שגיאה! סיסמא היא שדה חובה");
@@ -84,7 +70,7 @@ export default SigninScreen = ({ navigation }) => {
   };
 
   return (
-    <DismissKeyboard>
+    <KeyboardAwareScrollView>
       <Container>
         <Main>
           <Text title semi center>
@@ -94,7 +80,7 @@ export default SigninScreen = ({ navigation }) => {
 
         <Auth>
           <AuthContainer>
-            <AuthTitle>Email Address</AuthTitle>
+            <AuthTitle>כתובת מייל</AuthTitle>
             <AuthField
               autoCapitalize="none"
               autoCompleteType="email"
@@ -107,7 +93,7 @@ export default SigninScreen = ({ navigation }) => {
           </AuthContainer>
 
           <AuthContainer>
-            <AuthTitle>Password</AuthTitle>
+            <AuthTitle>סיסמא</AuthTitle>
             <AuthField
               autoCapitalize="none"
               autoCompleteType="password"
@@ -158,7 +144,7 @@ export default SigninScreen = ({ navigation }) => {
         </HeaderGraphic>
         <StatusBar barStyle="light-content" />
       </Container>
-    </DismissKeyboard>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -180,9 +166,10 @@ const AuthContainer = styled.View`
 
 const AuthTitle = styled(Text)`
   color: #8e93a1;
-  font-size: 12px;
+  font-size: 15px;
   text-transform: uppercase;
-  font-weight: 300;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const AuthField = styled.TextInput`

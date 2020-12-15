@@ -10,6 +10,7 @@ export default ProfileScreen = ({ navigation }) => {
   const [user, setUser] = useContext(UserContext);
   const firebase1 = useContext(FirebaseContext);
   const [data, setData] = useState([]);
+  const [vol, setVol] = useState([]);
   const [err, setErr] = useState();
 
   useEffect(() => {
@@ -35,7 +36,21 @@ export default ProfileScreen = ({ navigation }) => {
         );
     };
 
+    const voln = () => {
+      firebase
+        .firestore()
+        .collection("requests")
+        .where("uid", "==", uid)
+        .where("status", "==", "מאושר ✅")
+        .onSnapshot((querySnapshot) => {
+          setVol(querySnapshot.size);
+          console.log(querySnapshot.size);
+          console.log(uid);
+        });
+    };
+
     ref();
+    voln();
   }, []);
 
   const logOut = async () => {
@@ -77,6 +92,13 @@ export default ProfileScreen = ({ navigation }) => {
             <View style={styles.row}>
               <Text style={{ color: "#777777", marginRight: 10 }}>
                 מספר טלפון: {dataVal.phoneNumber}
+              </Text>
+              <Ionicons name="ios-call" size={20} />
+            </View>
+
+            <View style={styles.row}>
+              <Text style={{ color: "#777777", marginRight: 10 }}>
+                התנדבויות בהן אני מתנדב: {vol}
               </Text>
               <Ionicons name="ios-call" size={20} />
             </View>
@@ -143,12 +165,13 @@ const styles = StyleSheet.create({
   },
   userInfoSection2: {
     paddingHorizontal: 30,
-    marginBottom: 25,
-    padding: 20,
+    marginBottom: 30,
+    marginTop: 10,
     alignContent: "flex-end",
     alignItems: "flex-end",
     alignSelf: "flex-end",
   },
+
   row: {
     flexDirection: "row",
     marginBottom: 13,

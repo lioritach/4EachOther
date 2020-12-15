@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import Text from "../components/Text";
-import DismissKeyboard from "../components/DismissKeyboard";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FirebaseContext } from "../context/FirebaseContext";
 import { UserContext } from "../context/UserContext";
 
@@ -22,7 +22,7 @@ export default SignUpScreen = ({ navigation }) => {
     try {
       const createdUser = firebase.createUser(user);
 
-      setUser({ ...createdUser, isLoggedIn: true });
+      await setUser({ ...createdUser, isLoggedIn: true });
     } catch (error) {
       console.log("error @signUp", error);
     } finally {
@@ -59,7 +59,7 @@ export default SignUpScreen = ({ navigation }) => {
   };
 
   return (
-    <DismissKeyboard>
+    <KeyboardAwareScrollView>
       <Container>
         <Main>
           <Text large semi center>
@@ -69,7 +69,7 @@ export default SignUpScreen = ({ navigation }) => {
 
         <Auth>
           <AuthContainer>
-            <AuthTitle>Username</AuthTitle>
+            <AuthTitle>שם משתמש</AuthTitle>
             <AuthField
               autoCapitalize="none"
               autoCorrect={false}
@@ -80,7 +80,7 @@ export default SignUpScreen = ({ navigation }) => {
           </AuthContainer>
 
           <AuthContainer>
-            <AuthTitle>Email Address</AuthTitle>
+            <AuthTitle>כתובת מייל</AuthTitle>
             <AuthField
               autoCapitalize="none"
               autoCompleteType="email"
@@ -92,7 +92,7 @@ export default SignUpScreen = ({ navigation }) => {
           </AuthContainer>
 
           <AuthContainer>
-            <AuthTitle>Phone Number</AuthTitle>
+            <AuthTitle>מספר טלפון</AuthTitle>
             <AuthField
               autoCapitalize="none"
               autoCorrect={false}
@@ -104,7 +104,7 @@ export default SignUpScreen = ({ navigation }) => {
           </AuthContainer>
 
           <AuthContainer>
-            <AuthTitle>Password</AuthTitle>
+            <AuthTitle>סיסמא</AuthTitle>
             <AuthField
               autoCapitalize="none"
               autoCompleteType="password"
@@ -122,7 +122,7 @@ export default SignUpScreen = ({ navigation }) => {
             console.log(password);
             console.log(phoneNumber);
             console.log(email);
-            onSubmit(username, password, phoneNumber, email);
+            onSubmit(username, password, phoneNumber, email, city);
           }}
           disabled={loading}
         >
@@ -150,7 +150,7 @@ export default SignUpScreen = ({ navigation }) => {
         </HeaderGraphic>
         <StatusBar barStyle="light-content" />
       </Container>
-    </DismissKeyboard>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -172,9 +172,10 @@ const AuthContainer = styled.View`
 
 const AuthTitle = styled(Text)`
   color: #8e93a1;
-  font-size: 12px;
+  font-size: 15px;
   text-transform: uppercase;
-  font-weight: 300;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const AuthField = styled.TextInput`
@@ -184,7 +185,7 @@ const AuthField = styled.TextInput`
 `;
 
 const SignUpContainer = styled.TouchableOpacity`
-  margin: -32px 32px;
+  margin: -52px 32px;
   height: 48px;
   align-items: center;
   justify-content: center;
@@ -198,7 +199,7 @@ const Loading = styled.ActivityIndicator.attrs((props) => ({
 }))``;
 
 const SignUp = styled.TouchableOpacity`
-  margin-top: 39px;
+  margin-top: 52px;
 `;
 
 const HeaderGraphic = styled.View`

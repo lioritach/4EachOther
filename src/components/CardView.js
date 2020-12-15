@@ -1,99 +1,203 @@
-import React, { useRef, useContext } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  Dimensions,
-  StatusBar,
-  Platform,
-} from "react-native";
-import HeaderImageScrollView, {
-  TriggeringView,
-} from "react-native-image-header-scroll-view";
-import * as Animatable from "react-native-animatable";
+import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import * as firebase from "firebase";
 import { UserContext } from "../context/UserContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { isEnabled } from "react-native/Libraries/Performance/Systrace";
 
-const MIN_HEIGHT = Platform.OS === "ios" ? 90 : 55;
-const MAX_HEIGHT = 350;
-
-const CardView = ({ route, navigation }) => {
+const CardView = ({ navigation, route }) => {
   const { title, subtitle, description, image } = route.params;
-  const navTitleView = useRef(null);
   const [user] = useContext(UserContext);
+  const [data, setdata] = useState(false);
+
+  // Render
+  //check if the user already sign to vol.
+  useEffect(() => {
+    const userId = firebase.auth().currentUser.uid;
+    const ref = firebase
+      .firestore()
+      .collection("requests")
+      .where("title", "==", title)
+      .where("uid", "==", userId)
+      .onSnapshot((snapshot) => {
+        snapshot.forEach((querySelect) => {
+          test(querySelect.data().title, querySelect.data().uid);
+        });
+      });
+
+    return () => ref();
+  }, []);
+
+  const test = (titleParam, uidParam) => {
+    if (titleParam == title) {
+      setdata(true);
+    } else {
+      setdata(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <HeaderImageScrollView
-        maxHeight={MAX_HEIGHT}
-        minHeight={MIN_HEIGHT}
-        maxOverlayOpacity={0.6}
-        minOverlayOpacity={0.3}
-        renderHeader={() => (
-          <Image source={{ uri: image }} style={styles.image} />
-        )}
-        renderForeground={() => (
-          <View style={styles.titleContainer}>
-            <Text style={styles.imageTitle}>{title}</Text>
-          </View>
-        )}
-        renderFixedForeground={() => (
-          <Animatable.View style={styles.navTitleView} ref={navTitleView}>
-            <Text style={styles.navTitle}>{title}</Text>
-          </Animatable.View>
-        )}
-      >
-        <TriggeringView
-          style={styles.section}
-          onHide={() => navTitleView.current.fadeInUp(200)}
-          onDisplay={() => navTitleView.current.fadeOut(100)}
+      {/* Header */}
+      <View style={{ flex: 2 }}>
+        <Image
+          source={{ uri: image }}
+          resizeMode="cover"
+          style={{
+            width: "100%",
+            height: "80%",
+          }}
+        />
+
+        <View
+          style={[
+            {
+              position: "absolute",
+              bottom: "3%",
+              left: "5%",
+              right: "5%",
+              borderRadius: 15,
+              padding: 24,
+              backgroundColor: "white",
+            },
+            styles.shadow,
+          ]}
         >
-          <View style={{ flexDirection: "row", justifyContent: "center" }}>
-            <Text style={styles.title}>מידע על ההתנדבות</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View style={styles.shadow}>
+              <Image
+                source={{ uri: image }}
+                resizeMode="cover"
+                style={{
+                  width: 70,
+                  height: 70,
+                  borderRadius: 15,
+                }}
+              />
+            </View>
+
+            <View
+              style={{ marginHorizontal: 12, justifyContent: "space-around" }}
+            >
+              <Text style={{ fontSize: 15, lineHeight: 25 }}>{title}</Text>
+              <Text style={{ color: "#8b9097", fontSize: 16, lineHeight: 22 }}>
+                אופקים
+              </Text>
+            </View>
           </View>
-        </TriggeringView>
-        <View style={[styles.section, styles.sectionLarge]}>
-          <Text style={styles.sectionContent}>{subtitle}</Text>
+
+          <View style={{ marginTop: 12 }}>
+            <Text
+              style={{
+                color: "#8b9097",
+                fontSize: 16,
+                lineHeight: 22,
+                textAlign: "center",
+              }}
+            >
+              {subtitle}
+            </Text>
+          </View>
         </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <Text style={styles.title}>פעילות</Text>
-        </View>
-        <View style={[styles.section, styles.sectionLarge]}>
-          <Text style={styles.sectionContent}>{description}</Text>
-        </View>
+        {/* Header Buttons */}
+        <View
+          style={{
+            position: "absolute",
+            top: 50,
+            left: 20,
+            right: 20,
+            //height: 50,
+            flexDirection: "row",
+          }}
+        ></View>
+      </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <Text style={styles.title}>מעוניין להתנדב?</Text>
-        </View>
-        <View style={[styles.section, styles.sectionLarge]}>
-          <TouchableOpacity
-            style={styles.commandButton}
-            onPress={() => {
-              navigation.navigate("formTextInput", { title: title });
+      {/* Body */}
+      <View style={{ flex: 1.5 }}>
+        {/* About */}
+        <View style={{ marginTop: 8, paddingHorizontal: 8 }}>
+          <Text
+            style={{
+              fontSize: 22,
+              lineHeight: 30,
+              textAlign: "center",
+              fontWeight: "bold",
             }}
           >
-            <Text style={styles.panelButtonTitle}>לחץ כאן</Text>
-          </TouchableOpacity>
+            מידע על ההתנדבות
+          </Text>
+          <Text
+            style={{
+              marginTop: 12,
+              color: "#8b9097",
+              fontSize: 16,
+              lineHeight: 22,
+              textAlign: "center",
+              fontWeight: "bold",
+            }}
+          >
+            {description}
+          </Text>
         </View>
-      </HeaderImageScrollView>
+      </View>
+
+      {/* Footer */}
+      <View style={{ flex: 0.5, paddingHorizontal: 8 }}>
+        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+          <View style={styles.sectionLarge}>
+            <TouchableOpacity
+              disabled={data}
+              style={styles.commandButton}
+              onPress={() => {
+                navigation.navigate("formTextInput", { title: title });
+              }}
+            >
+              <Text style={styles.panelButtonTitle}>לחצו כאן כדי להתנדב</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
     </View>
   );
 };
-export default CardView;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#ffffff",
   },
-  slide: {
-    flex: 1,
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  sectionLarge: {
+    minHeight: 100,
+  },
+  commandButton: {
+    padding: 15,
+    backgroundColor: "#33A8FF",
     justifyContent: "center",
-    backgroundColor: "transparent",
-    borderRadius: 8,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    borderTopEndRadius: 20,
+    borderTopLeftRadius: 20,
+
+    marginStart: 50,
+    left: 40,
+
+    marginLeft: 140,
+    marginRight: 130,
+  },
+  panelButtonTitle: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "white",
   },
   sliderImage: {
     height: "100%",
@@ -101,104 +205,20 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 8,
   },
-  buttonStyle: {
-    color: "red",
-    marginTop: 20,
-    padding: 20,
-    backgroundColor: "green",
-  },
-  image: {
-    height: MAX_HEIGHT,
-    width: Dimensions.get("window").width,
-    alignSelf: "stretch",
-    resizeMode: "cover",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  vol: {
-    flexDirection: "row",
-    alignItems: "stretch",
-    alignContent: "space-between",
-  },
-  name: {
-    fontWeight: "bold",
-  },
-  section: {
-    padding: 20,
-    borderBottomWidth: 5,
-    borderBottomColor: "#cccccc",
-    backgroundColor: "white",
-    alignContent: "center",
-    alignItems: "center",
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  sectionContent: {
-    fontSize: 16,
-    textAlign: "justify",
-    alignContent: "center",
-    alignItems: "center",
-  },
-  categories: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    flexWrap: "wrap",
-  },
-  categoryContainer: {
-    flexDirection: "row",
-    backgroundColor: "#33A8FF",
-    borderRadius: 20,
-    margin: 4,
-    padding: 10,
-    paddingHorizontal: 15,
-  },
-  category: {
-    fontSize: 14,
-    color: "#fff",
-    marginLeft: 10,
-  },
-  titleContainer: {
+  slide: {
     flex: 1,
-    alignSelf: "stretch",
     justifyContent: "center",
-    alignItems: "center",
-  },
-  imageTitle: {
-    color: "white",
     backgroundColor: "transparent",
-    fontSize: 24,
-    fontWeight: "bold",
+    borderRadius: 8,
   },
-  navTitleView: {
-    height: MIN_HEIGHT,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: Platform.OS === "ios" ? 40 : 5,
-    opacity: 0,
-  },
-  navTitle: {
-    color: "white",
-    fontSize: 18,
-    backgroundColor: "transparent",
-  },
-  sectionLarge: {
-    minHeight: 100,
-  },
-  panelButtonTitle: {
-    fontSize: 17,
-    fontWeight: "bold",
-    color: "white",
-  },
-  commandButton: {
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: "#33A8FF",
-    alignItems: "center",
+  sliderContainer: {
+    height: "20%",
+    width: "90%",
     marginTop: 10,
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 8,
   },
 });
+
+export default CardView;

@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import AuthStackScreens from "./AuthStackScreens";
 import MainStackScreens from "./MainStackScreens";
 import TabStackScreens from "./TabStackScreens";
@@ -23,7 +22,5 @@ export default AppStackScreens = () => {
         <AppStack.Screen name="Auth" component={AuthStackScreens} />
       )}
     </AppStack.Navigator>
-
-
   );
 };

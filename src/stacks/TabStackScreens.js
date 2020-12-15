@@ -1,10 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import { Text } from "react-native";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
 import HomeScreen from "../screens/HomeScreen";
@@ -21,6 +19,12 @@ import TeensOfakim from "../screens/categories/OfakimCity/TeensOfakim";
 import OldsOfakim from "../screens/categories/OfakimCity/OldsOfakim";
 import FormTextInput from "../components/FormTextInput";
 import EditProfileScreen from "../screens/EditProfileScreen";
+import FreeItems from "../screens/categories/OfakimCity/ItemsForDelivery/FreeItems";
+import Covid19Ofakim from "../screens/categories/OfakimCity/Covid19Ofakim";
+import ShoesOfakim from "../screens/categories/OfakimCity/ItemsForDelivery/ShoesOfakim";
+import CardViewShoesOfakim from "../components/CardViewShoesOfakims";
+import Realtime from "../screens/categories/OfakimCity/Realtime";
+import FormUploadItems from "../screens/categories/OfakimCity/ItemsForDelivery/FormUploadItems";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -85,6 +89,7 @@ const HomeStackScreen = ({ navigation }) => (
         shadowColor: "#fff",
         elevation: 0,
       },
+      // headerShown: false,
       headerTintColor: "#fff",
       headerTitleStyle: {
         fontWeight: "bold",
@@ -171,6 +176,16 @@ const HomeStackScreen = ({ navigation }) => (
     />
 
     <HomeStack.Screen
+      name="covid19ofakim"
+      component={Covid19Ofakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות בקורונה באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
       name="viewContents"
       component={CardView}
       options={({ route }) => ({
@@ -187,6 +202,55 @@ const HomeStackScreen = ({ navigation }) => (
         headerBackTitleVisible: false,
         headerShown: true,
         title: "הזנת פרטים להתנדבות",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="freeItems"
+      component={FreeItems}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "פריטים למסירה באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="shoesofakim"
+      component={ShoesOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "נעליים למסירה באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="viewContentsShoesOfakim"
+      component={CardViewShoesOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "נעליים למסירה באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="realtime"
+      component={Realtime}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות מעכשיו לעכשיו",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="formUploadItems"
+      component={FormUploadItems}
+      options={({ route }) => ({
+        headerShown: true,
+        title: "העלאת פריטים למסירה",
       })}
     />
 

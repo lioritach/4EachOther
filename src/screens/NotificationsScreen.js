@@ -1,11 +1,11 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
 
 import * as firebase from "firebase";
-import CardMessage from "../components/CardMessages";
+import CardMessage from "../components/CardMessage";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
-const NotificationsScreen = ({ title, status }) => {
+const NotificationsScreen = ({ title, status, navigation }) => {
   const [data, setData] = useState([]);
   const [err, setErr] = useState();
 
@@ -50,7 +50,6 @@ const NotificationsScreen = ({ title, status }) => {
     ]);
   };
 
-
   const deleteFields = (title, uid) => {
     firebase
       .firestore()
@@ -67,22 +66,22 @@ const NotificationsScreen = ({ title, status }) => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Image
-          style={{
-            height: 200,
-            width: 200,
-            alignSelf: "center",
-          }}
-          source={require("../../assets/notifications.png")}
-        />
-        <View>
-          <Text style={{ textAlign: "center" }}>
-            {" "}
-            באיזור זה תוכלו לצפות בסטטוס הרישום להתנדבויות
-          </Text>
-        </View>
+    <View style={styles.container}>
+      <Image
+        style={{
+          width: "60%",
+          height: "30%",
+          marginLeft: 80,
+        }}
+        source={require("../../assets/notifications.png")}
+      />
+      <View>
+        <Text style={{ textAlign: "center", fontWeight: "bold" }}>
+          {" "}
+          באיזור זה תוכלו לצפות בסטטוס הרישום להתנדבויות
+        </Text>
+      </View>
+      <ScrollView>
         {data.map(({ id, dataVal }) => (
           <TouchableOpacity
             key={id}
@@ -93,8 +92,8 @@ const NotificationsScreen = ({ title, status }) => {
             <CardMessage title={dataVal.title} status={dataVal.status} />
           </TouchableOpacity>
         ))}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 

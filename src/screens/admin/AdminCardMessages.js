@@ -1,8 +1,7 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-const AdminCardMessages = ({ title, status, fullName, phoneNumber }) => {
+const AdminCardMessages = ({ title, status, fullName, phoneNumber, city }) => {
   return (
     <TouchableOpacity>
       <View style={styles.card}>
@@ -10,7 +9,7 @@ const AdminCardMessages = ({ title, status, fullName, phoneNumber }) => {
           <Text style={styles.cardTitle}>שם המתנדב: {fullName}</Text>
           <Text style={styles.cardTitle}>שם ההתנדבות: {title}</Text>
           <Text style={styles.cardTitle}>מס' טלפון: {phoneNumber}</Text>
-          <Text style={styles.cardTitle}>עיר: </Text>
+          <Text style={styles.cardTitle}>עיר: {city} </Text>
           <Text numberOfLines={1} style={styles.cardDetails}>
             {status}
           </Text>

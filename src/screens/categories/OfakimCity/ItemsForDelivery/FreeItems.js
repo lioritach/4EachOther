@@ -1,22 +1,20 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 
-export default BeerSheva = ({ navigation }) => {
+const FreeItems = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.sliderContainer}>
         <View style={styles.slide}>
           <Image
-            source={require("../../assets/BeerShevaCity.jpg")}
+            source={require("../../../../../assets/giving.png")}
             resizeMode="cover"
             style={styles.sliderImage}
           />
         </View>
 
         <View style={styles.categoryContainer}>
-          <Text style={styles.textTitle}>
-            אנא בחרו את הקטגוריה שבה תרצו להתנדב
-          </Text>
+          <Text style={styles.textTitle}>אנא בחרו את הקטגוריה המתאימה</Text>
         </View>
       </View>
 
@@ -26,91 +24,102 @@ export default BeerSheva = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("EmergencyBeerSheva");
+            navigation.navigate("shoesofakim");
           }}
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../assets/sos.png")}
+              source={require("../../../../../assets/shoesIcon1.png")}
               style={styles.sliderImage}
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>התנדבויות בחירום</Text>
+          <Text style={styles.categoryBtnTxt}>נעליים</Text>
         </TouchableOpacity>
-
-        {/* ---------------------------------------------------------------------- */}
 
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("EmergencyOfakim");
           }}
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../assets/covid.png")}
+              source={require("../../../../../assets/clothesIcon.png")}
               style={styles.sliderImage}
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>התנדבויות בקורונה</Text>
+          <Text style={styles.categoryBtnTxt}>בגדים</Text>
         </TouchableOpacity>
-
-        {/* ---------------------------------------------------------------------- */}
 
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("EmergencyOfakim");
           }}
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../assets/teens.png")}
+              source={require("../../../../../assets/furnitureIcon.png")}
               style={styles.sliderImage}
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>התנדבויות לנוער</Text>
+          <Text style={styles.categoryBtnTxt}>ריהוט</Text>
         </TouchableOpacity>
       </View>
 
-      {/* ------------------------ANOTHER SECTION------------------------------------ */}
+      {/* ---------------------------- Categories Section ------------------------------------ */}
 
       <View style={styles.categoryContainer}>
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("EmergencyOfakim");
           }}
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../assets/old.png")}
+              source={require("../../../../../assets/electronicsIcon.png")}
               style={styles.sliderImage}
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>התנדבויות עם קשישים</Text>
+          <Text style={styles.categoryBtnTxt}>מוצרי חשמל</Text>
         </TouchableOpacity>
-
-        {/* ---------------------------------------------------------------------- */}
 
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("EmergencyOfakim");
           }}
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../assets/routine.png")}
+              source={require("../../../../../assets/housewaresIcon.png")}
               style={styles.sliderImage}
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>התנדבויות בשגרה</Text>
+          <Text style={styles.categoryBtnTxt}>כלי בית</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => {
+            navigation.navigate("EmergencyOfakim");
+          }}
+        >
+          <View style={styles.categoryIcon}>
+            <Image
+              source={require("../../../../../assets/booksIcon.png")}
+              style={styles.sliderImage}
+            />
+          </View>
+          <Text style={styles.categoryBtnTxt}>ספרים</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
+
+export default FreeItems;
 
 const styles = StyleSheet.create({
   container: {
@@ -120,7 +129,7 @@ const styles = StyleSheet.create({
   textTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    marginLeft: 10,
+    marginLeft: 40,
   },
   sliderContainer: {
     height: 200,

@@ -1,8 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import Swiper from "react-native-swiper";
+import * as firebase from "firebase";
 
 const HomeScreen = ({ navigation }) => {
+  const [data, setData] = useState([]);
+  const [err, setErr] = useState();
+
+  useEffect(() => {
+    const uid = firebase.auth().currentUser.uid;
+
+    const ref = () => {
+      firebase
+        .firestore()
+        .collection("users")
+        .where("uid", "==", uid)
+        .onSnapshot(
+          (snapshot) => {
+            setData(
+              snapshot.docs.map((doc) => ({
+                id: doc.id,
+                dataVal: doc.data(),
+              }))
+            );
+          },
+          (err) => {
+            setErr(err);
+          }
+        );
+    };
+
+    ref();
+  }, []);
+
+  // function calcCrow(lat1, lon1, lat2, lon2) {
+  //   var R = 6371; // km
+  //   var dLat = toRad(lat2 - lat1);
+  //   var dLon = toRad(lon2 - lon1);
+  //   var lat1 = toRad(lat1);
+  //   var lat2 = toRad(lat2);
+
+  //   var a =
+  //     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+  //     Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  //   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  //   var d = R * c;
+  //   return d;
+  // }
+
+  // // Converts numeric degrees to radians
+  // function toRad(Value) {
+  //   return (Value * Math.PI) / 180;
+  // }
+
   return (
     <View style={styles.container}>
       <View style={styles.sliderContainer}>
@@ -34,15 +84,27 @@ const HomeScreen = ({ navigation }) => {
             />
           </View>
         </Swiper>
-      </View>
-
-      <View style={styles.categoryContainer}>
-        <Text style={styles.textTitle}>
-          שלום, אנא בחרו את העיר בה תרצו להתנדב
+        <Text
+          style={{
+            fontWeight: "bold",
+            color: "white",
+            backgroundColor: "#33A8FF",
+            position: "absolute", // child
+            bottom: 175, // position where you want
+            left: 15,
+            fontSize: 20,
+          }}
+        >
+          קצת מהעשייה
         </Text>
       </View>
-
-      <View style={styles.categoryContainer}></View>
+      {data.map(({ id, dataVal }) => (
+        <View style={styles.categoryContainer} key={id}>
+          <Text style={styles.textTitle}>
+            שלום {dataVal.username}, אנא בחר/י את העיר בה תרצה/י להתנדב
+          </Text>
+        </View>
+      ))}
 
       <View style={styles.categoryContainer}>
         <TouchableOpacity
@@ -66,7 +128,6 @@ const HomeScreen = ({ navigation }) => {
           }}
         >
           <View style={styles.categoryIcon}>
-            {/* <Fontisto name="clock" size={35} color="#33A8FF" /> */}
             <Image
               source={require("../../assets/beersheva.jpg")}
               style={styles.slider}
@@ -78,15 +139,19 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
+export default HomeScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#EFECF4",
   },
   textTitle: {
-    fontSize: 18,
+    fontSize: 15,
+    color: "black",
     fontWeight: "bold",
     marginLeft: 10,
+    paddingBottom: 15,
   },
   sliderContainer: {
     height: 200,
@@ -146,4 +211,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-export default HomeScreen;

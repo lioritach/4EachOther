@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DismissKeyboard from "../components/DismissKeyboard";
 import * as firebase from "firebase";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -12,6 +13,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
       .auth()
       .sendPasswordResetEmail(email)
       .then(() => {
+        console.log(email);
         alert("קישור להזנת סיסמא חדשה נשלחה למייל בהצלחה!");
       })
       .then(() => navigation.navigate("SignIn"));
@@ -28,7 +30,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
   };
 
   return (
-    <DismissKeyboard>
+    <KeyboardAwareScrollView>
       <View style={styles.container}>
         <Image
           style={{
@@ -66,7 +68,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
           <View style={styles.leftCircle} />
         </View>
       </View>
-    </DismissKeyboard>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -129,7 +131,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
     backgroundColor: "#33A8FF",
-    borderBottomWidth: 15,
     justifyContent: "center",
   },
 });

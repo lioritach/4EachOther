@@ -8,6 +8,7 @@ export default EditProfileScreen = ({ navigation }) => {
   const [phone, setPhone] = useState();
   const [username, setUsername] = useState();
 
+  //TODO: cleanup
   const updateData = () => {
     const uid = firebase.auth().currentUser.uid;
 
@@ -26,7 +27,7 @@ export default EditProfileScreen = ({ navigation }) => {
         navigation.navigate("profile");
       })
       .catch((error) => {
-        alert("שגיאה בעדכון נתונים.");
+        alert("שגיאה בעדכון נתונים.", error);
       });
   };
 
@@ -50,11 +51,10 @@ export default EditProfileScreen = ({ navigation }) => {
       <View style={styles.container}>
         <Image
           source={require("../../assets/edit.png")}
-          style={{ width: "100%", height: "35%" }}
+          style={{ width: "100%", height: "45%" }}
         />
-
         <View style={styles.textInputView}>
-          <Text style={styles.textInput}>שם מלא: </Text>
+          <Text style={styles.textInput}>שם משתמש: </Text>
           <TextInput
             style={styles.input}
             autoCompleteType="name"
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     color: "#33A8FF",
   },
   textInputView: {
-    margin: 20,
+    margin: 10,
   },
   textInput: {
     textAlign: "right",
@@ -127,13 +127,15 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     textAlign: "center",
-    margin: 9,
-    paddingTop: 22,
-    fontSize: 29,
+    borderRadius: 29,
+    marginLeft: 55,
+    marginRight: 55,
+    paddingTop: 15,
+    paddingBottom: 10,
+    fontSize: 25,
     fontWeight: "bold",
     color: "#fff",
     backgroundColor: "#33A8FF",
-    borderBottomWidth: 15,
     justifyContent: "center",
   },
 });

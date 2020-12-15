@@ -7,6 +7,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import * as firebase1 from "firebase";
 
 import Text from "../components/Text";
+import { Image } from "react-native";
 
 export default LoadingScreen = () => {
   const [val, setUser] = useContext(UserContext);
@@ -46,9 +47,10 @@ export default LoadingScreen = () => {
 
   return (
     <Container>
-      <Text titleLoading heavy color="#ffffff">
-        4EachOther
-      </Text>
+      <Image
+        source={require("../../assets/4eachother.png")}
+        style={{ width: "100%", height: 300 }}
+      />
       <Text medium color="#ffffff">
         מיד מתחילים ...
       </Text>

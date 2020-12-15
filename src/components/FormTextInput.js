@@ -96,8 +96,12 @@ const FormTextInput = ({ route, navigation }) => {
           />
         </View>
 
-        <TouchableOpacity onPress={() => onSubmit(fullName, phone)}>
-          <Text style={styles.sendButton}>שלח</Text>
+        <TouchableOpacity
+          disabled={!fullName && !phone}
+          onPress={() => onSubmit(fullName, phone)}
+          style={styles.sendButton}
+        >
+          <Text style={styles.sendText}>שלח</Text>
         </TouchableOpacity>
       </View>
     </DismissKeyboard>
@@ -141,13 +145,17 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     textAlign: "center",
-    margin: 9,
-    paddingTop: 22,
-    fontSize: 29,
-    fontWeight: "bold",
-    color: "#fff",
+    borderRadius: 29,
+    marginLeft: 83,
+    marginRight: 83,
+    paddingTop: 15,
+    paddingBottom: 10,
     backgroundColor: "#33A8FF",
-    borderBottomWidth: 15,
-    justifyContent: "center",
+  },
+  sendText: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
   },
 });

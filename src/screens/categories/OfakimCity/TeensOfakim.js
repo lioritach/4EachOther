@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, Alert } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import CardVol from "../../../components/CardVol";
@@ -8,8 +8,6 @@ const TeensOfakim = ({ navigation }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    let isMounted = false;
-
     const ref = firebase
       .firestore()
       .collection("ofakim_teens")

@@ -1,21 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ScrollView, StyleSheet, Text, View, Image, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import AdminCardMessages from "./AdminCardMessages";
+import { FirebaseContext } from "../../context/FirebaseContext";
 
 const ShowRequests = ({ navigation }) => {
   const [data, setData] = useState([]);
+  const [city, setCity] = useState([]);
   const [err, setErr] = useState();
+  const firebase1 = useContext(FirebaseContext);
 
-  //always run when ShowrRequests loaded.
+  const uid = firebase1.getCurrentUser().uid;
+
+  //always run when ShowRequests loaded.
   useEffect(() => {
-    const uid = firebase.auth().currentUser.uid;
+    const ref1 = firebase
+      .firestore()
+      .collection("admins")
+      .doc(uid)
+      .onSnapshot(function (doc) {
+        if (doc.exists) {
+          setCity(doc.data().city);
+          console.log(doc.data().city);
+        } else {
+          console.log("No such document!");
+        }
+      });
 
+    //CleanUp function
+    return () => ref1();
+  }, []);
+
+  useEffect(() => {
     const ref = firebase
       .firestore()
       .collection("requests")
       .where("status", "==", "ממתין לאישור.")
+      .where("city", "==", city)
       .onSnapshot(
         (snapshot) => {
           setData(
@@ -30,8 +52,11 @@ const ShowRequests = ({ navigation }) => {
         }
       );
 
-    return () => ref();
-  }, []);
+    //CleanUp function
+    return () => {
+      ref();
+    };
+  });
 
   //the alert message when admin click on the card
   const requestsMessage = (title, uid) => {
@@ -98,25 +123,23 @@ const ShowRequests = ({ navigation }) => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Image
-          style={{
-            height: 200,
-            width: 200,
-            alignSelf: "center",
-          }}
-          source={require("../../../assets/notifications.png")}
-        />
+    <View style={styles.container}>
+      <Image
+        style={{
+          height: 200,
+          width: 200,
+          alignSelf: "center",
+        }}
+        source={require("../../../assets/notifications.png")}
+      />
 
-        <View>
-          <Text style={{ textAlign: "center" }}>
-            {" "}
-            באיזור זה תוכלו לאשר או לדחות בקשות התנדבויות. לחצו על ההתנדבות
-            המתאימה
-          </Text>
-        </View>
-
+      <View>
+        <Text style={{ textAlign: "center", fontWeight: "bold" }}>
+          {" "}
+          באיזור זה תוכלו לאשר או לדחות בקשות התנדבויות. לחצו על הבקשה המתאימה
+        </Text>
+      </View>
+      <ScrollView>
         {data.map(({ id, dataVal }) => (
           <TouchableOpacity
             key={id}
@@ -129,11 +152,12 @@ const ShowRequests = ({ navigation }) => {
               fullName={dataVal.fullName}
               status={dataVal.status}
               phoneNumber={dataVal.phoneNumber}
+              city={dataVal.city}
             />
           </TouchableOpacity>
         ))}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 

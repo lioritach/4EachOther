@@ -66,6 +66,31 @@ const Firebase = {
     }
   },
 
+  uploadPhotoAsync: async (uri) => {
+    const uid = firebase.auth().currentUser.uid;
+
+    const path = `photos/${uid}/${Date.now()}.jpg`;
+
+    return new Promise(async (res, rej) => {
+      const respone = await fetch(uri);
+      const file = await respone.blob();
+
+      let upload = firebase.storage().ref(path).put(file);
+
+      upload.on(
+        "state_changed",
+        (snapshot) => {},
+        (err) => {
+          rej(err);
+        },
+        async () => {
+          const url = await upload.snapshot.ref.getDownloadURL();
+          res(url);
+        }
+      );
+    });
+  },
+
   logOut: async () => {
     try {
       await firebase.auth().signOut();

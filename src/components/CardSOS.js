@@ -1,11 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import * as firebase from "firebase";
 
-const CardVol = ({ title, description, image }) => {
+const CardSOS = ({ title, description, image, maxVol }) => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const ref = firebase
+      .firestore()
+      .collection("votes")
+      .onSnapshot((snapshot) => {
+        setData(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            dataVal: doc.data(),
+          }))
+        );
+      });
+    return () => ref();
+  }, []);
+
+  const increment = firebase.firestore.FieldValue.increment(1);
+
+  const updateFunc = () => {
+    firebase
+      .firestore()
+      .collection("votes")
+      .doc(title)
+      .update({ votes: increment });
+  };
+
   return (
     <View style={styles.card}>
       <View style={styles.cardImgWrapper}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={updateFunc}>
           <Image
             source={{ uri: image }}
             resizeMode="cover"
@@ -14,16 +42,29 @@ const CardVol = ({ title, description, image }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.cardInfo}>
-        <Text style={styles.cardTitle}>{title}</Text>
-        <Text style={styles.cardDetails} numberOfLines={2}>
-          {description}
-        </Text>
+        <Text style={styles.cardDetails}>{description}</Text>
+        {data.map(({ id, dataVal }) => (
+          <Text
+            key={id}
+            style={{
+              fontWeight: "bold",
+              fontSize: 14,
+              color: "red",
+              backgroundColor: "#fff",
+              position: "absolute", // child
+              bottom: 1, // position where you want
+              left: 11,
+            }}
+          >
+            מס' האנשים שבחרו להתנדב: {dataVal.votes} מתוך {maxVol}
+          </Text>
+        ))}
       </View>
     </View>
   );
 };
 
-export default CardVol;
+export default CardSOS;
 
 const styles = StyleSheet.create({
   container: {

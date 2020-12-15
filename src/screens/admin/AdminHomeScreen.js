@@ -4,6 +4,16 @@ import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 export default Ofakim = ({ navigation }) => {
   return (
     <View style={styles.container}>
+      <View style={styles.sliderContainer}>
+        <View style={styles.slide}>
+          <Image
+            source={require("../../../assets/adminhome.png")}
+            resizeMode="cover"
+            style={styles.sliderImage}
+          />
+        </View>
+      </View>
+
       <View style={styles.categoryContainer}>
         <Text style={styles.textTitle}>שלום מנהל/ת התנדבויות!</Text>
       </View>
@@ -18,7 +28,7 @@ export default Ofakim = ({ navigation }) => {
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../../assets/sos.png")}
+              source={require("../../../assets/addadmin.png")}
               style={styles.sliderImage}
             />
           </View>
@@ -33,26 +43,45 @@ export default Ofakim = ({ navigation }) => {
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../../assets/sos.png")}
+              source={require("../../../assets/requestadmin.png")}
               style={styles.sliderImage}
             />
           </View>
           <Text style={styles.categoryBtnTxt}>בקשות ממתינות להתנדבות</Text>
         </TouchableOpacity>
+      </View>
 
+      {/* NEW SECTION */}
+
+      <View style={styles.categoryContainer}>
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("EmergencyOfakim");
+            navigation.navigate("removeVol");
           }}
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../../assets/sos.png")}
+              source={require("../../../assets/deleteVol.png")}
               style={styles.sliderImage}
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>התנדבויות בחירום</Text>
+          <Text style={styles.categoryBtnTxt}> מחיקת התנדבויות מהמאגר</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => {
+            navigation.navigate("admininformation");
+          }}
+        >
+          <View style={styles.categoryIcon}>
+            <Image
+              source={require("../../../assets/infoCategory.png")}
+              style={styles.sliderImage}
+            />
+          </View>
+          <Text style={styles.categoryBtnTxt}> מידע נוסף</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -62,7 +91,7 @@ export default Ofakim = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#EFECF4",
+    backgroundColor: "#fff",
   },
   textTitle: {
     fontSize: 16,
@@ -122,9 +151,10 @@ const styles = StyleSheet.create({
   },
   categoryBtnTxt: {
     alignSelf: "center",
+    textAlign: "center",
     marginTop: 5,
     color: "#de4f35",
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "bold",
   },
 });

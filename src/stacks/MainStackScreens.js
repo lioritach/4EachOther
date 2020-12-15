@@ -1,21 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-
+import { Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
 import ProfileScreen from "../screens/ProfileScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import Ofakim from ".././cities/Ofakim";
 import BeerSheva from ".././cities/BeerSheva";
-import EmergencyOfakim from "../screens/categories/OfakimCity/EmergencyOfakim";
-import EmergencyBeerSheva from "../screens/categories/BeerShevaCity/EmergencyBeerSheva";
-import RoutineOfakim from "../screens/categories/OfakimCity/RoutineOfakim";
 import CardView from "../components/CardView";
-import ReligionOfakim from "../screens/categories/OfakimCity/ReligionOfakim";
 import TeensOfakim from "../screens/categories/OfakimCity/TeensOfakim";
 import OldsOfakim from "../screens/categories/OfakimCity/OldsOfakim";
 import FormTextInput from "../components/FormTextInput";
@@ -23,11 +16,12 @@ import EditProfileScreen from "../screens/EditProfileScreen";
 import AdminHomeScreen from "../screens/admin/AdminHomeScreen";
 import AddNewVolunteers from "../screens/admin/AddNewVolunteers";
 import ShowRequests from "../screens/admin/ShowRequests";
+import AdminInformation from "../screens/admin/AdminInformation";
+// import RemoveVol from "../screens/admin/RemoveVol";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const NotificationsStack = createStackNavigator();
-
 const Tab = createBottomTabNavigator();
 
 const MainStacksScreens = () => (
@@ -123,54 +117,44 @@ const HomeStackScreen = ({ navigation }) => (
     />
 
     <HomeStack.Screen
-        name="addNewVol"
-        component={AddNewVolunteers}
-        options={({ route }) => ({
-          headerBackTitleVisible: false,
-          headerShown: true,
-          title: "הוספת התנדבות חדשה",
-        })}
-      />
-
-    <HomeStack.Screen
-        name="showRequests"
-        component={ShowRequests}
-        options={({ route }) => ({
-          headerBackTitleVisible: false,
-          headerShown: true,
-          title: "בקשות הממתינות להתנדבות",
-        })}
-      />
-
-    <HomeStack.Screen
-      name="routineOfakim"
-      component={RoutineOfakim}
+      name="addNewVol"
+      component={AddNewVolunteers}
       options={({ route }) => ({
         headerBackTitleVisible: false,
         headerShown: true,
-        title: "התנדבויות בשגרה באופקים",
+        title: "הוספת התנדבות חדשה",
       })}
     />
 
     <HomeStack.Screen
-      name="religionOfakim"
-      component={ReligionOfakim}
+      name="showRequests"
+      component={ShowRequests}
       options={({ route }) => ({
         headerBackTitleVisible: false,
         headerShown: true,
-        title: "התנדבויות לפי מגדר באופקים",
+        title: "בקשות הממתינות להתנדבות",
       })}
     />
 
     <HomeStack.Screen
-      name="teensOfakim"
-      component={TeensOfakim}
+      name="admininformation"
+      component={AdminInformation}
       options={({ route }) => ({
         headerBackTitleVisible: false,
         headerShown: true,
-        title: "התנדבויות לבני נוער באופקים",
+        title: "מידע נוסף",
       })}
     />
+
+    {/* <HomeStack.Screen
+      name="removeVol"
+      component={RemoveVol}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "מחיקת התנדבות",
+      })}
+    /> */}
 
     <HomeStack.Screen
       name="oldsOfakim"

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image, Text } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import CardVol from "../../../components/CardVol";
 
-const EmergencyOfakim = ({ navigation }) => {
+const Covid19Ofakim = ({ navigation }) => {
   const [data, setData] = useState([]);
+  const [clicked, setClicked] = useState(true);
   const [err, setErr] = useState();
 
   useEffect(() => {
     const ref = firebase
       .firestore()
-      .collection("ofakim_emergency")
+      .collection("ofakim_covid19")
       .onSnapshot(
         (snapshot) => {
           setData(
@@ -30,8 +31,13 @@ const EmergencyOfakim = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView>
-      <View>
+    <View>
+      <Image
+        source={require("../../../../assets/covid19Cover.png")}
+        resizeMode="cover"
+        style={{ height: "45%", width: "100%" }}
+      />
+      <ScrollView>
         {data.map(({ id, dataVal }) => (
           <TouchableOpacity
             key={id}
@@ -51,11 +57,11 @@ const EmergencyOfakim = ({ navigation }) => {
             />
           </TouchableOpacity>
         ))}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
-export default EmergencyOfakim;
+export default Covid19Ofakim;
 
 const styles = StyleSheet.create({
   container: {
