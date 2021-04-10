@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 
-export default Ofakim = ({ navigation }) => {
+export default AdminHomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.sliderContainer}>

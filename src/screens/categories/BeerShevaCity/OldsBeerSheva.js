@@ -4,14 +4,14 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import CardVol from "../../../components/CardVol";
 
-const EmergencyOfakim = ({ navigation }) => {
+const OldsBeerSheva = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [err, setErr] = useState();
 
   useEffect(() => {
     const ref = firebase
       .firestore()
-      .collection("ofakim_emergency")
+      .collection("beersheva_olds")
       .onSnapshot(
         (snapshot) => {
           setData(
@@ -41,6 +41,7 @@ const EmergencyOfakim = ({ navigation }) => {
                 subtitle: dataVal.subtitle,
                 description: dataVal.description,
                 image: dataVal.image,
+                city: dataVal.city,
               });
             }}
           >
@@ -55,4 +56,5 @@ const EmergencyOfakim = ({ navigation }) => {
     </ScrollView>
   );
 };
-export default EmergencyOfakim;
+
+export default OldsBeerSheva;

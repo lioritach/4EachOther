@@ -13,26 +13,20 @@ const ShowRequests = ({ navigation }) => {
 
   const uid = firebase1.getCurrentUser().uid;
 
-  //always run when ShowRequests loaded.
-  useEffect(() => {
-    const ref1 = firebase
+  const getCity = async (uid) => {
+    await firebase
       .firestore()
-      .collection("admins")
+      .collection("users")
       .doc(uid)
-      .onSnapshot(function (doc) {
-        if (doc.exists) {
-          setCity(doc.data().city);
-          console.log(doc.data().city);
-        } else {
-          console.log("No such document!");
-        }
+      .get()
+      .then((cityVal) => {
+        let city = cityVal.data().city;
+        setCity(city);
       });
-
-    //CleanUp function
-    return () => ref1();
-  }, []);
+  };
 
   useEffect(() => {
+    getCity(uid);
     const ref = firebase
       .firestore()
       .collection("requests")
@@ -53,10 +47,8 @@ const ShowRequests = ({ navigation }) => {
       );
 
     //CleanUp function
-    return () => {
-      ref();
-    };
-  });
+    return () => ref();
+  }, [city]);
 
   //the alert message when admin click on the card
   const requestsMessage = (title, uid) => {

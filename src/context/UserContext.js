@@ -8,6 +8,7 @@ const UserProvider = (props) => {
     email: "",
     uid: "",
     phoneNumber: "",
+    city: "",
     isLoggedIn: null,
     isAdmin: false,
   });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import CardSOS from "../../../components/CardSOS";
@@ -59,5 +59,3 @@ const Realtime = ({ navigation }) => {
 };
 
 export default Realtime;
-
-const styles = StyleSheet.create({});

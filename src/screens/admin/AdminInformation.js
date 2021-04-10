@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import * as firebase from "firebase";
-import { Root, Popup } from "popup-ui";
 
 const AdminInformation = ({ navigation }) => {
   const [approvedReq, setApprovedRequests] = useState();
@@ -72,37 +71,24 @@ const AdminInformation = ({ navigation }) => {
   }, []);
 
   return (
-    <Root>
-      <View style={styles.card}>
-        <View style={styles.cardInfo}>
-          <TouchableOpacity
-            onPress={() =>
-              Popup.show({
-                type: "Success",
-                title: "Upload complete",
-                button: true,
-                textBody: "Congrats! Your upload successfully done",
-                buttonText: "Ok",
-                callback: () => Popup.hide(),
-              })
-            }
-          >
-            <Text style={styles.text}>
-              סה"כ בקשות התנדבות הממתינות לאישור: {waitingReq}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.cardInfo}>
+    <View style={styles.card}>
+      <View style={styles.cardInfo}>
+        <TouchableOpacity>
           <Text style={styles.text}>
-            סה"כ בקשות התנדבות שאושרו: {approvedReq}
+            סה"כ בקשות התנדבות הממתינות לאישור: {waitingReq}
           </Text>
-        </View>
-        <View style={styles.cardInfo}>
-          <Text style={styles.text}>סה"כ בקשות התנדבות שנדחו: {deniedReq}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
-    </Root>
+
+      <View style={styles.cardInfo}>
+        <Text style={styles.text}>
+          סה"כ בקשות התנדבות שאושרו: {approvedReq}
+        </Text>
+      </View>
+      <View style={styles.cardInfo}>
+        <Text style={styles.text}>סה"כ בקשות התנדבות שנדחו: {deniedReq}</Text>
+      </View>
+    </View>
   );
 };
 

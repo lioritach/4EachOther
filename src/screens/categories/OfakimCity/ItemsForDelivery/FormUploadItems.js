@@ -4,7 +4,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
-import { Picker } from "@react-native-community/picker";
+import { ProgressDialog } from "react-native-simple-dialogs";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FirebaseContext } from "../../../../context/FirebaseContext";
 import * as firebase from "firebase";
@@ -15,11 +16,13 @@ const FormUploadItems = ({ navigation, route }) => {
   const [details, setDetails] = useState("");
   const [phoneNumber, setPhoneNumber] = useState();
   const [username, setUsername] = useState();
+  const [popUp, setPopUp] = useState(false);
   const firebaseContext = useContext(FirebaseContext);
 
   const { title } = route.params;
   const uid = firebaseContext.getCurrentUser().uid;
 
+  //Getting the phone number from the user.
   const getNumber = firebase
     .firestore()
     .collection("users")
@@ -30,6 +33,7 @@ const FormUploadItems = ({ navigation, route }) => {
       setPhoneNumber(number);
     });
 
+  //Getting the username from the user.
   const getUsername = firebase
     .firestore()
     .collection("users")
@@ -40,6 +44,7 @@ const FormUploadItems = ({ navigation, route }) => {
       setUsername(number);
     });
 
+  //Ask for permissions
   const getPermissions = async () => {
     if (Platform.OS !== "web") {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -47,22 +52,7 @@ const FormUploadItems = ({ navigation, route }) => {
     }
   };
 
-  // const uploadPhoto = async ({ localUri, name, description }) => {
-  //   const remoteUri = await firebaseContext.uploadPhotoAsync(localUri);
-
-  //   return new Promise((res, rej) => {
-  //     firebase.firestore().collection(name).add({
-  //       title: name,
-  //       description: description,
-  //       image: remoteUri,
-  //       name: username,
-  //       phone: phoneNumber,
-  //       uid: uid,
-  //     });
-  //   });
-  // };
-
-  const pickImage = async (name, description) => {
+  const pickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -90,21 +80,7 @@ const FormUploadItems = ({ navigation, route }) => {
   };
 
   const sendData = async (name, description, photo) => {
-    // await firebase
-    //   .firestore()
-    //   .collection(title)
-    //   .add({
-    //     title: name,
-    //     description: description,
-    //     image: photo,
-    //     name: username,
-    //     phone: phoneNumber,
-    //     uid: uid,
-    //   })
-    //   .then(() => {
-    // alert("הפריט הועלה בהצלחה!");
-    // navigation.navigate("shoesofakim");
-    //   });
+    setPopUp(true);
 
     const remoteUri = await firebaseContext.uploadPhotoAsync(photo);
     console.log(remoteUri);
@@ -123,10 +99,9 @@ const FormUploadItems = ({ navigation, route }) => {
         })
         .then((ref) => {
           res(ref);
-          alert("הפריט הועלה בהצלחה!");
+          // alert("הפריט הועלה בהצלחה! 😊");
           navigation.navigate("shoesofakim");
         })
-
         .catch((error) => {
           rej(error);
         });
@@ -134,6 +109,8 @@ const FormUploadItems = ({ navigation, route }) => {
   };
 
   const sendDefaultData = async (name, description, defaultPhoto) => {
+    setPopUp(true);
+
     return new Promise((res, rej) => {
       firebase
         .firestore()
@@ -148,7 +125,7 @@ const FormUploadItems = ({ navigation, route }) => {
         })
         .then((ref) => {
           res(ref);
-          alert("הפריט הועלה בהצלחה!");
+          //alert("הפריט הועלה בהצלחה!");
           navigation.navigate("shoesofakim");
         })
 
@@ -244,6 +221,14 @@ const FormUploadItems = ({ navigation, route }) => {
         <View>
           <TouchableOpacity onPress={() => onSubmit(name, details, photo)}>
             <Text style={styles.sendButton}>אישור</Text>
+
+            {popUp ? (
+              <ProgressDialog
+                visible={popUp}
+                title="אנא המתינו .."
+                message="מעלה את הפריט שבחרתם 😊"
+              ></ProgressDialog>
+            ) : null}
           </TouchableOpacity>
         </View>
       </View>

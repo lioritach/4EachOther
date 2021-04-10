@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, Text } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import CardVol from "../../../../components/CardVol";
-import AntDesign, { Ionicons } from "@expo/vector-icons/AntDesign";
-import { FloatingAction } from "react-native-floating-action";
-
-const actions = [
-  {
-    text: "הוסף פריט חדש",
-    icon: require("../../../../../assets/sos.png"),
-    name: "bt_accessibility",
-    position: 2,
-  },
-];
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const ShoesOfakim = ({ navigation }) => {
   const [data, setData] = useState([]);
@@ -86,5 +76,3 @@ const ShoesOfakim = ({ navigation }) => {
 };
 
 export default ShoesOfakim;
-
-const styles = StyleSheet.create({});

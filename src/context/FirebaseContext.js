@@ -29,6 +29,7 @@ const Firebase = {
         username: user.username,
         email: user.email,
         phoneNumber: user.phoneNumber,
+        city: user.city,
         uid: uid,
       });
 

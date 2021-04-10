@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, Button, StyleSheet, Image } from "react-native";
 import { Picker } from "@react-native-community/picker";
 import { TextInput } from "react-native-paper";
@@ -9,13 +9,16 @@ import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Root, Popup } from "popup-ui";
+import { FirebaseContext } from "../../context/FirebaseContext";
 
 const AddNewVolunteers = ({ navigation }) => {
-  const [pickerValue, setPickerValue] = useState([]);
+  const [pickerValue, setPickerValue] = useState();
   const [title, setTitle] = useState();
   const [subTitle, setSubTitle] = useState();
   const [description, setDescription] = useState();
   const [photo, setPhoto] = useState();
+  const firebaseContext = useContext(FirebaseContext);
+  const uid = firebaseContext.getCurrentUser().uid;
 
   const addVol = (category, title, subTitle, description, photo) => {
     if (
@@ -31,19 +34,9 @@ const AddNewVolunteers = ({ navigation }) => {
     if (typeof photo == "undefined") {
       const defaultImage =
         "https://firebasestorage.googleapis.com/v0/b/eachother-59993.appspot.com/o/imgnotfound.png?alt=media&token=b1741111-815a-4da4-8f59-c59912b697bc";
-      firebase.firestore().collection(category).add({
-        title: title,
-        subtitle: subTitle,
-        description: description,
-        image: defaultImage,
-      });
+      sendDefaultData(category, title, subTitle, description, defaultImage);
     } else {
-      firebase.firestore().collection(category).add({
-        title: title,
-        subtitle: subTitle,
-        description: description,
-        image: photo,
-      });
+      sendData(category, title, subTitle, description, photo);
     }
     alert("הוספת התנדבות חדשה בוצעה בהצלחה!");
 
@@ -86,6 +79,61 @@ const AddNewVolunteers = ({ navigation }) => {
       return;
     }
     pickImage();
+  };
+
+  const sendData = async (category, title, subTitle, description, photo) => {
+    const remoteUri = await firebaseContext.uploadPhotoAsync(photo);
+    console.log(remoteUri);
+
+    return new Promise((res, rej) => {
+      firebase
+        .firestore()
+        .collection(category)
+        .add({
+          title: title,
+          description: description,
+          subtitle: subTitle,
+          image: remoteUri,
+        })
+        .then((ref) => {
+          res(ref);
+          alert("הוספת התנדבות חדשה בוצעה בהצלחה!");
+          navigation.navigate("HomePage");
+        })
+
+        .catch((error) => {
+          rej(error);
+        });
+    });
+  };
+
+  const sendDefaultData = async (
+    category,
+    title,
+    subTitle,
+    description,
+    defaultPhoto
+  ) => {
+    return new Promise((res, rej) => {
+      firebase
+        .firestore()
+        .collection(category)
+        .add({
+          title: title,
+          description: description,
+          image: defaultPhoto,
+          subtitle: subTitle,
+        })
+        .then((ref) => {
+          res(ref);
+          alert("הוספת התנדבות חדשה בוצעה בהצלחה!");
+          navigation.navigate("HomePage");
+        })
+
+        .catch((error) => {
+          rej(error);
+        });
+    });
   };
 
   return (
