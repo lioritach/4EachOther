@@ -43,7 +43,7 @@ export default BeerSheva = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("Covid19BeerSheva");
           }}
         >
           <View style={styles.categoryIcon}>
@@ -60,7 +60,7 @@ export default BeerSheva = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("TeensBeerSheva");
           }}
         >
           <View style={styles.categoryIcon}>
@@ -79,7 +79,7 @@ export default BeerSheva = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("OldsBeerSheva");
           }}
         >
           <View style={styles.categoryIcon}>
@@ -96,7 +96,7 @@ export default BeerSheva = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
+            navigation.navigate("GmachBeerSheva");
           }}
         >
           <View style={styles.categoryIcon}>
@@ -105,7 +105,7 @@ export default BeerSheva = ({ navigation }) => {
               style={styles.sliderImage}
             />
           </View>
-          <Text style={styles.categoryBtnTxt}>התנדבויות בשגרה</Text>
+          <Text style={styles.categoryBtnTxt}>התנדבויות בגמחים</Text>
         </TouchableOpacity>
       </View>
     </View>

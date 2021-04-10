@@ -2,13 +2,19 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
 import { UserContext } from "../context/UserContext";
+import { ScrollView } from "react-native-gesture-handler";
 
 const CardView = ({ navigation, route }) => {
   const { title, subtitle, description, image } = route.params;
+  var { city } = route.params;
   const [user] = useContext(UserContext);
   const [data, setdata] = useState(false);
 
-  // Render
+
+  if (typeof city === "undefined") {
+    city = "אופקים";
+  }
+
   //check if the user already sign to vol.
   useEffect(() => {
     const userId = firebase.auth().currentUser.uid;
@@ -25,7 +31,7 @@ const CardView = ({ navigation, route }) => {
 
     return () => ref();
   }, []);
-
+//check that the user will not send 2 requests for vol
   const test = (titleParam, uidParam) => {
     if (titleParam == title) {
       setdata(true);
@@ -52,10 +58,10 @@ const CardView = ({ navigation, route }) => {
             {
               position: "absolute",
               bottom: "3%",
-              left: "5%",
-              right: "5%",
+              left: "3%",
+              right: "3%",
               borderRadius: 15,
-              padding: 24,
+              padding: 18,
               backgroundColor: "white",
             },
             styles.shadow,
@@ -77,7 +83,7 @@ const CardView = ({ navigation, route }) => {
             <View
               style={{ marginHorizontal: 12, justifyContent: "space-around" }}
             >
-              <Text style={{ fontSize: 15, lineHeight: 25 }}>{title}</Text>
+              <Text style={{ fontSize: 14, lineHeight: 25, textDecorationLine: "underline" }}>{title}</Text>
               <Text style={{ color: "#8b9097", fontSize: 16, lineHeight: 22 }}>
                 אופקים
               </Text>
@@ -127,12 +133,12 @@ const CardView = ({ navigation, route }) => {
           </Text>
           <Text
             style={{
-              marginTop: 12,
+              marginTop: 10,
               color: "#8b9097",
               fontSize: 16,
-              lineHeight: 22,
+              lineHeight: 15,
               textAlign: "center",
-              fontWeight: "bold",
+              fontWeight: "400",
             }}
           >
             {description}
@@ -188,8 +194,8 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 20,
     borderTopLeftRadius: 20,
 
-    marginStart: 50,
-    left: 40,
+    marginStart: 25,
+    left: 80,
 
     marginLeft: 140,
     marginRight: 130,

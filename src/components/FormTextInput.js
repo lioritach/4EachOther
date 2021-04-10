@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { TextInput } from "react-native-paper";
 import DismissKeyboard from "./DismissKeyboard";
@@ -10,12 +10,28 @@ const FormTextInput = ({ route, navigation }) => {
   const [phone, setPhone] = useState();
   const [fullName, setFullName] = useState();
   const [user] = useContext(UserContext);
+  const [city, setCity] = useState("");
+
 
   const { title } = route.params;
+  const uid = user.uid;
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .onSnapshot((doc) => {
+        if (doc.exists) {
+          setCity(doc.data().city);
+        }
+      });
+  }, []);
+
 
   const sendData = () => {
     const uid = user.uid;
-    firebase
+    await firebase
       .firestore()
       .collection("requests")
       .add({
@@ -24,6 +40,7 @@ const FormTextInput = ({ route, navigation }) => {
         phoneNumber: phone,
         status: "ממתין לאישור.",
         uid: uid,
+        city: city,
       })
       .then(() => {
         console.log("Data sent.");

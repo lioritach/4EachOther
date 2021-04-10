@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -151,7 +151,7 @@ export default Ofakim = ({ navigation }) => {
             </View>
             <Text style={styles.categoryBtnTxt}>פריטים למסירה</Text>
           </TouchableOpacity>
-
+          {/* ---------------------------------------------------------------------- */}
           <TouchableOpacity
             style={styles.categoryBtn}
             onPress={() => {
@@ -172,7 +172,7 @@ export default Ofakim = ({ navigation }) => {
             </View>
             <Text style={styles.categoryBtnTxt}>מעכשיו לעכשיו</Text>
           </TouchableOpacity>
-
+          {/* ---------------------------------------------------------------------- */}
           <TouchableOpacity
             style={styles.categoryBtn}
             onPress={() => {

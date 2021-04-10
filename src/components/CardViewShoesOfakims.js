@@ -13,13 +13,12 @@ import HeaderImageScrollView, {
 } from "react-native-image-header-scroll-view";
 import * as Animatable from "react-native-animatable";
 import { UserContext } from "../context/UserContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 
 const MIN_HEIGHT = Platform.OS === "ios" ? 90 : 55;
 const MAX_HEIGHT = 350;
 
-const CardViewShoesOfakim = ({ route, navigation }) => {
+const CardViewShoesOfakim = ({ route }) => {
   const { title, phone, description, image, time } = route.params;
   const navTitleView = useRef(null);
   const [user] = useContext(UserContext);
@@ -30,19 +29,19 @@ const CardViewShoesOfakim = ({ route, navigation }) => {
     const userId = firebase.auth().currentUser.uid;
     const ref = firebase
       .firestore()
-      .collection("requests")
+      .collection("ofakim_shoesItems")
       .where("title", "==", title)
       .where("uid", "==", userId)
       .onSnapshot((snapshot) => {
         snapshot.forEach((querySelect) => {
-          test(querySelect.data().title, querySelect.data().uid);
+          test(querySelect.data().title, userId);
         });
       });
 
     return () => ref();
   }, []);
 
-  const test = (titleParam, uidParam) => {
+  const test = (uid, userId) => {
     if (titleParam == title) {
       setdata(true);
     } else {
@@ -92,20 +91,7 @@ const CardViewShoesOfakim = ({ route, navigation }) => {
           <Text style={styles.sectionContent}>{phone}</Text>
         </View>
 
-        {/* <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <Text style={styles.title}>מעוניין להתנדב?</Text>
-        </View>
-        <View style={[styles.section, styles.sectionLarge]}>
-          <TouchableOpacity
-            disabled={data}
-            style={styles.commandButton}
-            onPress={() => {
-              navigation.navigate("formTextInput", { title: title });
-            }}
-          >
-            <Text style={styles.panelButtonTitle}>לחץ כאן</Text>
-          </TouchableOpacity>
-        </View> */}
+
       </HeaderImageScrollView>
     </View>
   );

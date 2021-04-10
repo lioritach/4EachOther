@@ -1,23 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
 
 const CardVol = ({ title, description, image }) => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(!visible), 2000);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <View style={styles.card}>
       <View style={styles.cardImgWrapper}>
         <TouchableOpacity>
-          <Image
-            source={{ uri: image }}
-            resizeMode="cover"
-            style={styles.cardImg}
-          />
+          <ShimmerPlaceHolder
+              autoRun
+              visible={visible}
+              style={styles.cardImg}
+              shimmerColors={["#ffffff", "#33A8FF", "#ebebeb"]}
+            >
+              <Image
+                source={{ uri: image }}
+                resizeMode="cover"
+                style={styles.cardImg}
+              />
+          </ShimmerPlaceHolder>
         </TouchableOpacity>
       </View>
       <View style={styles.cardInfo}>
-        <Text style={styles.cardTitle}>{title}</Text>
-        <Text style={styles.cardDetails} numberOfLines={2}>
-          {description}
-        </Text>
+        <ShimmerPlaceHolder
+            autoRun
+            visible={visible}
+            style={styles.cardTitle}
+            shimmerColors={["#ffffff", "#33A8FF", "#ebebeb"]}
+          >
+            <Text style={styles.cardTitle}>{title}</Text>
+        </ShimmerPlaceHolder>
+        
+        <ShimmerPlaceHolder
+          autoRun
+          visible={visible}
+          style={styles.cardDetails}
+          shimmerColors={["#ffffff", "#33A8FF", "#ebebeb"]}
+        >
+          <Text style={styles.cardDetails} numberOfLines={2}>
+            {description}
+          </Text>
+        </ShimmerPlaceHolder>
+
       </View>
     </View>
   );
