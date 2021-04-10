@@ -17,7 +17,12 @@ import AdminHomeScreen from "../screens/admin/AdminHomeScreen";
 import AddNewVolunteers from "../screens/admin/AddNewVolunteers";
 import ShowRequests from "../screens/admin/ShowRequests";
 import AdminInformation from "../screens/admin/AdminInformation";
-// import RemoveVol from "../screens/admin/RemoveVol";
+import RemoveVol from "../screens/admin/RemoveVol";
+import EmergencyOfakim from "../screens/categories/OfakimCity/EmergencyOfakim";
+import Covid19Ofakim from "../screens/categories/OfakimCity/Covid19Ofakim";
+import ReligionOfakim from "../screens/categories/OfakimCity/ReligionOfakim";
+import RoutineOfakim from "../screens/categories/OfakimCity/RoutineOfakim";
+import AdminRemoveVol from "../components/AdminRemoveVol";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -146,23 +151,13 @@ const HomeStackScreen = ({ navigation }) => (
       })}
     />
 
-    {/* <HomeStack.Screen
+    <HomeStack.Screen
       name="removeVol"
       component={RemoveVol}
       options={({ route }) => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "מחיקת התנדבות",
-      })}
-    /> */}
-
-    <HomeStack.Screen
-      name="oldsOfakim"
-      component={OldsOfakim}
-      options={({ route }) => ({
-        headerBackTitleVisible: false,
-        headerShown: true,
-        title: "התנדבויות עם קשישים באופקים",
       })}
     />
 
@@ -183,6 +178,76 @@ const HomeStackScreen = ({ navigation }) => (
         headerBackTitleVisible: false,
         headerShown: true,
         title: "הזנת פרטים להתנדבות",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="EmergencyOfakim"
+      component={EmergencyOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות בשעת חירום באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="oldsOfakim"
+      component={OldsOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות עם קשישים באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="routineOfakim"
+      component={RoutineOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות בשגרה באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="religionOfakim"
+      component={ReligionOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות לפי מגדר באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="teensOfakim"
+      component={TeensOfakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות לבני נוער באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="covid19ofakim"
+      component={Covid19Ofakim}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "התנדבויות בקורונה באופקים",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="adminRemoveVol"
+      component={AdminRemoveVol}
+      options={({ route }) => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "מחיקת התנדבויות",
       })}
     />
 

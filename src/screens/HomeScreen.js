@@ -1,57 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import Swiper from "react-native-swiper";
 import * as firebase from "firebase";
+import { FirebaseContext } from "../context/FirebaseContext";
+import { ScrollView } from "react-native-gesture-handler";
 
 const HomeScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [err, setErr] = useState();
+  const firebase1 = useContext(FirebaseContext);
+  const [city, setCity] = useState("");
 
   useEffect(() => {
     const uid = firebase.auth().currentUser.uid;
 
-    const ref = () => {
-      firebase
-        .firestore()
-        .collection("users")
-        .where("uid", "==", uid)
-        .onSnapshot(
-          (snapshot) => {
-            setData(
-              snapshot.docs.map((doc) => ({
-                id: doc.id,
-                dataVal: doc.data(),
-              }))
-            );
-          },
-          (err) => {
-            setErr(err);
-          }
-        );
-    };
+    const checkCity = firebase
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .onSnapshot((snapshot) => {
+        var userCity = snapshot.data().city;
+        setCity(userCity);
+      });
 
-    ref();
-  }, []);
+    return () => checkCity();
+  }, [city]);
 
-  // function calcCrow(lat1, lon1, lat2, lon2) {
-  //   var R = 6371; // km
-  //   var dLat = toRad(lat2 - lat1);
-  //   var dLon = toRad(lon2 - lon1);
-  //   var lat1 = toRad(lat1);
-  //   var lat2 = toRad(lat2);
-
-  //   var a =
-  //     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-  //     Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-  //   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  //   var d = R * c;
-  //   return d;
-  // }
-
-  // // Converts numeric degrees to radians
-  // function toRad(Value) {
-  //   return (Value * Math.PI) / 180;
-  // }
+  console.log(city);
 
   return (
     <View style={styles.container}>
@@ -98,42 +73,145 @@ const HomeScreen = ({ navigation }) => {
           קצת מהעשייה
         </Text>
       </View>
-      {data.map(({ id, dataVal }) => (
-        <View style={styles.categoryContainer} key={id}>
-          <Text style={styles.textTitle}>
-            שלום {dataVal.username}, אנא בחר/י את העיר בה תרצה/י להתנדב
-          </Text>
-        </View>
-      ))}
 
       <View style={styles.categoryContainer}>
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() => {
-            navigation.navigate("Ofakim_HomeStack");
-          }}
-        >
-          <View style={styles.categoryIcon}>
-            <Image
-              source={require("../../assets/ofakim.jpg")}
-              style={styles.slider}
-            />
-          </View>
-        </TouchableOpacity>
+        <Text style={styles.textTitle}>קטגוריות</Text>
+      </View>
 
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() => {
-            navigation.navigate("BeerSheva_HomeStack");
-          }}
-        >
-          <View style={styles.categoryIcon}>
-            <Image
-              source={require("../../assets/beersheva.jpg")}
-              style={styles.slider}
-            />
-          </View>
-        </TouchableOpacity>
+      <View style={styles.categoryContainer}>
+        {city == "אופקים" ? (
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{ marginHorizontal: -10, marginTop: 0 }}
+          >
+            <TouchableOpacity
+              style={styles.categoryBtn}
+              onPress={() => {
+                navigation.navigate("religionOfakim");
+              }}
+            >
+              <View style={styles.categoryIcon}>
+                <Image
+                  source={require("../../assets/religion.png")}
+                  style={styles.sliderImage}
+                />
+              </View>
+              <Text style={styles.categoryBtnTxt}>מגדר</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.categoryBtn}
+              onPress={() => {
+                navigation.navigate("oldsOfakim");
+              }}
+            >
+              <View style={styles.categoryIcon}>
+                <Image
+                  source={require("../../assets/old.png")}
+                  style={styles.sliderImage}
+                />
+              </View>
+              <Text style={styles.categoryBtnTxt}>קשישים</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.categoryBtn}
+              onPress={() => {
+                navigation.navigate("routineOfakim");
+              }}
+            >
+              <View style={styles.categoryIcon}>
+                <Image
+                  source={require("../../assets/routine.png")}
+                  style={styles.sliderImage}
+                />
+              </View>
+              <Text style={styles.categoryBtnTxt}>שגרה</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.categoryBtn}
+              onPress={() => {
+                navigation.navigate("Ofakim_HomeStack");
+              }}
+            >
+              <View style={styles.categoryIcon}>
+                <Image
+                  source={require("../../assets/plus.png")}
+                  style={styles.sliderImage}
+                />
+              </View>
+              <Text style={styles.categoryBtnTxt}>קטגוריות נוספות</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        ) : (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={{ marginHorizontal: -10, marginTop: 0 }}
+          >
+            <TouchableOpacity
+              style={styles.categoryBtn}
+              onPress={() => {
+                navigation.navigate("GmachBeerSheva");
+              }}
+            >
+              <View style={styles.categoryIcon}>
+                <Image
+                  source={require("../../assets/give.png")}
+                  style={styles.sliderImage}
+                />
+              </View>
+              <Text style={styles.categoryBtnTxt}>גמחים</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.categoryBtn}
+              onPress={() => {
+                navigation.navigate("OldsBeerSheva");
+              }}
+            >
+              <View style={styles.categoryIcon}>
+                <Image
+                  source={require("../../assets/old.png")}
+                  style={styles.sliderImage}
+                />
+              </View>
+              <Text style={styles.categoryBtnTxt}>קשישים</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.categoryBtn}
+              onPress={() => {
+                navigation.navigate("TeensBeerSheva");
+              }}
+            >
+              <View style={styles.categoryIcon}>
+                <Image
+                  source={require("../../assets/teens.png")}
+                  style={styles.sliderImage}
+                />
+              </View>
+              <Text style={styles.categoryBtnTxt}>נוער</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.categoryBtn}
+              onPress={() => {
+                navigation.navigate("BeerSheva_HomeStack");
+              }}
+            >
+              <View style={styles.categoryIcon}>
+                <Image
+                  source={require("../../assets/plus.png")}
+                  style={styles.sliderImage}
+                />
+              </View>
+              <Text style={styles.categoryBtnTxt}>קטגוריות נוספות</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        )}
       </View>
     </View>
   );
@@ -147,11 +225,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFECF4",
   },
   textTitle: {
-    fontSize: 15,
+    fontSize: 19,
     color: "black",
     fontWeight: "bold",
-    marginLeft: 10,
+    marginLeft: 140,
     paddingBottom: 15,
+    textAlign: "center",
+    textDecorationLine: "underline",
   },
   sliderContainer: {
     height: 200,
@@ -184,7 +264,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "90%",
     alignSelf: "center",
-    marginTop: 25,
+    marginTop: 10,
     marginBottom: 10,
   },
   categoryBtn: {
@@ -202,12 +282,19 @@ const styles = StyleSheet.create({
     height: 70,
     backgroundColor: "#fdeae7" /* '#FF6347' */,
     borderRadius: 50,
+    marginHorizontal: 10,
   },
   categoryBtnTxt: {
     alignSelf: "center",
-    marginTop: 5,
+    marginTop: 10,
     color: "#de4f35",
     fontSize: 12,
     fontWeight: "bold",
+  },
+  categoryBtn: {
+    flex: 1,
+    width: "30%",
+    marginHorizontal: 0,
+    alignSelf: "center",
   },
 });

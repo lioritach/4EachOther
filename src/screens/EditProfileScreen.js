@@ -9,10 +9,10 @@ export default EditProfileScreen = ({ navigation }) => {
   const [username, setUsername] = useState();
 
   //TODO: cleanup
-  const updateData = () => {
+  const updateData = async () => {
     const uid = firebase.auth().currentUser.uid;
 
-    firebase
+    await firebase
       .firestore()
       .collection("users")
       .doc(uid)

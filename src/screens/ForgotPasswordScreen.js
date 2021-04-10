@@ -8,8 +8,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState();
 
-  const forgotPassword = (email) => {
-    firebase
+  const forgotPassword = async (email) => {
+    await firebase
       .auth()
       .sendPasswordResetEmail(email)
       .then(() => {
