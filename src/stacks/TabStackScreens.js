@@ -28,10 +28,8 @@ import CardViewShoesOfakim from "../components/CardViewShoesOfakims";
 import Realtime from "../screens/categories/OfakimCity/Realtime";
 import FormUploadItems from "../screens/categories/OfakimCity/ItemsForDelivery/FormUploadItems";
 import MyItems from "../screens/MyItems";
-import LocationFunc from "../screens/LocationFunc";
 import EditItems from "../components/EditItems";
 import RemoveVol from "../screens/admin/RemoveVol";
-import permission from "../screens/permission";
 import Covid19BeerSheva from "../screens/categories/BeerShevaCity/Covid19BeerSheva";
 import TeensBeerSheva from "../screens/categories/BeerShevaCity/TeensBeerSheva";
 import OldsBeerSheva from "../screens/categories/BeerShevaCity/OldsBeerSheva";
@@ -288,25 +286,6 @@ const HomeStackScreen = ({ navigation }) => (
       options={({ route }) => ({
         headerShown: true,
         title: "עריכת פריט למסירה",
-      })}
-    />
-
-    <HomeStack.Screen
-      name="location"
-      component={LocationFunc}
-      options={({ route }) => ({
-        headerShown: true,
-        title: "Locations",
-      })}
-    />
-
-    <HomeStack.Screen
-      name="permission"
-      component={permission}
-      options={({ route }) => ({
-        headerBackTitleVisible: false,
-        headerShown: true,
-        title: "גישה מוגבלת",
       })}
     />
 

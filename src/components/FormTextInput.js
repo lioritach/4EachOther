@@ -29,7 +29,7 @@ const FormTextInput = ({ route, navigation }) => {
   }, []);
 
 
-  const sendData = () => {
+  const sendData = async () => {
     const uid = user.uid;
     await firebase
       .firestore()
