@@ -4,7 +4,9 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import { View, StyleSheet, Text, Image } from "react-native";
 import * as firebase from "firebase";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Feather from "react-native-vector-icons/Feather";
 
 export default ProfileScreen = ({ navigation }) => {
   const [user, setUser] = useContext(UserContext);
@@ -36,7 +38,7 @@ export default ProfileScreen = ({ navigation }) => {
         );
     };
 
-    const voln = () => {
+    const voln = async () => {
       firebase
         .firestore()
         .collection("requests")
@@ -97,10 +99,22 @@ export default ProfileScreen = ({ navigation }) => {
             </View>
 
             <View style={styles.row}>
+              <Text
+                style={{
+                  color: "#777777",
+                  marginRight: 10,
+                }}
+              >
+                עיר: {dataVal.city}
+              </Text>
+              <FontAwesome5 name="city" size={20} />
+            </View>
+
+            <View style={styles.row}>
               <Text style={{ color: "#777777", marginRight: 10 }}>
                 התנדבויות בהן אני מתנדב: {vol}
               </Text>
-              <Ionicons name="ios-call" size={20} />
+              <Feather name="award" size={20} />
             </View>
           </View>
         ))}
@@ -126,7 +140,7 @@ export default ProfileScreen = ({ navigation }) => {
             >
               <Text style={styles.menuItemText}>עריכת פרופיל</Text>
             </TouchableOpacity>
-            <Ionicons name="md-settings" size={20} />
+            <AntDesign name="edit" size={20} />
           </View>
 
           <View style={styles.row2}>
