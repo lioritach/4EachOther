@@ -4,7 +4,6 @@ import * as firebase from "firebase";
 import { FirebaseContext } from "../../context/FirebaseContext";
 import { Card } from "react-native-shadow-cards";
 import { Button } from "react-native";
-import AdminRemoveVol from "../../components/AdminRemoveVol";
 
 const RemoveVol = ({ navigation }) => {
   const [city, setCity] = useState("");
