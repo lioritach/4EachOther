@@ -13,16 +13,15 @@ const EditItems = ({ navigation, route }) => {
   const [olddetails, setOldDetails] = useState("");
   const [docid, setDocId] = useState("");
 
-  console.log(docid);
 
-  const { title } = route.params;
+  const { title, nameOfProduct } = route.params;
 
   const uid = firebase.auth().currentUser.uid;
 
   useEffect(() => {
     const getTitle = firebase
       .firestore()
-      .collection("ofakim_shoesItems")
+      .collection(nameOfProduct)
       .where("title", "==", title)
       .where("uid", "==", uid)
       .onSnapshot((snapshot) => {
@@ -44,11 +43,11 @@ const EditItems = ({ navigation, route }) => {
 
   const onSubmit = async (oldtitle, olddesc, newtitle, newdetails) => {
     if (newtitle == "" && newdetails == "") {
-      navigation.navigate("messages");
+      navigation.goBack();
     } else if (newtitle != "" && newdetails == "") {
       await firebase
         .firestore()
-        .collection("ofakim_shoesItems")
+        .collection(nameOfProduct)
         .where("title", "==", oldtitle)
         .where("description", "==", olddesc)
         .where("uid", "==", uid)
@@ -59,12 +58,12 @@ const EditItems = ({ navigation, route }) => {
             title: newtitle,
           });
           alert("הפריט עודכן בהצלחה 😊");
-          navigation.navigate("messages");
+          navigation.goBack();
         });
     } else if (newtitle == "" && newdetails != "") {
       await firebase
         .firestore()
-        .collection("ofakim_shoesItems")
+        .collection(nameOfProduct)
         .where("title", "==", oldtitle)
         .where("description", "==", olddesc)
         .where("uid", "==", uid)
@@ -75,12 +74,12 @@ const EditItems = ({ navigation, route }) => {
             description: newdetails,
           });
           alert("הפריט עודכן בהצלחה 😊");
-          navigation.navigate("messages");
+          navigation.goBack();
         });
     } else if (newtitle != "" && newdetails != "") {
       await firebase
         .firestore()
-        .collection("ofakim_shoesItems")
+        .collection(nameOfProduct)
         .where("title", "==", oldtitle)
         .where("description", "==", olddesc)
         .where("uid", "==", uid)
@@ -92,7 +91,7 @@ const EditItems = ({ navigation, route }) => {
             description: newdetails,
           });
           alert("הפריט עודכן בהצלחה 😊");
-          navigation.navigate("messages");
+          navigation.goBack();
         });
     }
   };
