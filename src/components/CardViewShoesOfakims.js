@@ -14,27 +14,30 @@ import HeaderImageScrollView, {
 import * as Animatable from "react-native-animatable";
 import { UserContext } from "../context/UserContext";
 import * as firebase from "firebase";
+import { Alert } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const MIN_HEIGHT = Platform.OS === "ios" ? 90 : 55;
 const MAX_HEIGHT = 350;
 
-const CardViewShoesOfakim = ({ route }) => {
-  const { title, phone, description, image, time } = route.params;
+const CardViewShoesOfakim = ({ route, navigation }) => {
+  const { title, phone, description, image, nameOfProduct } = route.params;
   const navTitleView = useRef(null);
   const [user] = useContext(UserContext);
   const [data, setdata] = useState(false);
 
+  const userId = firebase.auth().currentUser.uid;
+
   //check if the user already sign to vol.
   useEffect(() => {
-    const userId = firebase.auth().currentUser.uid;
     const ref = firebase
       .firestore()
-      .collection("ofakim_shoesItems")
+      .collection(nameOfProduct)
       .where("title", "==", title)
       .where("uid", "==", userId)
       .onSnapshot((snapshot) => {
         snapshot.forEach((querySelect) => {
-          test(querySelect.data().title, userId);
+          test(querySelect.data().uid, userId);
         });
       });
 
@@ -42,11 +45,51 @@ const CardViewShoesOfakim = ({ route }) => {
   }, []);
 
   const test = (uid, userId) => {
-    if (titleParam == title) {
+    if (uid == userId) {
       setdata(true);
     } else {
       setdata(false);
     }
+  };
+
+  var deleteFields = async (nameOfProduct, title, uid) => {
+    await firebase
+      .firestore()
+      .collection(nameOfProduct)
+      .where("uid", "==", uid)
+      .where("title", "==", title)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          doc.ref.delete();
+          alert("הפריט נמחק בהצלחה!");
+        });
+        navigation.goBack();
+      });
+  };
+
+  const Options = (title, nameOfProduct, userId) => {
+    Alert.alert("עריכת פריט", "בחר את האופציה הרלוונטית", [
+      {
+        text: "עריכת פריט",
+        onPress: () => {
+          navigation.navigate("editItems", {
+            title: title,
+            nameOfProduct: nameOfProduct,
+          });
+        },
+      },
+      {
+        text: "מחיקת פריט",
+        onPress: () => {
+          deleteFields(nameOfProduct, title, userId);
+        },
+      },
+      {
+        text: "חזור",
+        onPress: () => {},
+      },
+    ]);
   };
 
   return (
@@ -91,7 +134,25 @@ const CardViewShoesOfakim = ({ route }) => {
           <Text style={styles.sectionContent}>{phone}</Text>
         </View>
 
-
+        {data ? (
+          <TouchableOpacity
+            onPress={() => Options(title, nameOfProduct, userId)}
+          >
+            <Text
+              style={{
+                paddingTop: 15,
+                textAlign: "center",
+                fontWeight: "bold",
+                fontSize: 18,
+                backgroundColor: "#33A8FF",
+                borderRadius: 28,
+                color: "white",
+              }}
+            >
+              עריכת פריט
+            </Text>
+          </TouchableOpacity>
+        ) : null}
       </HeaderImageScrollView>
     </View>
   );
