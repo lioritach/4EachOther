@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import * as firebase from "firebase";
 
-const FreeItems = ({ navigation }) => {
+const FreeItems = ({ navigation, route }) => {
+  const [city, setCity] = useState();
+  const uid = firebase.auth().currentUser.uid;
+
+  useEffect(() => {
+    const checkCity = firebase
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .onSnapshot((doc) => {
+        if (doc.exists) {
+          setCity(doc.data().city);
+        }
+      });
+
+    return () => checkCity();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.sliderContainer}>
@@ -24,7 +42,11 @@ const FreeItems = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("shoesofakim");
+            navigation.navigate("shoesofakim", {
+              title: "shoes",
+              name: "נעליים למסירה",
+              city: city,
+            });
           }}
         >
           <View style={styles.categoryIcon}>
@@ -39,7 +61,11 @@ const FreeItems = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("EmergencyOfakim");
+            navigation.navigate("shoesofakim", {
+              title: "clothes",
+              name: "בגדים למסירה",
+              city: city,
+            });
           }}
         >
           <View style={styles.categoryIcon}>
@@ -54,7 +80,11 @@ const FreeItems = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("EmergencyOfakim");
+            navigation.navigate("shoesofakim", {
+              title: "furniture",
+              name: "ריהוט למסירה",
+              city: city,
+            });
           }}
         >
           <View style={styles.categoryIcon}>
@@ -73,7 +103,11 @@ const FreeItems = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("EmergencyOfakim");
+            navigation.navigate("shoesofakim", {
+              title: "electronics",
+              name: "מוצרי חשמל למסירה",
+              city: city,
+            });
           }}
         >
           <View style={styles.categoryIcon}>
@@ -88,7 +122,11 @@ const FreeItems = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("EmergencyOfakim");
+            navigation.navigate("shoesofakim", {
+              title: "housewares",
+              name: "כלי בית למסירה",
+              city: city,
+            });
           }}
         >
           <View style={styles.categoryIcon}>
@@ -103,7 +141,11 @@ const FreeItems = ({ navigation }) => {
         <TouchableOpacity
           style={styles.categoryBtn}
           onPress={() => {
-            navigation.navigate("EmergencyOfakim");
+            navigation.navigate("shoesofakim", {
+              title: "books",
+              name: "ספרים למסירה",
+              city: city,
+            });
           }}
         >
           <View style={styles.categoryIcon}>
