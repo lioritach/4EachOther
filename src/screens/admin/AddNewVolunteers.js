@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, Text, Button, StyleSheet, Image } from "react-native";
 import { Picker } from "@react-native-community/picker";
 import { TextInput } from "react-native-paper";
@@ -8,7 +8,6 @@ import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Root, Popup } from "popup-ui";
 import { FirebaseContext } from "../../context/FirebaseContext";
 
 const AddNewVolunteers = ({ navigation }) => {
@@ -19,6 +18,7 @@ const AddNewVolunteers = ({ navigation }) => {
   const [photo, setPhoto] = useState();
   const firebaseContext = useContext(FirebaseContext);
   const uid = firebaseContext.getCurrentUser().uid;
+  const [city, setCity] = useState("");
 
   const addVol = (category, title, subTitle, description, photo) => {
     if (
@@ -46,6 +46,19 @@ const AddNewVolunteers = ({ navigation }) => {
     setPickerValue("");
     setPhoto("");
   };
+
+  useEffect(() => {
+    const checkCity = firebase
+      .firestore()
+      .collection("admins")
+      .doc(uid)
+      .onSnapshot((snapshot) => {
+        var userCity = snapshot.data().city;
+        setCity(userCity);
+      });
+
+    return () => checkCity();
+  }, []);
 
   const getPermissions = async () => {
     if (Platform.OS !== "web") {
@@ -138,7 +151,7 @@ const AddNewVolunteers = ({ navigation }) => {
 
   return (
     <KeyboardAwareScrollView>
-      <Root>
+      {city == "אופקים" ? (
         <View style={styles.container}>
           <Text
             style={{
@@ -244,7 +257,118 @@ const AddNewVolunteers = ({ navigation }) => {
             <Text style={styles.sendButton}>אישור</Text>
           </TouchableOpacity>
         </View>
-      </Root>
+      ) : (
+        <View style={styles.container}>
+          <Text
+            style={{
+              margin: 10,
+              textAlign: "center",
+              fontSize: 20,
+              fontWeight: "bold",
+              color: "#33A8FF",
+            }}
+          >
+            {" "}
+            בחרו את הקטגוריה המתאימה
+          </Text>
+          <View style={{ height: 200 }}>
+            <Picker
+              style={{ width: "100%" }}
+              selectedValue={pickerValue}
+              onValueChange={(itemValue, itemIndex) =>
+                setPickerValue(itemValue)
+              }
+            >
+              <Picker.Item label="התנדבויות עם קשישים" value="beersheva_olds" />
+              <Picker.Item
+                label="התנדבויות בחירום"
+                value="beersheva_emergency"
+              />
+              <Picker.Item
+                label="התנדבויות בקורונה"
+                value="beersheva_covid19"
+              />
+              <Picker.Item label="התנדבויות לנוער" value="beersheva_teens" />
+              <Picker.Item label="התנדבויות בגמחים" value="beersheva_gmach" />
+            </Picker>
+          </View>
+
+          <View style={styles.photo}>
+            <TouchableOpacity onPress={addPhoto}>
+              {photo ? (
+                <View style={styles.ProfilePhoto}>
+                  <Image
+                    source={{ uri: photo }}
+                    style={{ width: 100, height: 100 }}
+                  />
+                </View>
+              ) : (
+                <View style={styles.photo}>
+                  <Text style={{ fontSize: 20, textAlign: "center" }}>
+                    בחרו תמונה
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.textInputView}>
+            <Text style={styles.textInput}>שם ההתנדבות </Text>
+            <TextInput
+              placeholder="שם ההתנדבות"
+              style={styles.input}
+              autoCompleteType="name"
+              autoCorrect={false}
+              autoFocus={true}
+              keyboardType="default"
+              onChangeText={(title) => {
+                setTitle(title);
+              }}
+              value={title}
+            />
+          </View>
+
+          <View style={styles.textInputView}>
+            <Text style={styles.textInput}>תת כותרת </Text>
+            <TextInput
+              placeholder="תת כותרת"
+              style={styles.input}
+              autoCompleteType="name"
+              autoCorrect={false}
+              autoFocus={true}
+              keyboardType="default"
+              onChangeText={(subTitle) => {
+                setSubTitle(subTitle);
+              }}
+              value={subTitle}
+            />
+          </View>
+
+          <View style={styles.textInputView}>
+            <Text style={styles.textInput}>תיאור </Text>
+            <TextInput
+              placeholder="תיאור"
+              style={styles.input}
+              autoCompleteType="name"
+              autoCorrect={false}
+              autoFocus={true}
+              keyboardType="default"
+              onChangeText={(description) => {
+                setDescription(description);
+              }}
+              value={description}
+            />
+          </View>
+
+          <TouchableOpacity
+            onPress={() =>
+              addVol(pickerValue, title, subTitle, description, photo)
+            }
+          >
+            <Text style={styles.sendButton}>אישור</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </KeyboardAwareScrollView>
   );
 };
