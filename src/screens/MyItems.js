@@ -3,17 +3,20 @@ import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import * as firebase from "firebase";
 import CardMessage from "../components/CardMessage";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { Picker } from "@react-native-community/picker";
 
 const MyItems = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [err, setErr] = useState();
+  const [pickerValue, setPickerValue] = useState("books");
+
 
   useEffect(() => {
     const uid = firebase.auth().currentUser.uid;
 
     const ref = firebase
       .firestore()
-      .collection("ofakim_shoesItems")
+      .collection(pickerValue)
       .where("uid", "==", uid)
       .onSnapshot(
         (snapshot) => {
@@ -30,22 +33,23 @@ const MyItems = ({ navigation }) => {
       );
 
     return () => ref();
-  }, []);
+  }, [pickerValue]);
 
-  const Options = (title, uid) => {
+  const Options = (title, nameOfProduct, userId) => {
     Alert.alert("עריכת פריט", "בחר את האופציה הרלוונטית", [
       {
         text: "עריכת פריט",
         onPress: () => {
           navigation.navigate("editItems", {
             title: title,
+            nameOfProduct: nameOfProduct,
           });
         },
       },
       {
         text: "מחיקת פריט",
         onPress: () => {
-          deleteFields(title, uid);
+          deleteFields(nameOfProduct, title, userId);
         },
       },
       {
@@ -55,10 +59,10 @@ const MyItems = ({ navigation }) => {
     ]);
   };
 
-  const deleteFields = async (title, uid) => {
+  const deleteFields = async (nameOfProduct, title, uid) => {
     await firebase
       .firestore()
-      .collection("ofakim_shoesItems")
+      .collection(nameOfProduct)
       .where("uid", "==", uid)
       .where("title", "==", title)
       .get()
@@ -86,12 +90,28 @@ const MyItems = ({ navigation }) => {
           באיזור זה תוכלו לצפות בפריטים למסירה שהעלתם
         </Text>
       </View>
+
+      <View>
+        <Picker
+          style={{ width: "100%" }}
+          selectedValue={pickerValue}
+          onValueChange={(itemValue, itemIndex) => setPickerValue(itemValue)}
+        >
+          <Picker.Item label="ספרים למסירה" value="books" />
+          <Picker.Item label="מוצרי חשמל למסירה" value="electronics" />
+          <Picker.Item label="ריהוט למסירה" value="furniture" />
+          <Picker.Item label="כלי בית למסירה" value="housewares" />
+          <Picker.Item label="נעליים למסירה" value="shoes" />
+          <Picker.Item label="בגדים למסירה" value="clothes" />
+        </Picker>
+      </View>
+
       <ScrollView>
         {data.map(({ id, dataVal }) => (
           <TouchableOpacity
             key={id}
             onPress={() => {
-              Options(dataVal.title, dataVal.uid);
+              Options(dataVal.title, pickerValue, dataVal.uid);
             }}
           >
             <CardMessage title={dataVal.title} />
