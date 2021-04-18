@@ -5,7 +5,7 @@ import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
 import { ProgressDialog } from "react-native-simple-dialogs";
-
+import { AutoGrowingTextInput } from "react-native-autogrow-textinput";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FirebaseContext } from "../../../../context/FirebaseContext";
 import * as firebase from "firebase";
@@ -15,6 +15,7 @@ const FormUploadItems = ({ navigation, route }) => {
   const [name, setName] = useState("");
   const [details, setDetails] = useState("");
   const [phoneNumber, setPhoneNumber] = useState();
+  const [city, setCity] = useState();
   const [username, setUsername] = useState();
   const [popUp, setPopUp] = useState(false);
   const firebaseContext = useContext(FirebaseContext);
@@ -23,25 +24,19 @@ const FormUploadItems = ({ navigation, route }) => {
   const uid = firebaseContext.getCurrentUser().uid;
 
   //Getting the phone number from the user.
-  const getNumber = firebase
+  const getData = firebase
     .firestore()
     .collection("users")
     .doc(uid)
     .get()
-    .then((value_number) => {
-      let number = value_number.data().phoneNumber;
-      setPhoneNumber(number);
-    });
+    .then((value) => {
+      let number = value.data().phoneNumber;
+      let city = value.data().city;
+      let username = value.data().username;
 
-  //Getting the username from the user.
-  const getUsername = firebase
-    .firestore()
-    .collection("users")
-    .doc(uid)
-    .get()
-    .then((value_number) => {
-      let number = value_number.data().username;
-      setUsername(number);
+      setPhoneNumber(number);
+      setCity(city);
+      setPhoneNumber(username);
     });
 
   //Ask for permissions
@@ -96,6 +91,7 @@ const FormUploadItems = ({ navigation, route }) => {
           name: username,
           phone: phoneNumber,
           uid: uid,
+          city: city,
         })
         .then((ref) => {
           res(ref);
@@ -122,6 +118,7 @@ const FormUploadItems = ({ navigation, route }) => {
           name: username,
           phone: phoneNumber,
           uid: uid,
+          city: city,
         })
         .then((ref) => {
           res(ref);
@@ -186,11 +183,17 @@ const FormUploadItems = ({ navigation, route }) => {
 
         <View style={styles.textInputView}>
           <Text style={styles.textInput}>תיאור הפריט: </Text>
-          <TextInput
+          {/* <TextInput
             style={styles.input}
             autoCompleteType="name"
             autoFocus={false} // open keyboard automate
             keyboardType="default"
+            onChangeText={(details) => {
+              setDetails(details);
+            }}
+          /> */}
+          <AutoGrowingTextInput
+            style={styles.input}
             onChangeText={(details) => {
               setDetails(details);
             }}
