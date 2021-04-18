@@ -16,7 +16,7 @@ const ShowRequests = ({ navigation }) => {
   const getCity = async (uid) => {
     await firebase
       .firestore()
-      .collection("users")
+      .collection("admins")
       .doc(uid)
       .get()
       .then((cityVal) => {
@@ -27,6 +27,7 @@ const ShowRequests = ({ navigation }) => {
 
   useEffect(() => {
     getCity(uid);
+
     const ref = firebase
       .firestore()
       .collection("requests")
