@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import CardVol from "../../../../components/CardVol";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import AntDesign, { Ionicons } from "@expo/vector-icons/AntDesign";
 
-const ShoesOfakim = ({ navigation }) => {
+const ShoesOfakim = ({ navigation, route }) => {
   const [data, setData] = useState([]);
   const [err, setErr] = useState();
+  const { title, city } = route.params;
+
+  const uid = firebase.auth().currentUser.uid;
 
   useEffect(() => {
     const ref = firebase
       .firestore()
-      .collection("ofakim_shoesItems")
+      .collection(title)
+      .where("city", "==", city)
       .onSnapshot(
         (snapshot) => {
           setData(
@@ -35,7 +39,7 @@ const ShoesOfakim = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("formUploadItems", {
-            title: "ofakim_shoesItems",
+            title: title,
           });
         }}
         style={{
@@ -60,6 +64,7 @@ const ShoesOfakim = ({ navigation }) => {
                 description: dataVal.description,
                 image: dataVal.image,
                 phone: dataVal.phone,
+                nameOfProduct: title,
               });
             }}
           >
@@ -76,3 +81,5 @@ const ShoesOfakim = ({ navigation }) => {
 };
 
 export default ShoesOfakim;
+
+const styles = StyleSheet.create({});
