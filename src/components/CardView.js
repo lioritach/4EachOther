@@ -85,7 +85,7 @@ const CardView = ({ navigation, route }) => {
             >
               <Text style={{ fontSize: 14, lineHeight: 25, textDecorationLine: "underline" }}>{title}</Text>
               <Text style={{ color: "#8b9097", fontSize: 16, lineHeight: 22 }}>
-                אופקים
+                {city}
               </Text>
             </View>
           </View>

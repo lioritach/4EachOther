@@ -14,6 +14,7 @@ import ShowRequests from "../screens/admin/ShowRequests";
 import AdminInformation from "../screens/admin/AdminInformation";
 import RemoveVol from "../screens/admin/RemoveVol";
 import AdminRemoveVol from "../components/AdminRemoveVol";
+import addNewMessage from "../screens/admin/addNewMessage";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -138,12 +139,12 @@ const HomeStackScreen = ({ navigation }) => (
     />
 
     <HomeStack.Screen
-      name="adminRemoveVol"
-      component={AdminRemoveVol}
+      name="addNewMessage"
+      component={addNewMessage}
       options={({ route }) => ({
         headerBackTitleVisible: false,
         headerShown: true,
-        title: "מחיקת התנדבויות",
+        title: "הוסםת הודעה חדשה",
       })}
     />
   </HomeStack.Navigator>

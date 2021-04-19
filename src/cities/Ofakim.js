@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -134,7 +134,9 @@ export default Ofakim = ({ navigation }) => {
           <TouchableOpacity
             style={styles.categoryBtn}
             onPress={() => {
-              navigation.navigate("freeItems");
+              navigation.navigate("freeItems", {
+                nameOfCity: "פריטים למסירה באופקים",
+              });
             }}
           >
             <View style={styles.categoryIcon}>
@@ -151,7 +153,7 @@ export default Ofakim = ({ navigation }) => {
             </View>
             <Text style={styles.categoryBtnTxt}>פריטים למסירה</Text>
           </TouchableOpacity>
-          {/* ---------------------------------------------------------------------- */}
+
           <TouchableOpacity
             style={styles.categoryBtn}
             onPress={() => {
@@ -172,11 +174,11 @@ export default Ofakim = ({ navigation }) => {
             </View>
             <Text style={styles.categoryBtnTxt}>מעכשיו לעכשיו</Text>
           </TouchableOpacity>
-          {/* ---------------------------------------------------------------------- */}
+
           <TouchableOpacity
             style={styles.categoryBtn}
             onPress={() => {
-              navigation.navigate("freeItems");
+              navigation.navigate("location");
             }}
           >
             <View style={styles.categoryIcon}>
@@ -192,6 +194,28 @@ export default Ofakim = ({ navigation }) => {
               />
             </View>
             <Text style={styles.categoryBtnTxt}>עזרה לבעלי מוגבלויות</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.categoryContainer}>
+          <TouchableOpacity
+            style={styles.categoryBtn}
+            onPress={() => {
+              navigation.navigate("permission");
+            }}
+          >
+            <View style={styles.categoryIcon}>
+              <Image
+                source={require("../../assets/free.png")}
+                // style={styles.sliderImage}
+                style={{
+                  height: "98%",
+                  width: 85,
+                  alignSelf: "center",
+                  borderRadius: 8,
+                }}
+              />
+            </View>
+            <Text style={styles.categoryBtnTxt}>מבוגרים</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

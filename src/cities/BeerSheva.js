@@ -101,11 +101,34 @@ export default BeerSheva = ({ navigation }) => {
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../assets/routine.png")}
+              source={require("../../assets/give.png")}
               style={styles.sliderImage}
             />
           </View>
           <Text style={styles.categoryBtnTxt}>התנדבויות בגמחים</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => {
+            navigation.navigate("freeItems", {
+              nameOfCity: "פריטים למסירה בבאר שבע",
+            });
+          }}
+        >
+          <View style={styles.categoryIcon}>
+            <Image
+              source={require("../../assets/free.png")}
+              // style={styles.sliderImage}
+              style={{
+                height: "98%",
+                width: 85,
+                alignSelf: "center",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <Text style={styles.categoryBtnTxt}>פריטים למסירה</Text>
         </TouchableOpacity>
       </View>
     </View>

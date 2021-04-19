@@ -84,6 +84,26 @@ export default AdminHomeScreen = ({ navigation }) => {
           <Text style={styles.categoryBtnTxt}> מידע נוסף</Text>
         </TouchableOpacity>
       </View>
+      {/* -------------------------------------------------------------- */}
+
+      <View style={styles.categoryContainer}>
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => {
+            navigation.navigate("addNewMessage");
+          }}
+        >
+          <View style={styles.categoryIcon}>
+            <Image
+              source={require("../../../assets/addadmin.png")}
+              style={styles.sliderImage}
+            />
+          </View>
+          <Text style={styles.categoryBtnTxt}>הוספת הודעה חדשה</Text>
+        </TouchableOpacity>
+      </View>
+
+
     </View>
   );
 };
