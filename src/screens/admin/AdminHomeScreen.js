@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default AdminHomeScreen = ({ navigation }) => {
   return (
@@ -7,7 +8,7 @@ export default AdminHomeScreen = ({ navigation }) => {
       <View style={styles.sliderContainer}>
         <View style={styles.slide}>
           <Image
-            source={require("../../../assets/adminhome.png")}
+            source={require("../../../assets/manager.jpeg")}
             resizeMode="cover"
             style={styles.sliderImage}
           />
@@ -19,91 +20,107 @@ export default AdminHomeScreen = ({ navigation }) => {
       </View>
 
       {/* ---------------------------- Categories Section ------------------------------------ */}
-      <View style={styles.categoryContainer}>
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() => {
-            navigation.navigate("addNewVol");
-          }}
-        >
-          <View style={styles.categoryIcon}>
-            <Image
-              source={require("../../../assets/addadmin.png")}
-              style={styles.sliderImage}
-            />
-          </View>
-          <Text style={styles.categoryBtnTxt}>הוספת התנדבות חדשה</Text>
-        </TouchableOpacity>
+      <ScrollView>
+        <View style={styles.categoryContainer}>
+          <TouchableOpacity
+            style={styles.categoryBtn}
+            onPress={() => {
+              navigation.navigate("addNewVol");
+            }}
+          >
+            <View style={styles.categoryIcon}>
+              <Image
+                source={require("../../../assets/addadmin.png")}
+                style={styles.sliderImage}
+              />
+            </View>
+            <Text style={styles.categoryBtnTxt}>הוספת התנדבות חדשה</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() => {
-            navigation.navigate("showRequests");
-          }}
-        >
-          <View style={styles.categoryIcon}>
-            <Image
-              source={require("../../../assets/requestadmin.png")}
-              style={styles.sliderImage}
-            />
-          </View>
-          <Text style={styles.categoryBtnTxt}>בקשות ממתינות להתנדבות</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={styles.categoryBtn}
+            onPress={() => {
+              navigation.navigate("showRequests");
+            }}
+          >
+            <View style={styles.categoryIcon}>
+              <Image
+                source={require("../../../assets/requestadmin.png")}
+                style={styles.sliderImage}
+              />
+            </View>
+            <Text style={styles.categoryBtnTxt}>בקשות ממתינות להתנדבות</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* NEW SECTION */}
+        {/* NEW SECTION */}
 
-      <View style={styles.categoryContainer}>
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() => {
-            navigation.navigate("removeVol");
-          }}
-        >
-          <View style={styles.categoryIcon}>
-            <Image
-              source={require("../../../assets/deleteVol.png")}
-              style={styles.sliderImage}
-            />
-          </View>
-          <Text style={styles.categoryBtnTxt}> מחיקת התנדבויות מהמאגר</Text>
-        </TouchableOpacity>
+        <View style={styles.categoryContainer}>
+          <TouchableOpacity
+            style={styles.categoryBtn}
+            onPress={() => {
+              navigation.navigate("removeVol");
+            }}
+          >
+            <View style={styles.categoryIcon}>
+              <Image
+                source={require("../../../assets/deleteVol.png")}
+                style={styles.sliderImage}
+              />
+            </View>
+            <Text style={styles.categoryBtnTxt}> מחיקת התנדבויות מהמאגר</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() => {
-            navigation.navigate("admininformation");
-          }}
-        >
-          <View style={styles.categoryIcon}>
-            <Image
-              source={require("../../../assets/infoCategory.png")}
-              style={styles.sliderImage}
-            />
-          </View>
-          <Text style={styles.categoryBtnTxt}> מידע נוסף</Text>
-        </TouchableOpacity>
-      </View>
-      {/* -------------------------------------------------------------- */}
+          <TouchableOpacity
+            style={styles.categoryBtn}
+            onPress={() => {
+              navigation.navigate("admininformation");
+            }}
+          >
+            <View style={styles.categoryIcon}>
+              <Image
+                source={require("../../../assets/infoCategory.png")}
+                style={styles.sliderImage}
+              />
+            </View>
+            <Text style={styles.categoryBtnTxt}> מידע נוסף</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.categoryContainer}>
-        <TouchableOpacity
-          style={styles.categoryBtn}
-          onPress={() => {
-            navigation.navigate("addNewMessage");
-          }}
-        >
-          <View style={styles.categoryIcon}>
-            <Image
-              source={require("../../../assets/addadmin.png")}
-              style={styles.sliderImage}
-            />
-          </View>
-          <Text style={styles.categoryBtnTxt}>הוספת הודעה חדשה</Text>
-        </TouchableOpacity>
-      </View>
+        {/* NEW SECTION */}
 
+        <View style={styles.categoryContainer}>
+          <TouchableOpacity
+            style={styles.categoryBtn}
+            onPress={() => {
+              navigation.navigate("AddNewMessage");
+            }}
+          >
+            <View style={styles.categoryIcon}>
+              <Image
+                source={require("../../../assets/HomeMessage.jpg")}
+                style={styles.sliderImage}
+              />
+            </View>
+            <Text style={styles.categoryBtnTxt}>הוספת הודעה חדשה</Text>
+          </TouchableOpacity>
 
+          <TouchableOpacity
+            style={styles.categoryBtn}
+            onPress={() => {
+              navigation.navigate("allMessages");
+            }}
+          >
+            <View style={styles.categoryIcon}>
+              <Image
+                source={require("../../../assets/message.jpg")}
+                style={styles.sliderImage}
+              />
+            </View>
+            <Text style={styles.categoryBtnTxt}>עריכת הודעות</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </View>
   );
 };
