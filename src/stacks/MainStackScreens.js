@@ -14,7 +14,9 @@ import ShowRequests from "../screens/admin/ShowRequests";
 import AdminInformation from "../screens/admin/AdminInformation";
 import RemoveVol from "../screens/admin/RemoveVol";
 import AdminRemoveVol from "../components/AdminRemoveVol";
-import addNewMessage from "../screens/admin/addNewMessage";
+import AddNewMessage from "../screens/admin/AddNewMessage";
+import AllMessages from "../screens/admin/AllMessages";
+import EditMessages from "../screens/admin/EditMessages";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -26,7 +28,7 @@ const MainStacksScreens = () => (
       name="Home"
       component={HomeStackScreen}
       options={{
-        tabBarLabel: ({ focused }) => (
+        tabBarLabel: () => (
           <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
             עמוד הבית
           </Text>
@@ -40,7 +42,7 @@ const MainStacksScreens = () => (
       name="ProfileScreen"
       component={ProfileStackScreen}
       options={{
-        tabBarLabel: ({ focused }) => (
+        tabBarLabel: () => (
           <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
             פרופיל אישי
           </Text>
@@ -55,7 +57,7 @@ const MainStacksScreens = () => (
 
 export default MainStacksScreens;
 
-const HomeStackScreen = ({ navigation }) => (
+const HomeStackScreen = () => (
   <HomeStack.Navigator
     screenOptions={{
       headerStyle: {
@@ -72,7 +74,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="HomePage"
       component={AdminHomeScreen}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         title: "עמוד הבית",
       })}
@@ -81,7 +83,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="addNewVol"
       component={AddNewVolunteers}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "הוספת התנדבות חדשה",
@@ -91,7 +93,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="showRequests"
       component={ShowRequests}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "בקשות הממתינות להתנדבות",
@@ -101,7 +103,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="admininformation"
       component={AdminInformation}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "מידע נוסף",
@@ -111,7 +113,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="removeVol"
       component={RemoveVol}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "מחיקת התנדבות",
@@ -131,7 +133,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="formTextInput"
       component={FormTextInput}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "הזנת פרטים להתנדבות",
@@ -139,18 +141,48 @@ const HomeStackScreen = ({ navigation }) => (
     />
 
     <HomeStack.Screen
-      name="addNewMessage"
-      component={addNewMessage}
-      options={({ route }) => ({
+      name="adminRemoveVol"
+      component={AdminRemoveVol}
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
-        title: "הוסםת הודעה חדשה",
+        title: "מחיקת התנדבויות",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="AddNewMessage"
+      component={AddNewMessage}
+      options={() => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "הוספת הודעה חדשה",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="allMessages"
+      component={AllMessages}
+      options={() => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "עריכת הודעות",
+      })}
+    />
+
+    <HomeStack.Screen
+      name="editMessages"
+      component={EditMessages}
+      options={() => ({
+        headerBackTitleVisible: false,
+        headerShown: true,
+        title: "עריכת הודעות",
       })}
     />
   </HomeStack.Navigator>
 );
 
-const ProfileStackScreen = ({ navigation }) => (
+const ProfileStackScreen = () => (
   <ProfileStack.Navigator
     screenOptions={{
       headerStyle: {
@@ -167,7 +199,7 @@ const ProfileStackScreen = ({ navigation }) => (
     <ProfileStack.Screen
       name="profile"
       component={ProfileScreen}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "פרופיל אישי",
@@ -177,7 +209,7 @@ const ProfileStackScreen = ({ navigation }) => (
     <ProfileStack.Screen
       name="editProfile"
       component={EditProfileScreen}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "עריכת פרופיל",
