@@ -13,8 +13,10 @@ const EditItems = ({ navigation, route }) => {
   const [olddetails, setOldDetails] = useState("");
   const [docid, setDocId] = useState("");
 
+  console.log(docid);
 
   const { title, nameOfProduct } = route.params;
+  console.log(title);
 
   const uid = firebase.auth().currentUser.uid;
 
