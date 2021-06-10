@@ -1,64 +1,101 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
+import { UserContext } from "../context/UserContext";
 
-const CardSOS = ({ title, description, image, maxVol }) => {
-  const [data, setData] = useState([]);
+const CardSOS = ({ title, description, image }) => {
+  const [city, setCity] = useState("");
+  const [auth, setAuth] = useState(false);
+  const [user] = useContext(UserContext);
+  const uid = user.uid;
 
   useEffect(() => {
+    /** Get the city of the current user from firestore */
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .onSnapshot((doc) => {
+        if (doc.exists) {
+          setCity(doc.data().city);
+        }
+      });
+  }, []);
+
+  const updateFunc = async (title) => {
+    /** Update the details in firestore collection */
+    await firebase
+      .firestore()
+      .collection("requests_realtime")
+      .add({
+        title: title,
+        username: user.username,
+        email: user.email,
+        status: "ממתין לאישור.",
+        uid: uid,
+        city: city,
+      })
+      .then(() => {
+        console.log("Data sent.");
+      });
+
+    alert("נשלחה בקשה למנהל ההתנדבות");
+  };
+
+  useEffect(() => {
+    /** Check if the user already sign to vol. */
+    const userId = firebase.auth().currentUser.uid;
     const ref = firebase
       .firestore()
-      .collection("votes")
+      .collection("requests_realtime")
+      .where("title", "==", title)
+      .where("uid", "==", userId)
       .onSnapshot((snapshot) => {
-        setData(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            dataVal: doc.data(),
-          }))
-        );
+        snapshot.forEach((querySelect) => {
+          test(querySelect.data().title, querySelect.data().uid);
+        });
       });
+
     return () => ref();
   }, []);
 
-  const increment = firebase.firestore.FieldValue.increment(1);
-
-  const updateFunc = () => {
-    firebase
-      .firestore()
-      .collection("votes")
-      .doc(title)
-      .update({ votes: increment });
+  const test = (titleParam) => {
+    /** Function to check if the user is sign to vol */
+    if (titleParam == title) {
+      setAuth(true);
+    } else {
+      setAuth(false);
+    }
   };
 
   return (
     <View style={styles.card}>
       <View style={styles.cardImgWrapper}>
-        <TouchableOpacity onPress={updateFunc}>
-          <Image
-            source={{ uri: image }}
-            resizeMode="cover"
-            style={styles.cardImg}
-          />
-        </TouchableOpacity>
+        {auth == false ? (
+          <TouchableOpacity onPress={() => updateFunc(title)} disabled={auth}>
+            <Image
+              source={{ uri: image }}
+              resizeMode="cover"
+              style={styles.cardImg}
+            />
+            <Text>לחץ כאן</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={() => updateFunc(title)} disabled={auth}>
+            <Image
+              source={{ uri: image }}
+              resizeMode="cover"
+              style={styles.cardImg}
+            />
+            <Text style={{ left: 19, top: -23, color: "#FFF", fontSize: 12 }}>
+              לחצו כדי להתנדב
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.cardInfo}>
+        <Text style={styles.cardTitle}>{title}</Text>
         <Text style={styles.cardDetails}>{description}</Text>
-        {data.map(({ id, dataVal }) => (
-          <Text
-            key={id}
-            style={{
-              fontWeight: "bold",
-              fontSize: 14,
-              color: "red",
-              backgroundColor: "#fff",
-              position: "absolute", // child
-              bottom: 1, // position where you want
-              left: 11,
-            }}
-          >
-            מס' האנשים שבחרו להתנדב: {dataVal.votes} מתוך {maxVol}
-          </Text>
-        ))}
       </View>
     </View>
   );
