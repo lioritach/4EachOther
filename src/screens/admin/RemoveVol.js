@@ -22,13 +22,13 @@ const RemoveVol = ({ navigation }) => {
       });
 
     return () => checkCity();
-  }, []);
+  }, [city]);
 
   return (
     <View style={styles.container}>
       {city == "אופקים" ? (
         <ScrollView>
-          <Card style={{ padding: 10, margin: 10, paddingTop: 2 }}>
+          <Card style={{ padding: 10, margin: 10, paddingTop: 2, left: 12 }}>
             <Text
               style={{ fontWeight: "bold", fontSize: 18, textAlign: "center" }}
             >
@@ -98,6 +98,28 @@ const RemoveVol = ({ navigation }) => {
                 });
               }}
               title="התנדבויות בשגרה"
+              color="#841584"
+            />
+          </Card>
+          <Card style={{ padding: 10, margin: 20, paddingTop: 2 }}>
+            <Button
+              onPress={() => {
+                navigation.navigate("adminRemoveVol", {
+                  title: "realtime",
+                });
+              }}
+              title="מעכשיו לעכשיו - כללי"
+              color="#841584"
+            />
+          </Card>
+          <Card style={{ padding: 10, margin: 20, paddingTop: 2 }}>
+            <Button
+              onPress={() => {
+                navigation.navigate("adminRemoveVol", {
+                  title: "realtimeAdults",
+                });
+              }}
+              title="מעכשיו לעכשיו - מבוגרים"
               color="#841584"
             />
           </Card>
