@@ -1,13 +1,5 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  Dimensions,
-  StatusBar,
-  Platform,
-} from "react-native";
+import { View, Text, Image, StatusBar, Platform } from "react-native";
 import HeaderImageScrollView, {
   TriggeringView,
 } from "react-native-image-header-scroll-view";
@@ -23,7 +15,6 @@ const MAX_HEIGHT = 350;
 const CardViewRealtime = ({ route, navigation }) => {
   const { title, subtitle, description, image } = route.params;
   const navTitleView = useRef(null);
-  const [user] = useContext(UserContext);
   const [data, setdata] = useState(false);
   const firebaseContext = useContext(FirebaseContext);
 
@@ -37,14 +28,14 @@ const CardViewRealtime = ({ route, navigation }) => {
       .where("uid", "==", userId)
       .onSnapshot((snapshot) => {
         snapshot.forEach((querySelect) => {
-          test(querySelect.data().title, querySelect.data().uid);
+          test(querySelect.data().title);
         });
       });
 
     return () => ref();
   }, []);
 
-  const test = (titleParam, uidParam) => {
+  const test = (titleParam) => {
     if (titleParam == title) {
       setdata(true);
     } else {
