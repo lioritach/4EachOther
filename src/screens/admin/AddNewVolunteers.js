@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, Button, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { Picker } from "@react-native-community/picker";
 import { TextInput } from "react-native-paper";
 import { Platform } from "react-native";
@@ -11,11 +11,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { FirebaseContext } from "../../context/FirebaseContext";
 
 const AddNewVolunteers = ({ navigation }) => {
-  const [pickerValue, setPickerValue] = useState();
+  const [pickerValue, setPickerValue] = useState("ofakim_olds");
   const [title, setTitle] = useState();
   const [subTitle, setSubTitle] = useState();
   const [description, setDescription] = useState();
   const [photo, setPhoto] = useState();
+  const [cityVar, setCityVar] = useState();
   const firebaseContext = useContext(FirebaseContext);
   const uid = firebaseContext.getCurrentUser().uid;
   const [city, setCity] = useState("");
@@ -38,11 +39,48 @@ const AddNewVolunteers = ({ navigation }) => {
     } else {
       sendData(category, title, subTitle, description, photo);
     }
-    alert("הוספת התנדבות חדשה בוצעה בהצלחה!");
 
     setTitle("");
     setDescription("");
     setSubTitle("");
+    setPickerValue("");
+    setPhoto("");
+  };
+
+  const addRealtimeVol = (category, title, subTitle, cityVar, photo) => {
+    if (
+      typeof category == "undefined" ||
+      typeof title == "undefined" ||
+      typeof subTitle == "undefined" ||
+      typeof cityVar == "undefined"
+    ) {
+      alert("נא למלא את כל השדות");
+      return;
+    }
+
+    if (typeof photo == "undefined") {
+      if (category == "realtimeAdults" || category == "realtime") {
+        const defaultImage =
+          "https://firebasestorage.googleapis.com/v0/b/eachother-59993.appspot.com/o/sosRealtime.png?alt=media&token=3af0eed2-fc58-49e3-b89d-67d1642e17ea";
+        sendDefaultDataRealtime(
+          category,
+          title,
+          subTitle,
+          cityVar,
+          defaultImage
+        );
+      } else {
+        const defaultImage =
+          "https://firebasestorage.googleapis.com/v0/b/eachother-59993.appspot.com/o/sosRealtime.png?alt=media&token=3af0eed2-fc58-49e3-b89d-67d1642e17ea";
+        sendDefaultData(category, title, subTitle, cityVar, defaultImage);
+      }
+    } else {
+      sendData(category, title, subTitle, description, photo);
+    }
+
+    setTitle("");
+    setSubTitle("");
+    setCityVar("");
     setPickerValue("");
     setPhoto("");
   };
@@ -95,8 +133,7 @@ const AddNewVolunteers = ({ navigation }) => {
   };
 
   const sendData = async (category, title, subTitle, description, photo) => {
-    const remoteUri = await firebaseContext.uploadPhotoAsync(photo);
-    console.log(remoteUri);
+    const remoteUri = await firebaseContext.uploadVolunteersAsync(photo);
 
     return new Promise((res, rej) => {
       firebase
@@ -149,6 +186,35 @@ const AddNewVolunteers = ({ navigation }) => {
     });
   };
 
+  const sendDefaultDataRealtime = async (
+    category,
+    title,
+    subTitle,
+    city,
+    defaultPhoto
+  ) => {
+    return new Promise((res, rej) => {
+      firebase
+        .firestore()
+        .collection(category)
+        .add({
+          title: title,
+          description: subTitle,
+          image: defaultPhoto,
+          city: city,
+        })
+        .then((ref) => {
+          res(ref);
+          alert("הוספת התנדבות חדשה בוצעה בהצלחה!");
+          navigation.navigate("HomePage");
+        })
+
+        .catch((error) => {
+          rej(error);
+        });
+    });
+  };
+
   return (
     <KeyboardAwareScrollView>
       {city == "אופקים" ? (
@@ -179,6 +245,12 @@ const AddNewVolunteers = ({ navigation }) => {
               <Picker.Item label="התנדבויות לנוער" value="ofakim_teens" />
               <Picker.Item label="התנדבויות לפי מגדר" value="ofakim_religion" />
               <Picker.Item label="התנדבויות בשגרה" value="ofakim_routine" />
+              <Picker.Item label="מעכשיו לעכשיו - כללי" value="realtime" />
+              <Picker.Item
+                label="מעכשיו לעכשיו - מבוגרים"
+                value="realtimeAdults"
+              />
+              <Picker.Item label="מבוגרים" value="permission" />
             </Picker>
           </View>
 
@@ -201,61 +273,179 @@ const AddNewVolunteers = ({ navigation }) => {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.textInputView}>
-            <Text style={styles.textInput}>שם ההתנדבות </Text>
-            <TextInput
-              placeholder="שם ההתנדבות"
-              style={styles.input}
-              autoCompleteType="name"
-              autoCorrect={false}
-              autoFocus={true}
-              keyboardType="default"
-              onChangeText={(title) => {
-                setTitle(title);
-              }}
-              value={title}
-            />
-          </View>
+          {pickerValue == "realtime" ? (
+            <View>
+              <View style={styles.textInputView}>
+                <Text style={styles.textInput}>שם ההתנדבות </Text>
+                <TextInput
+                  placeholder="שם ההתנדבות"
+                  style={styles.input}
+                  autoCompleteType="name"
+                  autoCorrect={false}
+                  autoFocus={true}
+                  keyboardType="default"
+                  onChangeText={(title) => {
+                    setTitle(title);
+                  }}
+                  value={title}
+                />
+              </View>
 
-          <View style={styles.textInputView}>
-            <Text style={styles.textInput}>תת כותרת </Text>
-            <TextInput
-              placeholder="תת כותרת"
-              style={styles.input}
-              autoCompleteType="name"
-              autoCorrect={false}
-              autoFocus={true}
-              keyboardType="default"
-              onChangeText={(subTitle) => {
-                setSubTitle(subTitle);
-              }}
-              value={subTitle}
-            />
-          </View>
+              <View style={styles.textInputView}>
+                <Text style={styles.textInput}>תיאור </Text>
+                <TextInput
+                  placeholder="תיאור"
+                  style={styles.input}
+                  autoCompleteType="name"
+                  autoCorrect={false}
+                  autoFocus={true}
+                  keyboardType="default"
+                  onChangeText={(subtitle) => {
+                    setSubTitle(subtitle);
+                  }}
+                  value={subTitle}
+                />
+              </View>
 
-          <View style={styles.textInputView}>
-            <Text style={styles.textInput}>תיאור </Text>
-            <TextInput
-              placeholder="תיאור"
-              style={styles.input}
-              autoCompleteType="name"
-              autoCorrect={false}
-              autoFocus={true}
-              keyboardType="default"
-              onChangeText={(description) => {
-                setDescription(description);
-              }}
-              value={description}
-            />
-          </View>
+              <View style={styles.textInputView}>
+                <Text style={styles.textInput}>עיר</Text>
+                <TextInput
+                  placeholder="עיר"
+                  style={styles.input}
+                  autoCompleteType="name"
+                  autoCorrect={false}
+                  autoFocus={true}
+                  keyboardType="default"
+                  onChangeText={(cityVar) => {
+                    setCityVar(cityVar);
+                  }}
+                  value={cityVar}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() =>
+                  addRealtimeVol(pickerValue, title, subTitle, city, photo)
+                }
+              >
+                <Text style={styles.sendButton}>אישור</Text>
+              </TouchableOpacity>
+            </View>
+          ) : pickerValue == "realtimeAdults" ? (
+            <View>
+              <View style={styles.textInputView}>
+                <Text style={styles.textInput}>שם ההתנדבות </Text>
+                <TextInput
+                  placeholder="שם ההתנדבות"
+                  style={styles.input}
+                  autoCompleteType="name"
+                  autoCorrect={false}
+                  autoFocus={true}
+                  keyboardType="default"
+                  onChangeText={(title) => {
+                    setTitle(title);
+                  }}
+                  value={title}
+                />
+              </View>
 
-          <TouchableOpacity
-            onPress={() =>
-              addVol(pickerValue, title, subTitle, description, photo)
-            }
-          >
-            <Text style={styles.sendButton}>אישור</Text>
-          </TouchableOpacity>
+              <View style={styles.textInputView}>
+                <Text style={styles.textInput}>תיאור </Text>
+                <TextInput
+                  placeholder="תיאור"
+                  style={styles.input}
+                  autoCompleteType="name"
+                  autoCorrect={false}
+                  autoFocus={true}
+                  keyboardType="default"
+                  onChangeText={(subtitle) => {
+                    setSubTitle(subtitle);
+                  }}
+                  value={subTitle}
+                />
+              </View>
+
+              <View style={styles.textInputView}>
+                <Text style={styles.textInput}>עיר</Text>
+                <TextInput
+                  placeholder="עיר"
+                  style={styles.input}
+                  autoCompleteType="name"
+                  autoCorrect={false}
+                  autoFocus={true}
+                  keyboardType="default"
+                  onChangeText={(cityVar) => {
+                    setCityVar(cityVar);
+                  }}
+                  value={cityVar}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() =>
+                  addRealtimeVol(pickerValue, title, subTitle, city, photo)
+                }
+              >
+                <Text style={styles.sendButton}>אישור</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View>
+              <View style={styles.textInputView}>
+                <Text style={styles.textInput}>שם ההתנדבות </Text>
+                <TextInput
+                  placeholder="שם ההתנדבות"
+                  style={styles.input}
+                  autoCompleteType="name"
+                  autoCorrect={false}
+                  autoFocus={true}
+                  keyboardType="default"
+                  onChangeText={(title) => {
+                    setTitle(title);
+                  }}
+                  value={title}
+                />
+              </View>
+
+              <View style={styles.textInputView}>
+                <Text style={styles.textInput}>תת כותרת </Text>
+                <TextInput
+                  placeholder="תת כותרת"
+                  style={styles.input}
+                  autoCompleteType="name"
+                  autoCorrect={false}
+                  autoFocus={true}
+                  keyboardType="default"
+                  onChangeText={(subTitle) => {
+                    setSubTitle(subTitle);
+                  }}
+                  value={subTitle}
+                />
+              </View>
+
+              <View style={styles.textInputView}>
+                <Text style={styles.textInput}>תיאור </Text>
+                <TextInput
+                  placeholder="תיאור"
+                  style={styles.input}
+                  autoCompleteType="name"
+                  autoCorrect={false}
+                  autoFocus={true}
+                  keyboardType="default"
+                  onChangeText={(description) => {
+                    setDescription(description);
+                  }}
+                  value={description}
+                />
+              </View>
+
+              <TouchableOpacity
+                onPress={() =>
+                  addVol(pickerValue, title, subTitle, description, photo)
+                }
+              >
+                <Text style={styles.sendButton}>אישור</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       ) : (
         <View style={styles.container}>
@@ -290,6 +480,11 @@ const AddNewVolunteers = ({ navigation }) => {
               />
               <Picker.Item label="התנדבויות לנוער" value="beersheva_teens" />
               <Picker.Item label="התנדבויות בגמחים" value="beersheva_gmach" />
+              <Picker.Item label="מעכשיו לעכשיו - כללי" value="realtime" />
+              <Picker.Item
+                label="מעכשיו לעכשיו - מבוגרים"
+                value="realtimeAdults"
+              />
             </Picker>
           </View>
 
