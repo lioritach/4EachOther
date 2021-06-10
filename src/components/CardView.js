@@ -10,13 +10,12 @@ const CardView = ({ navigation, route }) => {
   const [user] = useContext(UserContext);
   const [data, setdata] = useState(false);
 
-
   if (typeof city === "undefined") {
     city = "אופקים";
   }
 
-  //check if the user already sign to vol.
   useEffect(() => {
+    /** Check if the user already sign to vol. */
     const userId = firebase.auth().currentUser.uid;
     const ref = firebase
       .firestore()
@@ -25,14 +24,14 @@ const CardView = ({ navigation, route }) => {
       .where("uid", "==", userId)
       .onSnapshot((snapshot) => {
         snapshot.forEach((querySelect) => {
-          test(querySelect.data().title, querySelect.data().uid);
+          test(querySelect.data().title);
         });
       });
 
     return () => ref();
   }, []);
-//check that the user will not send 2 requests for vol
-  const test = (titleParam, uidParam) => {
+
+  const test = (titleParam) => {
     if (titleParam == title) {
       setdata(true);
     } else {
@@ -83,7 +82,15 @@ const CardView = ({ navigation, route }) => {
             <View
               style={{ marginHorizontal: 12, justifyContent: "space-around" }}
             >
-              <Text style={{ fontSize: 14, lineHeight: 25, textDecorationLine: "underline" }}>{title}</Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  lineHeight: 25,
+                  textDecorationLine: "underline",
+                }}
+              >
+                {title}
+              </Text>
               <Text style={{ color: "#8b9097", fontSize: 16, lineHeight: 22 }}>
                 {city}
               </Text>
@@ -111,7 +118,6 @@ const CardView = ({ navigation, route }) => {
             top: 50,
             left: 20,
             right: 20,
-            //height: 50,
             flexDirection: "row",
           }}
         ></View>
@@ -131,18 +137,20 @@ const CardView = ({ navigation, route }) => {
           >
             מידע על ההתנדבות
           </Text>
-          <Text
-            style={{
-              marginTop: 10,
-              color: "#8b9097",
-              fontSize: 16,
-              lineHeight: 15,
-              textAlign: "center",
-              fontWeight: "400",
-            }}
-          >
-            {description}
-          </Text>
+          <ScrollView>
+            <Text
+              style={{
+                marginTop: 10,
+                color: "#8b9097",
+                fontSize: 16,
+                lineHeight: 15,
+                textAlign: "center",
+                fontWeight: "400",
+              }}
+            >
+              {description}
+            </Text>
+          </ScrollView>
         </View>
       </View>
 
@@ -150,15 +158,29 @@ const CardView = ({ navigation, route }) => {
       <View style={{ flex: 0.5, paddingHorizontal: 8 }}>
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           <View style={styles.sectionLarge}>
-            <TouchableOpacity
-              disabled={data}
-              style={styles.commandButton}
-              onPress={() => {
-                navigation.navigate("formTextInput", { title: title });
-              }}
-            >
-              <Text style={styles.panelButtonTitle}>לחצו כאן כדי להתנדב</Text>
-            </TouchableOpacity>
+            {data == false ? (
+              <TouchableOpacity
+                disabled={data}
+                style={styles.commandButton}
+                onPress={() => {
+                  navigation.navigate("formTextInput", { title: title });
+                }}
+              >
+                <Text style={styles.panelButtonTitle}>לחצו כאן כדי להתנדב</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                disabled={data}
+                style={styles.commandButton}
+                onPress={() => {
+                  navigation.navigate("formTextInput", { title: title });
+                }}
+              >
+                <Text style={styles.panelButtonTitle}>
+                  בחרת להתנדב בארגון זה
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>
@@ -179,7 +201,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   sectionLarge: {
@@ -188,15 +209,13 @@ const styles = StyleSheet.create({
   commandButton: {
     padding: 15,
     backgroundColor: "#33A8FF",
-    justifyContent: "center",
+    // justifyContent: "center",
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     borderTopEndRadius: 20,
     borderTopLeftRadius: 20,
-
     marginStart: 25,
-    left: 80,
-
+    left: 70,
     marginLeft: 140,
     marginRight: 130,
   },
