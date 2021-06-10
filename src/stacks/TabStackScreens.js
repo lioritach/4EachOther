@@ -1,12 +1,10 @@
 import React from "react";
 import { Text } from "react-native";
-
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import Feather from "react-native-vector-icons/Feather";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 
+import Feather from "react-native-vector-icons/Feather";
 import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
@@ -28,9 +26,9 @@ import CardViewShoesOfakim from "../components/CardViewShoesOfakims";
 import Realtime from "../screens/categories/OfakimCity/Realtime";
 import FormUploadItems from "../screens/categories/OfakimCity/ItemsForDelivery/FormUploadItems";
 import MyItems from "../screens/MyItems";
-//import LocationFunc from "../screens/LocationFunc";
+import LocationFunc from "../screens/LocationFunc";
 import EditItems from "../components/EditItems";
-//import permission from "../screens/permission";
+import Permission from "../screens/Permission";
 import Covid19BeerSheva from "../screens/categories/BeerShevaCity/Covid19BeerSheva";
 import TeensBeerSheva from "../screens/categories/BeerShevaCity/TeensBeerSheva";
 import OldsBeerSheva from "../screens/categories/BeerShevaCity/OldsBeerSheva";
@@ -40,7 +38,6 @@ const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const NotificationsStack = createStackNavigator();
 const MyItemsStack = createStackNavigator();
-
 const Tab = createBottomTabNavigator();
 
 const MainTabScreens = () => (
@@ -49,7 +46,7 @@ const MainTabScreens = () => (
       name="Home"
       component={HomeStackScreen}
       options={{
-        tabBarLabel: ({ focused }) => (
+        tabBarLabel: () => (
           <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
             עמוד הבית
           </Text>
@@ -63,9 +60,9 @@ const MainTabScreens = () => (
       name="Notifications"
       component={NotificationsStackScreen}
       options={{
-        tabBarLabel: ({ focused }) => (
+        tabBarLabel: () => (
           <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
-            הודעות
+            סטטוס בקשות
           </Text>
         ),
         tabBarIcon: ({ color }) => (
@@ -78,13 +75,13 @@ const MainTabScreens = () => (
       name="myItems"
       component={MyItemsStackScreen}
       options={{
-        tabBarLabel: ({ focused }) => (
+        tabBarLabel: () => (
           <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
             הפריטים שהעלת
           </Text>
         ),
         tabBarIcon: ({ color }) => (
-          <FontAwesome name="heart-o" color={color} size={26} />
+          <Feather name="upload" color={color} size={26} />
         ),
       }}
     />
@@ -93,7 +90,7 @@ const MainTabScreens = () => (
       name="ProfileScreen"
       component={ProfileStackScreen}
       options={{
-        tabBarLabel: ({ focused }) => (
+        tabBarLabel: () => (
           <Text style={{ fontSize: 13, fontWeight: "bold", color: "gray" }}>
             פרופיל אישי
           </Text>
@@ -108,15 +105,15 @@ const MainTabScreens = () => (
 
 export default MainTabScreens;
 
-const HomeStackScreen = ({ navigation }) => (
+const HomeStackScreen = () => (
   <HomeStack.Navigator
     screenOptions={{
+      headerShown: true,
       headerStyle: {
-        backgroundColor: "#33A8FF",
-        shadowColor: "#fff",
+        backgroundColor: "#0099ff",
+        shadowColor: "#0099ff",
         elevation: 0,
       },
-      // headerShown: false,
       headerTintColor: "#fff",
       headerTitleStyle: {
         fontWeight: "bold",
@@ -126,7 +123,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="HomePage"
       component={HomeScreen}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         title: "עמוד הבית",
       })}
@@ -135,7 +132,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="Ofakim_HomeStack"
       component={Ofakim}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות בעיר אופקים",
@@ -145,7 +142,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="BeerSheva_HomeStack"
       component={BeerSheva}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות בעיר באר שבע",
@@ -155,7 +152,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="EmergencyOfakim"
       component={EmergencyOfakim}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות בשעת חירום באופקים",
@@ -165,7 +162,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="routineOfakim"
       component={RoutineOfakim}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות בשגרה באופקים",
@@ -175,7 +172,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="religionOfakim"
       component={ReligionOfakim}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות לפי מגדר באופקים",
@@ -185,7 +182,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="teensOfakim"
       component={TeensOfakim}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות לבני נוער באופקים",
@@ -195,7 +192,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="oldsOfakim"
       component={OldsOfakim}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות עם קשישים באופקים",
@@ -205,7 +202,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="covid19ofakim"
       component={Covid19Ofakim}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות בקורונה באופקים",
@@ -225,7 +222,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="formTextInput"
       component={FormTextInput}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "הזנת פרטים להתנדבות",
@@ -255,7 +252,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="viewContentsShoesOfakim"
       component={CardViewShoesOfakim}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "נעליים למסירה באופקים",
@@ -265,7 +262,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="realtime"
       component={Realtime}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות מעכשיו לעכשיו",
@@ -275,7 +272,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="formUploadItems"
       component={FormUploadItems}
-      options={({ route }) => ({
+      options={() => ({
         headerShown: true,
         title: "העלאת פריטים למסירה",
       })}
@@ -284,16 +281,16 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="editItems"
       component={EditItems}
-      options={({ route }) => ({
+      options={() => ({
         headerShown: true,
         title: "עריכת פריט למסירה",
       })}
     />
 
-    {/* <HomeStack.Screen
+    <HomeStack.Screen
       name="location"
       component={LocationFunc}
-      options={({ route }) => ({
+      options={() => ({
         headerShown: true,
         title: "Locations",
       })}
@@ -301,18 +298,18 @@ const HomeStackScreen = ({ navigation }) => (
 
     <HomeStack.Screen
       name="permission"
-      component={permission}
-      options={({ route }) => ({
+      component={Permission}
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
-        title: "גישה מוגבלת",
+        title: "מבוגרים בודדים",
       })}
-    /> */}
+    />
 
     <HomeStack.Screen
       name="EmergencyBeerSheva"
       component={EmergencyBeerSheva}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות בחירום בעיר באר שבע",
@@ -322,7 +319,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="Covid19BeerSheva"
       component={Covid19BeerSheva}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות בקורונה בעיר באר שבע",
@@ -332,7 +329,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="TeensBeerSheva"
       component={TeensBeerSheva}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות לנוער בעיר באר שבע",
@@ -342,7 +339,7 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="OldsBeerSheva"
       component={OldsBeerSheva}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות עם קשישים בבאר שבע",
@@ -352,33 +349,16 @@ const HomeStackScreen = ({ navigation }) => (
     <HomeStack.Screen
       name="GmachBeerSheva"
       component={GmachBeerSheva}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "התנדבויות בגמחים בבאר שבע",
       })}
     />
-
-    {/* <HomeStack.Screen
-      name={"volunteer"}
-      component={CardListScreen}
-      options={({ route }) => ({
-        title: route.params.title,
-        headerBackTitleVisible: false,
-      })}
-    />
-    <HomeStack.Screen
-      name={"cardItems"}
-      component={CardItemDetails}
-      options={({ route }) => ({
-        // title: route.params.title,
-        headerBackTitleVisible: false,
-      })}
-    /> */}
   </HomeStack.Navigator>
 );
 
-const ProfileStackScreen = ({ navigation }) => (
+const ProfileStackScreen = () => (
   <ProfileStack.Navigator
     screenOptions={{
       headerStyle: {
@@ -395,7 +375,7 @@ const ProfileStackScreen = ({ navigation }) => (
     <ProfileStack.Screen
       name="profile"
       component={ProfileScreen}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "פרופיל אישי",
@@ -405,7 +385,7 @@ const ProfileStackScreen = ({ navigation }) => (
     <ProfileStack.Screen
       name="editProfile"
       component={EditProfileScreen}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
         title: "עריכת פרופיל",
@@ -414,7 +394,7 @@ const ProfileStackScreen = ({ navigation }) => (
   </ProfileStack.Navigator>
 );
 
-const NotificationsStackScreen = ({ navigation }) => (
+const NotificationsStackScreen = () => (
   <NotificationsStack.Navigator
     screenOptions={{
       headerStyle: {
@@ -431,16 +411,16 @@ const NotificationsStackScreen = ({ navigation }) => (
     <NotificationsStack.Screen
       name="messages"
       component={NotificationsScreen}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
-        title: "הודעות & עדכונים",
+        title: "סטטוס רישום להתנדבויות",
       })}
     />
   </NotificationsStack.Navigator>
 );
 
-const MyItemsStackScreen = ({ navigation }) => (
+const MyItemsStackScreen = () => (
   <MyItemsStack.Navigator
     screenOptions={{
       headerStyle: {
@@ -457,10 +437,10 @@ const MyItemsStackScreen = ({ navigation }) => (
     <MyItemsStack.Screen
       name="messages"
       component={MyItems}
-      options={({ route }) => ({
+      options={() => ({
         headerBackTitleVisible: false,
         headerShown: true,
-        title: "הפריטים שהעלת",
+        title: "הפריטים שהעלתם",
       })}
     />
   </MyItemsStack.Navigator>
