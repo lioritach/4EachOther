@@ -30,11 +30,13 @@ work environment, JavaScript language and Firebase database.
 _______________________________________________________________________________________________________________
 
 Some screenshots:
-![WhatsApp Image 2021-06-10 at 21 37 57](https://user-images.githubusercontent.com/44543472/121579426-6239d700-ca34-11eb-92fd-338ee8bb5b1b.jpeg)
+<img src="https://github.com/favicon.ico" width="48">
+
+<!-- ![WhatsApp Image 2021-06-10 at 21 37 57](https://user-images.githubusercontent.com/44543472/121579426-6239d700-ca34-11eb-92fd-338ee8bb5b1b.jpeg)
 ![WhatsApp Image 2021-06-10 at 21 37 40](https://user-images.githubusercontent.com/44543472/121579431-636b0400-ca34-11eb-8c7e-096e9348d610.jpeg)
 ![WhatsApp Image 2021-06-10 at 21 37 11](https://user-images.githubusercontent.com/44543472/121579433-636b0400-ca34-11eb-9d25-7210823d1694.jpeg)
 ![WhatsApp Image 2021-06-10 at 21 37 10 (1)](https://user-images.githubusercontent.com/44543472/121579438-64039a80-ca34-11eb-9b3a-d0cb05f1e959.jpeg)
 ![WhatsApp Image 2021-06-10 at 21 37 10](https://user-images.githubusercontent.com/44543472/121579441-649c3100-ca34-11eb-8ca2-001558f8a89e.jpeg)
 ![WhatsApp Image 2021-06-10 at 21 37 09 (1)](https://user-images.githubusercontent.com/44543472/121579443-649c3100-ca34-11eb-8047-4ef3f2e1ef5b.jpeg)
 ![WhatsApp Image 2021-06-10 at 21 37 09](https://user-images.githubusercontent.com/44543472/121579445-6534c780-ca34-11eb-84fd-f71801c6390f.jpeg)
-![WhatsApp Image 2021-06-10 at 21 37 08](https://user-images.githubusercontent.com/44543472/121579447-65cd5e00-ca34-11eb-9fa9-7e94b6bd7a2c.jpeg)
+![WhatsApp Image 2021-06-10 at 21 37 08](https://user-images.githubusercontent.com/44543472/121579447-65cd5e00-ca34-11eb-9fa9-7e94b6bd7a2c.jpeg) -->
