@@ -33,9 +33,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     margin: 10,
   },
-  cardImgWrapper: {
-    flex: 1,
-  },
   cardImg: {
     height: "100%",
     width: "100%",
