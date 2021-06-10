@@ -1,74 +1,72 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
+import { FirebaseContext } from "../../context/FirebaseContext";
 
 const AdminInformation = ({ navigation }) => {
   const [approvedReq, setApprovedRequests] = useState();
   const [deniedReq, setDeniedRequests] = useState();
   const [waitingReq, setWaitingReq] = useState();
-  const [users, setUsers] = useState([]);
+  const [city, setCity] = useState("default");
+  const firebaseContext = useContext(FirebaseContext);
 
-  const [visible, setVisible] = useState(false);
-
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
+  const uid = firebaseContext.getCurrentUser().uid;
 
   useEffect(() => {
-    const waitingRequests = () => {
-      firebase
-        .firestore()
-        .collection("requests")
-        .where("status", "==", "ממתין לאישור.")
-        .onSnapshot((querySnapshot) => {
-          setWaitingReq(querySnapshot.size);
-        });
-    };
+    const getCity = firebase
+      .firestore()
+      .collection("admins")
+      .doc(uid)
+      .onSnapshot((doc) => {
+        if (doc.exists) {
+          setCity(doc.data().city);
+        }
+      });
 
-    const approvedRequests = () => {
-      firebase
-        .firestore()
-        .collection("requests")
-        .where("status", "==", "מאושר ✅")
-        .onSnapshot((querySnapshot) => {
-          setApprovedRequests(querySnapshot.size);
-        });
-    };
+    return () => getCity();
+  });
 
-    const deniedRequests = () => {
-      firebase
-        .firestore()
-        .collection("requests")
-        .where("status", "==", "לא מאושר ❌")
-        .onSnapshot((querySnapshot) => {
-          setDeniedRequests(querySnapshot.size);
-        });
-    };
+  useEffect(() => {
+    setTimeout(async () => {
+      waitingRequests();
+      approvedRequests();
+      deniedRequests();
+      showUsers();
+    }, 500);
+  }, [approvedReq, deniedReq, waitingReq]);
 
-    const showUsers = () => {
-      firebase
-        .firestore()
-        .collection("users")
-        .onSnapshot(
-          (snapshot) => {
-            setUsers(
-              snapshot.docs.map((doc) => ({
-                id: doc.id,
-                dataVal: doc.data(),
-              }))
-            );
-          },
-          (err) => {
-            setErr(err);
-          }
-        );
-    };
+  const waitingRequests = () => {
+    firebase
+      .firestore()
+      .collection("requests")
+      .where("status", "==", "ממתין לאישור.")
+      .where("city", "==", city)
+      .onSnapshot((querySnapshot) => {
+        setWaitingReq(querySnapshot.size);
+      });
+  };
 
-    waitingRequests();
-    approvedRequests();
-    deniedRequests();
-    showUsers();
-  }, []);
+  const approvedRequests = () => {
+    firebase
+      .firestore()
+      .collection("requests")
+      .where("status", "==", "מאושר ✅")
+      .where("city", "==", city)
+      .onSnapshot((querySnapshot) => {
+        setApprovedRequests(querySnapshot.size);
+      });
+  };
+
+  const deniedRequests = () => {
+    firebase
+      .firestore()
+      .collection("requests")
+      .where("status", "==", "לא מאושר ❌")
+      .where("city", "==", city)
+      .onSnapshot((querySnapshot) => {
+        setDeniedRequests(querySnapshot.size);
+      });
+  };
 
   return (
     <View style={styles.card}>
