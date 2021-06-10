@@ -31,7 +31,7 @@ export default BeerSheva = ({ navigation }) => {
         >
           <View style={styles.categoryIcon}>
             <Image
-              source={require("../../assets/sos.png")}
+              source={require("../../assets/newemergency.jpg")}
               style={styles.sliderImage}
             />
           </View>
@@ -119,16 +119,60 @@ export default BeerSheva = ({ navigation }) => {
           <View style={styles.categoryIcon}>
             <Image
               source={require("../../assets/free.png")}
-              // style={styles.sliderImage}
               style={{
-                height: "98%",
-                width: 85,
+                height: "100%",
+                width: "117%",
                 alignSelf: "center",
                 borderRadius: 8,
               }}
             />
           </View>
           <Text style={styles.categoryBtnTxt}>פריטים למסירה</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* ---------------------------------------------------------------------- */}
+
+      <View style={styles.categoryContainer}>
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => {
+            navigation.navigate("realtime");
+          }}
+        >
+          <View style={styles.categoryIcon}>
+            <Image
+              source={require("../../assets/sos.png")}
+              style={{
+                height: "100%",
+                width: "100%",
+                alignSelf: "center",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <Text style={styles.categoryBtnTxt}>מעכשיו לעכשיו</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.categoryBtn}
+          onPress={() => {
+            navigation.navigate("permission");
+          }}
+        >
+          <View style={styles.categoryIcon}>
+            <Image
+              source={require("../../assets/address.png")}
+              style={{
+                height: "100%",
+                width: "100%",
+                alignSelf: "center",
+                borderRadius: 8,
+                backgroundColor: "#FFF",
+              }}
+            />
+          </View>
+          <Text style={styles.categoryBtnTxt}>מבוגרים</Text>
         </TouchableOpacity>
       </View>
     </View>
