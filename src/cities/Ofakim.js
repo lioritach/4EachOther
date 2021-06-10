@@ -33,7 +33,7 @@ export default Ofakim = ({ navigation }) => {
           >
             <View style={styles.categoryIcon}>
               <Image
-                source={require("../../assets/sos.png")}
+                source={require("../../assets/newemergency.jpg")}
                 style={styles.sliderImage}
               />
             </View>
@@ -142,10 +142,9 @@ export default Ofakim = ({ navigation }) => {
             <View style={styles.categoryIcon}>
               <Image
                 source={require("../../assets/free.png")}
-                // style={styles.sliderImage}
                 style={{
-                  height: "98%",
-                  width: 85,
+                  height: "100%",
+                  width: "117%",
                   alignSelf: "center",
                   borderRadius: 8,
                 }}
@@ -162,11 +161,10 @@ export default Ofakim = ({ navigation }) => {
           >
             <View style={styles.categoryIcon}>
               <Image
-                source={require("../../assets/free.png")}
-                // style={styles.sliderImage}
+                source={require("../../assets/sos.png")}
                 style={{
-                  height: "98%",
-                  width: 85,
+                  height: "100%",
+                  width: "100%",
                   alignSelf: "center",
                   borderRadius: 8,
                 }}
@@ -178,40 +176,18 @@ export default Ofakim = ({ navigation }) => {
           <TouchableOpacity
             style={styles.categoryBtn}
             onPress={() => {
-              navigation.navigate("location");
-            }}
-          >
-            <View style={styles.categoryIcon}>
-              <Image
-                source={require("../../assets/free.png")}
-                // style={styles.sliderImage}
-                style={{
-                  height: "98%",
-                  width: 85,
-                  alignSelf: "center",
-                  borderRadius: 8,
-                }}
-              />
-            </View>
-            <Text style={styles.categoryBtnTxt}>עזרה לבעלי מוגבלויות</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.categoryContainer}>
-          <TouchableOpacity
-            style={styles.categoryBtn}
-            onPress={() => {
               navigation.navigate("permission");
             }}
           >
             <View style={styles.categoryIcon}>
               <Image
-                source={require("../../assets/free.png")}
-                // style={styles.sliderImage}
+                source={require("../../assets/address.png")}
                 style={{
-                  height: "98%",
-                  width: 85,
+                  height: "100%",
+                  width: "100%",
                   alignSelf: "center",
                   borderRadius: 8,
+                  backgroundColor: "#FFF",
                 }}
               />
             </View>
@@ -264,7 +240,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "90%",
     alignSelf: "center",
-    marginTop: 10,
+    marginTop: 1,
     marginBottom: 10,
   },
   categoryBtn: {
@@ -285,7 +261,7 @@ const styles = StyleSheet.create({
   },
   categoryBtnTxt: {
     alignSelf: "center",
-    marginTop: 5,
+    marginTop: 10,
     color: "red",
     fontSize: 12,
     fontWeight: "bold",
