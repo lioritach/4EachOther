@@ -30,7 +30,7 @@ work environment, JavaScript language and Firebase database.
 _______________________________________________________________________________________________________________
 
 Some screenshots:
-<img src="https://github.com/favicon.ico" width="48">
+<img src="https://user-images.githubusercontent.com/44543472/121579426-6239d700-ca34-11eb-92fd-338ee8bb5b1b.jpeg" width="48">
 
 <!-- ![WhatsApp Image 2021-06-10 at 21 37 57](https://user-images.githubusercontent.com/44543472/121579426-6239d700-ca34-11eb-92fd-338ee8bb5b1b.jpeg)
 ![WhatsApp Image 2021-06-10 at 21 37 40](https://user-images.githubusercontent.com/44543472/121579431-636b0400-ca34-11eb-8c7e-096e9348d610.jpeg)
