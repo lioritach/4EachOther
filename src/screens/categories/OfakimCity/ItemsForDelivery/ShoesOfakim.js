@@ -10,8 +10,6 @@ const ShoesOfakim = ({ navigation, route }) => {
   const [err, setErr] = useState();
   const { title, city } = route.params;
 
-  const uid = firebase.auth().currentUser.uid;
-
   useEffect(() => {
     const ref = firebase
       .firestore()
@@ -82,4 +80,3 @@ const ShoesOfakim = ({ navigation, route }) => {
 
 export default ShoesOfakim;
 
-const styles = StyleSheet.create({});
