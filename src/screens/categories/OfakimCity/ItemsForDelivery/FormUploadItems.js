@@ -1,11 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, Text, View, Image, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
 import { ProgressDialog } from "react-native-simple-dialogs";
-import { AutoGrowingTextInput } from "react-native-autogrow-textinput";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FirebaseContext } from "../../../../context/FirebaseContext";
 import * as firebase from "firebase";
@@ -24,20 +23,26 @@ const FormUploadItems = ({ navigation, route }) => {
   const uid = firebaseContext.getCurrentUser().uid;
 
   //Getting the phone number from the user.
-  const getData = firebase
-    .firestore()
-    .collection("users")
-    .doc(uid)
-    .get()
-    .then((value) => {
-      let number = value.data().phoneNumber;
-      let city = value.data().city;
-      let username = value.data().username;
+  useEffect(() => {
+    setTimeout(() => {
+      const getData = firebase
+        .firestore()
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((value) => {
+          let number = value.data().phoneNumber;
+          let city = value.data().city;
+          let username = value.data().username;
 
-      setPhoneNumber(number);
-      setCity(city);
-      setPhoneNumber(username);
-    });
+          setPhoneNumber(number);
+          setCity(city);
+          setUsername(username);
+        });
+
+      return () => getData();
+    }, 500);
+  }, []);
 
   //Ask for permissions
   const getPermissions = async () => {
@@ -65,6 +70,7 @@ const FormUploadItems = ({ navigation, route }) => {
   };
 
   const addPhoto = async () => {
+    console.log("object");
     const status = await getPermissions();
 
     if (status !== "granted") {
@@ -183,7 +189,7 @@ const FormUploadItems = ({ navigation, route }) => {
 
         <View style={styles.textInputView}>
           <Text style={styles.textInput}>תיאור הפריט: </Text>
-          {/* <TextInput
+          <TextInput
             style={styles.input}
             autoCompleteType="name"
             autoFocus={false} // open keyboard automate
@@ -191,13 +197,13 @@ const FormUploadItems = ({ navigation, route }) => {
             onChangeText={(details) => {
               setDetails(details);
             }}
-          /> */}
-          <AutoGrowingTextInput
+          />
+          {/* <AutoGrowingTextInput
             style={styles.input}
             onChangeText={(details) => {
               setDetails(details);
             }}
-          />
+          /> */}
         </View>
 
         <View style={styles.photo}>
