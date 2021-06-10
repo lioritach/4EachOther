@@ -28,7 +28,6 @@ const CardViewShoesOfakim = ({ route, navigation }) => {
 
   const userId = firebase.auth().currentUser.uid;
 
-  //check if the user already sign to vol.
   useEffect(() => {
     const ref = firebase
       .firestore()
