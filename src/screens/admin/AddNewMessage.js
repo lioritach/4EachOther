@@ -94,7 +94,6 @@ const AddNewMessage = () => {
           />
         </View>
         <TouchableOpacity
-          // disabled={!textMessage && !titleTextMessage}
           onPress={() => onSubmit(titleTextMessage, textMessage)}
           style={styles.sendButton}
         >
